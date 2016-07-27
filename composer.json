@@ -1,0 +1,12 @@
+{
+  "name": "lilt/lilt",
+  "description": "lilt php code library",
+  "minimum-stability": "dev",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "lilty",
+      "email": "ylilt71@gmail.com"
+    }
+  ]
+}
