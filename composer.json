@@ -1,12 +1,36 @@
 {
   "name": "lilt/lilt",
   "description": "lilt php code library",
-  "minimum-stability": "dev",
-  "license": "proprietary",
+  "homepage": "https://github.com/lilt-php/lilt",
+  "license": "MIT",
   "authors": [
     {
       "name": "lilty",
       "email": "ylilt71@gmail.com"
     }
-  ]
+  ],
+  "support": {
+    "issues": "https://github.com/lilt-php/lilt/issues"
+  },
+  "require": {
+    "php": ">=7.2"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^5.5",
+    "friendsofphp/php-cs-fixer": "^1.12"
+  },
+  "autoload": {
+    "psr-4": {
+      "Lilt\\": "lib/"
+    },
+    "files": [
+      "lib/functions.php",
+      "lib/functions.global.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Lilt\\Test\\": "test/"
+    }
+  }
 }
