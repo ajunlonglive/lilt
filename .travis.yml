@@ -7,14 +7,15 @@ php:
 
 install:
   - composer self-update
-  - composer require scrutinizer/ocular:dev-master
+  - composer require satooshi/php-coveralls:dev-master
   - composer install
 
 script:
-  - vendor/bin/phpunit
+  - $(php -r 'if (PHP_MAJOR_VERSION >= 7) echo "phpdbg -qrr"; else echo "php";') vendor/bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml
+  - php vendor/bin/php-cs-fixer --diff --dry-run -v fix
 
 after_script:
-  - vendor/bin/ocular code-coverage:upload --format=php-clover build/logs/clover.xml
+  - php vendor/bin/coveralls -v
 
 cache:
   directories:
