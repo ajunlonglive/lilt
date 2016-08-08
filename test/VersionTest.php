@@ -1,6 +1,6 @@
 <?php
 namespace Lilt\Test;
-use Lilt\Version;
+use Lilt;
 
 /**
  * Test VersionTest
@@ -9,12 +9,12 @@ use Lilt\Version;
 class VersionTest extends \PHPUnit_Framework_TestCase {
 
     public function testConstruct() {
-        $version = new Version;
+        $version = version();
         self::assertEquals(0, $version->build);
         self::assertEquals(0, $version->major);
         self::assertEquals(1, $version->minor);
         self::assertEquals(null, $version->revision);
-        $version = new Version(3, 2, 1, 0);
+        $version = version(3, 2, 1, 0);
         self::assertEquals(3, $version->build);
         self::assertEquals(2, $version->major);
         self::assertEquals(1, $version->minor);
@@ -22,9 +22,11 @@ class VersionTest extends \PHPUnit_Framework_TestCase {
     }
 
     public function testToString() {
-        $version = new Version;
+        $version = version();
         self::assertEquals('0.0.1', (string)$version);
-        $version = new Version(3, 2, 1, 0);
+        $version = version(3, 2, 1, 0);
         self::assertEquals('3.2.1', (string)$version);
+        $version = version(3, 2, 1, 100);
+        self::assertEquals('3.2.1.100', (string)$version);
     }
 }

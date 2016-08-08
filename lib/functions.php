@@ -1,12 +1,19 @@
 <?php
-namespace Lilt;
 /**
- * @param int $build
- * @param int $major
- * @param int $minor
- * @param ?int $revision
- * @return Version
+ * @param mixed $var
+ * @return \Lilt\Type
  */
-function version(int $build = 0, int $major = 0, int $minor = 1, ?int $revision = null) : Version {
-    return new Version($build, $major, $minor, $revision);
+function typeof($var) : \Lilt\Type {
+    return \Lilt\Type::of($var);
+}
+
+/**
+ * @param int  $build
+ * @param int  $major
+ * @param int  $minor
+ * @param ?int $revision
+ * @return Lilt\Version
+ */
+function version(int $build = 0, int $major = 0, int $minor = 1, ?int $revision = null) : Lilt\Version {
+    return new Lilt\Version($build, $major, $minor, $revision);
 }

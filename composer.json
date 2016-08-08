@@ -24,8 +24,7 @@
       "Lilt\\": "lib/"
     },
     "files": [
-      "lib/functions.php",
-      "lib/functions.global.php"
+      "lib/functions.php"
     ]
   },
   "autoload-dev": {

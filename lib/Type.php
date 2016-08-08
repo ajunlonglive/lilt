@@ -127,14 +127,6 @@ final class Type extends \ReflectionClass implements IObject, Stringable {
      * @param Type $other
      * @return bool
      */
-    public function equals(self $other) : bool {
-        return $this->_type === $other->_type;
-    }
-
-    /**
-     * @param Type $other
-     * @return bool
-     */
     public function coincide(self $other) : bool {
         if ($this->_scalar) {
             return $this->_type === $other->_type;
@@ -158,6 +150,13 @@ final class Type extends \ReflectionClass implements IObject, Stringable {
      */
     public function isBoolean() : bool {
         return $this->_type === self::BOOLEAN;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCallable() : bool {
+        return $this->_type === self::CALLABLE;
     }
 
     /**
@@ -207,12 +206,5 @@ final class Type extends \ReflectionClass implements IObject, Stringable {
      */
     public function isString() : bool {
         return $this->_type === self::STRING;
-    }
-
-    /**
-     * @return string
-     */
-    public function name() : string {
-        return $this->_type;
     }
 }

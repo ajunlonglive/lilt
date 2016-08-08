@@ -12,7 +12,7 @@
          stopOnFailure="false">
     <testsuites>
         <testsuite name="Lilt">
-            <directory>test</directory>
+            <directory suffix="Test.php">test</directory>
         </testsuite>
     </testsuites>
     <filter>
