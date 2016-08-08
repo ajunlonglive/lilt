@@ -41,6 +41,6 @@ final class Version implements Stringable {
      * @return string
      */
     public function __toString() : string {
-        return $this->build.'.'.$this->major.'.'.$this->minor.($this->revision ?: '');
+        return $this->build.'.'.$this->major.'.'.$this->minor.($this->revision !== null ? '.'.$this->revision : '');
     }
 }
