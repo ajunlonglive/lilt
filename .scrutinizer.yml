@@ -1,7 +1,13 @@
 build:
-  environment:
-    php:
-      version: 7.0.8
+  project_setup:
+    before:
+      - 'cd /usr/src'
+      - 'sudo apt-get update'
+      - 'sudo apt-get install make build-essential autoconf automake bison re2c clang flex libicu-dev libgmp-dev libmpfr-dev libmpc-dev libc6-dev libxml2-dev'
+      - './buildconf'
+      - './configure --prefix=/usr --enable-maintainer-zts --with-openssl --enable-json=shared'
+      - 'make -j8'
+      - 'sudo make install'
 
 checks:
   php:
