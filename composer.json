@@ -13,23 +13,28 @@
     "issues": "https://github.com/lilt-php/lilt/issues"
   },
   "require": {
+    "ext-uopz": "*",
     "php": ">=7.1"
   },
   "require-dev": {
+    "lilt/bench": "1.*",
     "phpunit/phpunit": "^5.5",
     "friendsofphp/php-cs-fixer": "~1.9"
   },
   "autoload": {
     "psr-4": {
-      "Lilt\\": "lib/"
+      "": "api/"
     },
     "files": [
-      "lib/functions.php"
+      "api/functions.php"
     ]
   },
   "autoload-dev": {
     "psr-4": {
-      "Lilt\\Test\\": "test/"
+      "": "test/"
     }
+  },
+  "scripts": {
+    "bench": "php bench/bootstrap.php"
   }
 }

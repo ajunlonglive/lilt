@@ -3,7 +3,7 @@
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/5.5/phpunit.xsd"
          backupGlobals="false"
          backupStaticAttributes="false"
-         bootstrap="vendor/autoload.php"
+         bootstrap="autoload.php"
          colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
@@ -17,10 +17,7 @@
     </testsuites>
     <filter>
         <whitelist>
-            <directory suffix=".php">lib</directory>
+            <directory suffix=".php">api</directory>
         </whitelist>
     </filter>
-    <logging>
-        <log type="coverage-html" target="build/coverage"/>
-    </logging>
 </phpunit>

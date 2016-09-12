@@ -1,54 +1,50 @@
 <?php
-namespace Lilt\Test;
-use Lilt\Type;
-
 /**
  * Test TypeTest
- * @package Lilt\Test
+ * @package \
  */
 class TypeTest extends \PHPUnit_Framework_TestCase {
 
     public function testTypes() {
-        self::assertEquals(Type::array(), typeof(['an array.']));
-        self::assertTrue(typeof(['an array.'])->isArray());
-        self::assertTrue(typeof(['an array.'])->isScalar());
-        self::assertEquals(Type::boolean(), typeof(false));
-        self::assertTrue(typeof(false)->isBoolean());
-        self::assertTrue(typeof(false)->isScalar());
-        self::assertEquals(Type::boolean(), typeof(true));
-        self::assertTrue(typeof(true)->isBoolean());
-        self::assertTrue(typeof(true)->isScalar());
-        self::assertEquals(Type::callable(), typeof(function () {}));
-        self::assertTrue(typeof(function () {})->isCallable());
-        self::assertTrue(typeof(function () {})->isScalar());
-        self::assertEquals(Type::double(), typeof(0.1));
-        self::assertTrue(typeof(0.1)->isDouble());
-        self::assertTrue(typeof(0.1)->isScalar());
-        self::assertEquals(Type::integer(), typeof(0));
-        self::assertTrue(typeof(0)->isInteger());
-        self::assertTrue(typeof(0)->isScalar());
-        self::assertEquals(Type::null(), typeof(null));
-        self::assertTrue(typeof(null)->isNull());
-        self::assertTrue(typeof(null)->isScalar());
+        self::assertEquals(\Type::ARRAY, \Type::of(['an array.']));
+        self::assertTrue(\Type::of(['an array.'])->isArray());
+        self::assertTrue(\Type::of(['an array.'])->isScalar());
+        self::assertEquals(\Type::BOOLEAN, \Type::of(false));
+        self::assertTrue(\Type::of(false)->isBoolean());
+        self::assertTrue(\Type::of(false)->isScalar());
+        self::assertEquals(\Type::BOOLEAN, \Type::of(true));
+        self::assertTrue(\Type::of(true)->isBoolean());
+        self::assertTrue(\Type::of(true)->isScalar());
+        self::assertEquals(\Type::CALLABLE, \Type::of(function () {}));
+        self::assertTrue(\Type::of(function () {})->isCallable());
+        self::assertFalse(\Type::of(function () {})->isScalar());
+        self::assertEquals(\Type::DOUBLE, \Type::of(0.1));
+        self::assertTrue(\Type::of(0.1)->isDouble());
+        self::assertTrue(\Type::of(0.1)->isScalar());
+        self::assertEquals(\Type::INTEGER, \Type::of(0));
+        self::assertTrue(\Type::of(0)->isInteger());
+        self::assertTrue(\Type::of(0)->isScalar());
+        self::assertEquals(\Type::NULL, \Type::of(null));
+        self::assertTrue(\Type::of(null)->isNull());
+        self::assertTrue(\Type::of(null)->isScalar());
         $resource = fopen(__FILE__, 'r');
-        self::assertEquals(Type::resource(), typeof($resource));
-        self::assertTrue(typeof($resource)->isResource());
-        self::assertTrue(typeof($resource)->isScalar());
+        self::assertEquals(\Type::RESOURCE, \Type::of($resource));
+        self::assertTrue(\Type::of($resource)->isResource());
+        self::assertTrue(\Type::of($resource)->isScalar());
         fclose($resource);
-        self::assertEquals(Type::string(), typeof('an str value.'));
-        self::assertTrue(typeof('an str value.')->isString());
-        self::assertTrue(typeof('an str value.')->isScalar());
-        self::assertEquals(Type::class, (string)typeof(Type::class));
-        self::assertEquals(Type::class(), typeof(Type::class));
-        self::assertEquals(Type::class, typeof(Type::class)->name);
-        self::assertTrue(typeof(Type::class)->isObject());
-        self::assertTrue(typeof(\ReflectionClass::class)->coincide(typeof(Type::class)));
-        self::assertTrue(typeof(Type::class)->coincide(typeof(Type::class)));
-        self::assertTrue(typeof(['an array.'])->coincide(typeof(['an array.'])));
+        self::assertEquals(\Type::STRING, \Type::of('an str value.'));
+        self::assertTrue(\Type::of('an str value.')->isString());
+        self::assertTrue(\Type::of('an str value.')->isScalar());
+        self::assertEquals(\Type::class, (string)\Type::of(\Type::class));
+        self::assertEquals(\Type::class, \Type::of(\Type::class)->name);
+        self::assertTrue(\Type::of(\Type::class)->isObject());
+        self::assertTrue(\Type::of(\ReflectionClass::class)->coincide(\Type::of(\Type::class)));
+        self::assertTrue(\Type::of(\Type::class)->coincide(\Type::of(\Type::class)));
+        self::assertTrue(\Type::of(['an array.'])->coincide(\Type::of(['an array.'])));
         /** @noinspection ImplicitMagicMethodCallInspection */
         self::assertEquals([
-            'type' => Type::ARRAY,
+            'type' => \Type::ARRAY,
             'scalar' => true
-        ], typeof(['an array.'])->__debugInfo());
+        ], \Type::of(['an array.'])->__debugInfo());
     }
 }

@@ -1,15 +1,9 @@
 <?php
-namespace Lilt\Test;
-use Lilt\EnumTrait;
-use Lilt\IEnum;
-
 /**
  * Class AnEnum
- * @package Lilt\Test
+ * @package \
  */
-class AnEnum implements IEnum {
-    use EnumTrait;
-
+class AnEnum extends \Enum {
     const CONST1 = 0;
     const CONST2 = 1 << 0;
     const CONST3 = 1 << 1;

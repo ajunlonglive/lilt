@@ -1,13 +1,12 @@
 <?php
-namespace Lilt\Test;
 /**
  * Class SingletonTest
- * @package Lilt\Test
+ * @package \
  */
 class SingletonTest extends \PHPUnit_Framework_TestCase {
 
     public function testMatter() {
-        self::assertInstanceOf(ASingleton::class, ASingleton::matter());
-        self::assertInstanceOf(AnInheritedSingleton::class, AnInheritedSingleton::matter());
+        self::assertInstanceOf(ASingleton::class, ASingleton::instance);
+        self::assertInstanceOf(AnInheritedSingleton::class, AnInheritedSingleton::instance);
     }
 }

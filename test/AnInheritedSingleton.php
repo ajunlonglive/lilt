@@ -1,8 +1,6 @@
 <?php
-namespace Lilt\Test;
-
 /**
  * Class ASingleton
- * @package Lilt\Test
+ * @package \
  */
 class AnInheritedSingleton extends ASingleton { }

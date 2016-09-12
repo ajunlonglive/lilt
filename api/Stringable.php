@@ -1,8 +1,7 @@
-<?php
-namespace Lilt;
+<?php declare(strict_types=1);
 /**
  * Interface Stringable
- * @package Lilt
+ * @package \
  */
 interface Stringable {
 

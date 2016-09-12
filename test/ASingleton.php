@@ -1,12 +1,6 @@
 <?php
-namespace Lilt\Test;
-use Lilt\ISingleton;
-use Lilt\SingletonTrait;
-
 /**
  * Class ASingleton
- * @package Lilt\Test
+ * @package \
  */
-class ASingleton implements ISingleton {
-    use SingletonTrait;
-}
+class ASingleton extends \Singleton { }
