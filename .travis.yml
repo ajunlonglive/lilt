@@ -8,7 +8,10 @@ php:
 install:
   - composer self-update
   - composer require satooshi/php-coveralls:dev-master
-  - composer install
+  - composer install --no-interaction
+
+before_script:
+  - echo "extension=lilt.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 script:
   - $(php -r 'if (PHP_MAJOR_VERSION >= 7) echo "phpdbg -qrr"; else echo "php";') vendor/bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml
