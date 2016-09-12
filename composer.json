@@ -27,7 +27,7 @@
   "scripts": {
     "test": "vendor/bin/phpunit -c phpunit.xml.dist",
     "post-update-cmd": [
-      "phpize && ./configure --enable-lilt && make && make install && make clean && phpize --clean"
+      "phpize && ./configure --enable-lilt && make && sudo make install && make clean && phpize --clean"
     ]
   }
 }
