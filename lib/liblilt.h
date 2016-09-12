@@ -21,7 +21,6 @@
 
 #include "php.h"
 #include "ext/standard/info.h"
-#include "arginfo.h"
 
 #define STRINGIZE_NX(A) #A
 #define STRINGIZE(A) STRINGIZE_NX(A)

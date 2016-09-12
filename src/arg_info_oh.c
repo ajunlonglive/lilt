@@ -16,11 +16,11 @@
   +----------------------------------------------------------------------+
  */
 
-#include "classes/type/property.h"
+#include "classes/type/arg_info.h"
 
 #define CUSTOM_STRUCT
-#define CLASS_NAME Type_PropertyName
-#define CLASS Type_Property
+#define CLASS_NAME Type_ArgInfoName
+#define CLASS Type_ArgInfo
 #include "gen/class.h"
 
 OHINIT_FUNCTION {
@@ -37,9 +37,9 @@ PHP_API int FUNC(cast_object, zval *readobj, zval *retval, int type) {
         return zend_std_cast_object_tostring(readobj, retval, type);
     }
     STRUCT *this = Z_THIS_P(readobj);
-    if (this->property_info) {
+    if (this->arg_info) {
 
-        ZVAL_STR(retval, this->property_info->name);
+        ZVAL_STR(retval, this->arg_info->name);
         return SUCCESS;
     }
 
@@ -59,15 +59,17 @@ PHP_API HashTable *FUNC(get_debug_info, zval *object, int *is_temp) {
     STRUCT *intern = Z_THIS_P(object);
 
     is_temp = 0;
-    array_init_size(&array, 4);
-    ZVAL_COPY(&tmp, FUNC(get_doc_comment, intern));
-    add_assoc_zval(&array, "doc_comment", &tmp);
-    ZVAL_COPY(&tmp, FUNC(get_class, intern));
-    add_assoc_zval(&array, "class", &tmp);
+    array_init_size(&array, 5);
+    ZVAL_COPY(&tmp, FUNC(get_by_reference, intern));
+    add_assoc_zval(&array, "byReference", &tmp);
     ZVAL_COPY(&tmp, FUNC(get_name, intern));
     add_assoc_zval(&array, "name", &tmp);
-    ZVAL_COPY(&tmp, FUNC(get_flags, intern));
-    add_assoc_zval(&array, "flags", &tmp);
+    ZVAL_COPY(&tmp, FUNC(get_nullable, intern));
+    add_assoc_zval(&array, "nullable", &tmp);
+    ZVAL_COPY(&tmp, FUNC(get_type_hint, intern));
+    add_assoc_zval(&array, "typeHint", &tmp);
+    ZVAL_COPY(&tmp, FUNC(get_variadic, intern));
+    add_assoc_zval(&array, "variadic", &tmp);
 
     return Z_ARRVAL(array);
 }
@@ -75,17 +77,20 @@ PHP_API HashTable *FUNC(get_debug_info, zval *object, int *is_temp) {
 PHP_API zval *FUNC(read_property, zval *object, zval *member, int type, void **cache_slot, zval *rv) {
     STRUCT *intern = Z_THIS_P(object);
     zend_string *property_name = Z_STR_P(member);
-    if (zend_string_equals_literal(property_name, "doc_comment")) {
-        return FUNC(get_doc_comment, intern);
+    if (zend_string_equals_literal(property_name, "byReference")) {
+        return FUNC(get_by_reference, intern);
     }
     if (zend_string_equals_literal(property_name, "name")) {
         return FUNC(get_name, intern);
     }
-    if (zend_string_equals_literal(property_name, "class")) {
-        return FUNC(get_class, intern);
+    if (zend_string_equals_literal(property_name, "nullable")) {
+        return FUNC(get_nullable, intern);
     }
-    if (zend_string_equals_literal(property_name, "flags")) {
-        return FUNC(get_flags, intern);
+    if (zend_string_equals_literal(property_name, "typeHint")) {
+        return FUNC(get_type_hint, intern);
+    }
+    if (zend_string_equals_literal(property_name, "variadic")) {
+        return FUNC(get_variadic, intern);
     }
     zend_error(E_ERROR,"Undefined property: %s::$%s", ZSTR_VAL(Z_OBJ_P(object)->ce->name), Z_STRVAL_P(member));
 

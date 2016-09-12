@@ -21,8 +21,8 @@
 
 #include "lilt.h"
 
-#define Type_Function Type_Function
-#define Type_FunctionName PHP_NSIZE(STRINGIZE(Type), "Function")
+#define Type_Function Type_Method
+#define Type_FunctionName PHP_NSIZE(STRINGIZE(Type), "Method")
 #define Type_FunctionStruct EXT_CLASS_STRUCT(Type_Function)
 #define Type_FunctionCtor EXT_CLASS_CTOR(Type_Function)
 #define Type_FunctionMem(name) EXT_CLASS_MEM(Type_Function, name)

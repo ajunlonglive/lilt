@@ -13,21 +13,11 @@
     "issues": "https://github.com/lilt-php/lilt/issues"
   },
   "require": {
-    "ext-uopz": "*",
     "php": ">=7.1"
   },
   "require-dev": {
-    "lilt/bench": "1.*",
     "phpunit/phpunit": "^5.5",
     "friendsofphp/php-cs-fixer": "~1.9"
-  },
-  "autoload": {
-    "psr-4": {
-      "": "api/"
-    },
-    "files": [
-      "api/functions.php"
-    ]
   },
   "autoload-dev": {
     "psr-4": {
@@ -35,6 +25,9 @@
     }
   },
   "scripts": {
-    "bench": "php bench/bootstrap.php"
+    "test": "vendor/bin/phpunit -c phpunit.xml.dist",
+    "post-update-cmd": [
+      "phpize && ./configure --enable-lilt && make && sudo make install && make clean && phpize --clean"
+    ]
   }
 }

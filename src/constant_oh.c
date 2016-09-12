@@ -61,7 +61,7 @@ PHP_API HashTable *FUNC(get_debug_info, zval *object, int *is_temp) {
     is_temp = 0;
     array_init_size(&array, 4);
     ZVAL_COPY(&tmp, FUNC(get_doc_comment, intern));
-    add_assoc_zval(&array, "doc_comment", &tmp);
+    add_assoc_zval(&array, "docComment", &tmp);
     ZVAL_COPY(&tmp, FUNC(get_class, intern));
     add_assoc_zval(&array, "class", &tmp);
     ZVAL_COPY(&tmp, FUNC(get_name, intern));
@@ -75,7 +75,7 @@ PHP_API HashTable *FUNC(get_debug_info, zval *object, int *is_temp) {
 PHP_API zval *FUNC(read_property, zval *object, zval *member, int type, void **cache_slot, zval *rv) {
     STRUCT *intern = Z_THIS_P(object);
     zend_string *property_name = Z_STR_P(member);
-    if (zend_string_equals_literal(property_name, "doc_comment")) {
+    if (zend_string_equals_literal(property_name, "docComment")) {
         return FUNC(get_doc_comment, intern);
     }
     if (zend_string_equals_literal(property_name, "class")) {

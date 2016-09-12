@@ -16,11 +16,11 @@
   +----------------------------------------------------------------------+
  */
 
-#include "classes/type/function.h"
+#include "classes/type/property.h"
 
 #define CUSTOM_STRUCT
-#define CLASS_NAME Type_FunctionName
-#define CLASS Type_Function
+#define CLASS_NAME Type_PropertyName
+#define CLASS Type_Property
 #include "gen/class.h"
 
 OHINIT_FUNCTION {
@@ -37,9 +37,9 @@ PHP_API int FUNC(cast_object, zval *readobj, zval *retval, int type) {
         return zend_std_cast_object_tostring(readobj, retval, type);
     }
     STRUCT *this = Z_THIS_P(readobj);
-    if (this->function) {
+    if (this->property_info) {
 
-        ZVAL_STR(retval, this->function->internal_function.function_name);
+        ZVAL_STR(retval, this->property_info->name);
         return SUCCESS;
     }
 
@@ -60,8 +60,8 @@ PHP_API HashTable *FUNC(get_debug_info, zval *object, int *is_temp) {
 
     is_temp = 0;
     array_init_size(&array, 4);
-    ZVAL_COPY(&tmp, FUNC(get_arg_infos, intern));
-    add_assoc_zval(&array, "arg_infos", &tmp);
+    ZVAL_COPY(&tmp, FUNC(get_doc_comment, intern));
+    add_assoc_zval(&array, "docComment", &tmp);
     ZVAL_COPY(&tmp, FUNC(get_class, intern));
     add_assoc_zval(&array, "class", &tmp);
     ZVAL_COPY(&tmp, FUNC(get_name, intern));
@@ -75,11 +75,11 @@ PHP_API HashTable *FUNC(get_debug_info, zval *object, int *is_temp) {
 PHP_API zval *FUNC(read_property, zval *object, zval *member, int type, void **cache_slot, zval *rv) {
     STRUCT *intern = Z_THIS_P(object);
     zend_string *property_name = Z_STR_P(member);
+    if (zend_string_equals_literal(property_name, "docComment")) {
+        return FUNC(get_doc_comment, intern);
+    }
     if (zend_string_equals_literal(property_name, "name")) {
         return FUNC(get_name, intern);
-    }
-    if (zend_string_equals_literal(property_name, "arg_infos")) {
-        return FUNC(get_arg_infos, intern);
     }
     if (zend_string_equals_literal(property_name, "class")) {
         return FUNC(get_class, intern);

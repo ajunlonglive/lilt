@@ -9,9 +9,4 @@ interface Typed {
      * @var \Type
      */
     const type = null;
-
-    /**
-     * @return \Type
-     */
-//    public static function type() : \Type;
 }

@@ -16,7 +16,6 @@
   +----------------------------------------------------------------------+
  */
 
-#include <Zend/zend_compile.h>
 #include "classes/type/function.h"
 
 #define CUSTOM_STRUCT
