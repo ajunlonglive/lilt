@@ -23,7 +23,7 @@
 #include "lilt.h"
 #include "utils.h"
 
-zend_lilt_globals EXT_MG;
+EXT_DECLARE_MODULE_GLOBALS;
 
 EXT_MGINIT_FUNCTION { /* {{{ EXT_MGINIT_FUNCTION */
     EXT_MEMSET_GLOBALS;
@@ -52,12 +52,6 @@ EXT_RINIT_FUNCTION { /* {{{ EXT_RINIT_FUNCTION */
     zend_hash_init(&LILTG(data.types), 8, NULL, zval_p_dtor, 0);
     LILTG(zstr.type) = z_string("type");
 
-    for (int i = 0; i < 256; i++) {
-        if (i != ZEND_FETCH_CLASS_CONSTANT) {
-            //zend_set_user_opcode_handler((zend_uchar) i, EXT_HANDLER(0));
-        }
-    }
-
     EXT_CLASS_INIT(Type_ArgInfo);
     EXT_CLASS_INIT(Type_Constant);
     EXT_CLASS_INIT(Type_Function);
@@ -72,12 +66,6 @@ EXT_RINIT_FUNCTION { /* {{{ EXT_RINIT_FUNCTION */
 
 EXT_RSHUTDOWN_FUNCTION { /* {{{ EXT_RSHUTDOWN_FUNCTION */
     zend_hash_destroy(&LILTG(data.types));
-
-    for (int i = 0; i < 256; i++) {
-        if (i != ZEND_FETCH_CLASS_CONSTANT) {
-            //zend_set_user_opcode_handler((zend_uchar) i, NULL);
-        }
-    }
 
     zend_objects_destroy_object(LILTG(type_array));
     zend_objects_destroy_object(LILTG(type_boolean));
@@ -101,8 +89,6 @@ EXT_MINFO_FUNCTION { /* {{{ EXT_MINFO_FUNCTION */
 } /* }}} */
 
 EXT_DEPS_TABLE = { /* {{{ EXT_DEPS_TABLE */
-    ZEND_MOD_REQUIRED("reflection")
-    ZEND_MOD_REQUIRED("spl")
     ZEND_MOD_END
 } /* }}} */;
 

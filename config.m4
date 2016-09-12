@@ -48,7 +48,4 @@ if test "$PHP_LILT" != "no"; then
   PHP_ADD_BUILD_DIR($ext_builddir/src, 1)
   PHP_ADD_INCLUDE($ext_builddir/lib)
   PHP_ADD_INCLUDE($ext_builddir)
-
-  PHP_ADD_EXTENSION_DEP(lilt, reflection)
-  PHP_ADD_EXTENSION_DEP(lilt, spl)
 fi
