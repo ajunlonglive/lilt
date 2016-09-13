@@ -36,14 +36,13 @@
   }
 
 CLASS_ENTRY;
+const METHODS_BEGIN
+    ME(of, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+METHODS_END;
 
 CEINIT_FUNCTION {
-    METHODS_BEGIN
-        ME(of, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-    METHODS_END
     INIT_CLASS;
     CE->ce_flags |= ZEND_ACC_FINAL;
-    CE->ce_flags |= ZEND_ACC_CONSTANTS_UPDATED;
     CE->create_object = MEM(create_object);
 
     INIT_TYPE_SCALAR(array, "TYPE_ARRAY");

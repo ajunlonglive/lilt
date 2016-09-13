@@ -52,6 +52,7 @@
 #       define INIT_THIS EXT_CLASS_INIT_THIS(CLASS)
 #   endif
 #   define METHODS EXT_CLASS_METHODS(CLASS)
+#   define NO_METHODS EXT_CLASS_NO_METHODS(CLASS)
 #   define METHODS_BEGIN EXT_CLASS_METHODS_BEGIN(CLASS)
 #   define METHOD(name) EXT_CLASS_METHOD(CLASS, name)
 #   define ME(name, arginfo, flags) EXT_CLASS_ME(CLASS, name, arginfo, flags)

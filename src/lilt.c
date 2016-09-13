@@ -66,15 +66,7 @@ EXT_RINIT_FUNCTION { /* {{{ EXT_RINIT_FUNCTION */
 
 EXT_RSHUTDOWN_FUNCTION { /* {{{ EXT_RSHUTDOWN_FUNCTION */
     zend_hash_destroy(&LILTG(data.types));
-
-    zend_objects_destroy_object(LILTG(type_array));
-    zend_objects_destroy_object(LILTG(type_boolean));
-    zend_objects_destroy_object(LILTG(type_double));
-    zend_objects_destroy_object(LILTG(type_integer));
-    zend_objects_destroy_object(LILTG(type_null));
-    zend_objects_destroy_object(LILTG(type_resource));
-    zend_objects_destroy_object(LILTG(type_string));
-    zend_objects_destroy_object(LILTG(type_unknown));
+    zend_string_release(LILTG(zstr.type));
 
     EXT_HFREE();
 

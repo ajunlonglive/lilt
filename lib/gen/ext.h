@@ -90,6 +90,7 @@
 #define EXT_CLASS_CUSTOM_THIS(class) EXT_CLASS_CUSTOM_THIS_NX(EXT_NAME, class)
 #define EXT_CLASS_INIT_CUSTOM_THIS(class) EXT_CLASS_INIT_CUSTOM_THIS_NX(EXT_NAME, class)
 #define EXT_CLASS_METHODS(class) EXT_CLASS_METHODS_NX(EXT_NAME, class)
+#define EXT_CLASS_NO_METHODS(class) EXT_CLASS_NO_METHODS_NX(EXT_NAME, class)
 #define EXT_CLASS_METHODS_BEGIN(class) EXT_CLASS_METHODS_BEGIN_NX(EXT_NAME, class)
 #define EXT_CLASS_METHOD(class, name) EXT_CLASS_METHOD_NX(EXT_NAME, class, name)
 #define EXT_CLASS_ME(class, name, arginfo, flags) EXT_CLASS_ME_NX(EXT_NAME, class, name, arginfo, flags)

@@ -74,9 +74,8 @@ PHP_API int FUNC(do_operation, zend_uchar opcode, zval *result, zval *op1, zval 
 
 PHP_API void FUNC(free_object, zend_object *object) {
     PHP_STRUCT *intern = (PHP_STRUCT *) object;
-    zend_object_std_dtor(&intern->std);
     FUNC(free, intern->intern);
-    efree(intern);
+    zend_object_std_dtor(&intern->std);
 }
 
 PHP_API HashTable *FUNC(get_debug_info, zval *object, int *is_temp) {

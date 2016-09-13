@@ -18,19 +18,17 @@
 
 #include "classes/typed.h"
 
-#define CUSTOM_STRUCT
 #define CLASS Typed
 #include "gen/class.h"
 
 CLASS_ENTRY;
 
 CEINIT_FUNCTION {
-    METHODS_BEGIN
-    METHODS_END
-    INIT_INTERFACE;
+    zend_class_entry ce;
+    INIT_CLASS_ENTRY(ce, CLASS_STR, NULL);
+    CE = zend_register_internal_interface(&ce);
 }
 
-#undef CUSTOM_STRUCT
 #undef CLASS
 
 /*

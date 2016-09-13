@@ -188,6 +188,7 @@ typedef int (*lilt_opcode_handler_t)(LILT_OPCODE_HANDLER_ARGS);
 #define EXT_CLASS_CUSTOM_THIS_NX(module, class) EXT_CLASS_CUSTOM_Z_THIS_NX(module, class, EX(This))
 #define EXT_CLASS_INIT_CUSTOM_THIS_NX(module, class) EXT_CLASS_STRUCT_NX(module, class) *this = EXT_CLASS_CUSTOM_THIS_NX(module, class)
 #define EXT_CLASS_METHODS_NX(module, class) CONCAT(module, _, class, _methods)
+#define EXT_CLASS_NO_METHODS_NX(module, class) zend_function_entry *EXT_CLASS_METHODS_NX(module, class) = NULL
 #define EXT_CLASS_METHODS_BEGIN_NX(module, class) zend_function_entry EXT_CLASS_METHODS_NX(module, class)[] = {
 #define EXT_CLASS_METHOD_NX(module, class, name) ZEND_NAMED_FUNCTION(EXT_MN(CONCAT(class, _, name)))
 #define EXT_CLASS_ME_NX(module, class, name, arginfo, flags) ZEND_FENTRY(name, EXT_MN(CONCAT(class, _, name)), arginfo, flags)

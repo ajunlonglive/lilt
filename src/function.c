@@ -53,6 +53,10 @@ PHP_API zend_object *FUNC(enclose, STRUCT *intern) {
 }
 
 PHP_API void FUNC(free, STRUCT *intern) {
+    zval_ptr_dtor(&intern->arg_infos);
+    zval_ptr_dtor(&intern->class);
+    zval_ptr_dtor(&intern->flags);
+    zval_ptr_dtor(&intern->name);
     efree(intern);
 }
 
