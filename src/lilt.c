@@ -68,6 +68,23 @@ EXT_RSHUTDOWN_FUNCTION { /* {{{ EXT_RSHUTDOWN_FUNCTION */
     zend_hash_destroy(&LILTG(data.types));
     zend_string_release(LILTG(zstr.type));
 
+    LILTG(type_array)->handlers->free_obj(LILTG(type_array));
+    efree(LILTG(type_array));
+    LILTG(type_boolean)->handlers->free_obj(LILTG(type_boolean));
+    efree(LILTG(type_boolean));
+    LILTG(type_double)->handlers->free_obj(LILTG(type_double));
+    efree(LILTG(type_double));
+    LILTG(type_integer)->handlers->free_obj(LILTG(type_integer));
+    efree(LILTG(type_integer));
+    LILTG(type_null)->handlers->free_obj(LILTG(type_null));
+    efree(LILTG(type_null));
+    LILTG(type_resource)->handlers->free_obj(LILTG(type_resource));
+    efree(LILTG(type_resource));
+    LILTG(type_string)->handlers->free_obj(LILTG(type_string));
+    efree(LILTG(type_string));
+    LILTG(type_unknown)->handlers->free_obj(LILTG(type_unknown));
+    efree(LILTG(type_unknown));
+
     EXT_HFREE();
 
     return SUCCESS;
