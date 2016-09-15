@@ -66,7 +66,7 @@ PHP_API zval *FUNC(get_arg_infos, STRUCT *intern) {
             zend_arg_info *ptr = intern->function->common.arg_info;
             array_init_size(&intern->arg_infos, 3);
             if (ptr) {
-                while (ptr->name) {
+                while (ptr->name && !zend_string_equals_literal(ptr->name ,"")) {
                     zval zv;
                     ZVAL_OBJ(&zv, Type_ArgInfoMem(enclose)(Type_ArgInfoCtor(ptr)));
                     zend_hash_add(Z_ARRVAL(intern->arg_infos), ptr->name, &zv);

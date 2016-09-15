@@ -32,3 +32,4 @@
 /modules/
 /config.log
 /composer.lock
+/tmp-php.ini

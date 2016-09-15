@@ -68,7 +68,6 @@ PHP_API zend_object *TypeFunc(create_object, zend_class_entry *ce);
  * * * * * * * * * */
 EXT_CLASS_OBJECT_HANDLERS(Type);
 EXT_CLASS_OHINIT_FUNCTION(Type);
-PHP_API int TypeFunc(cast_object, zval *readobj, zval *retval, int type);
 PHP_API int TypeFunc(do_operation, zend_uchar opcode, zval *result, zval *op1, zval *op2);
 PHP_API void TypeFunc(free_object, zend_object *object);
 PHP_API HashTable *TypeFunc(get_debug_info, zval *object, int *is_temp);

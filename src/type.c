@@ -88,6 +88,21 @@ PHP_API zval *FUNC(get_constants, STRUCT *intern) {
     return &intern->constants;
 }
 
+PHP_API zval *FUNC(get_properties, STRUCT *intern) {
+    if (intern->ce && Z_TYPE(intern->properties) == IS_UNDEF) {
+        zend_string *key;
+        zend_property_info *property_info;
+        array_init_size(&intern->properties, 3);
+        ZEND_HASH_FOREACH_STR_KEY_PTR(&intern->ce->properties_info, key, property_info)
+            zval zv;
+            ZVAL_OBJ(&zv, Type_PropertyMem(enclose)(Type_PropertyCtor(property_info, key)));
+            zend_hash_add(Z_ARRVAL(intern->properties), key, &zv);
+        ZEND_HASH_FOREACH_END();
+    }
+
+    return &intern->properties;
+}
+
 PHP_API zval *FUNC(get_functions, STRUCT *intern) {
     if (intern->ce && Z_TYPE(intern->functions) == IS_UNDEF) {
         zend_function *function;
@@ -100,20 +115,6 @@ PHP_API zval *FUNC(get_functions, STRUCT *intern) {
     }
 
     return &intern->functions;
-}
-
-PHP_API zval *FUNC(get_properties, STRUCT *intern) {
-    if (intern->ce && Z_TYPE(intern->properties) == IS_UNDEF) {
-        zend_property_info *property_info;
-        array_init_size(&intern->properties, 3);
-        ZEND_HASH_FOREACH_PTR(&intern->ce->properties_info, property_info)
-            zval zv;
-            ZVAL_OBJ(&zv, Type_PropertyMem(enclose)(Type_PropertyCtor(property_info)));
-            zend_hash_add(Z_ARRVAL(intern->properties), property_info->name, &zv);
-        ZEND_HASH_FOREACH_END();
-    }
-
-    return &intern->properties;
 }
 
 PHP_API int FUNC(zval_of, zval *value, zval *rv) {

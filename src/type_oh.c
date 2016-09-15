@@ -26,23 +26,9 @@ OHINIT_FUNCTION {
     INIT_HANDLERS;
     OH.dtor_obj = zend_objects_destroy_object;
     OH.free_obj = MEM(free_object);
-    OH.cast_object = MEM(cast_object);
     OH.do_operation = MEM(do_operation);
     OH.get_debug_info = MEM(get_debug_info);
     OH.read_property = MEM(read_property);
-}
-
-PHP_API int FUNC(cast_object, zval *readobj, zval *retval, int type) {
-    if (type != IS_STRING) {
-        return zend_std_cast_object_tostring(readobj, retval, type);
-    }
-    STRUCT *this = Z_THIS_P(readobj);
-    if (this->type_name) {
-        ZVAL_STR(retval, this->type_name);
-        return SUCCESS;
-    }
-
-    return FAILURE;
 }
 
 PHP_API int FUNC(do_operation, zend_uchar opcode, zval *result, zval *op1, zval *op2) {
@@ -84,27 +70,29 @@ PHP_API HashTable *FUNC(get_debug_info, zval *object, int *is_temp) {
     STRUCT *intern = Z_THIS_P(object);
 
     is_temp = 0;
-    array_init_size(&array, 4);
-    ZVAL_COPY(&tmp, FUNC(get_name, intern));
-    if (Z_TYPE(tmp) != IS_UNDEF) {
-        add_assoc_zval(&array, "name", &tmp);
+    array_init_size(&array, 6);
+    add_assoc_str(&array, "name", intern->type_name);
+    add_assoc_bool(&array, "scalar", intern->ce == NULL);
+    if (intern->ce) {
+        add_assoc_str(&array, "docComment", intern->ce->info.user.doc_comment);
+        ZVAL_COPY(&tmp, FUNC(get_flags, intern));
+        if (Z_TYPE(tmp) != IS_UNDEF) {
+            add_assoc_zval(&array, "flags", &tmp);
+        }
+        ZVAL_COPY(&tmp, FUNC(get_constants, intern));
+        if (Z_TYPE(tmp) != IS_UNDEF) {
+            add_assoc_zval(&array, "constants", &tmp);
+        }
+        ZVAL_COPY(&tmp, FUNC(get_properties, intern));
+        if (Z_TYPE(tmp) != IS_UNDEF) {
+            add_assoc_zval(&array, "properties", &tmp);
+        }
+        ZVAL_COPY(&tmp, FUNC(get_functions, intern));
+        if (Z_TYPE(tmp) != IS_UNDEF) {
+            add_assoc_zval(&array, "functions", &tmp);
+        }
     }
-    ZVAL_COPY(&tmp, FUNC(get_flags, intern));
-    if (Z_TYPE(tmp) != IS_UNDEF) {
-        add_assoc_zval(&array, "flags", &tmp);
-    }
-    ZVAL_COPY(&tmp, FUNC(get_constants, intern));
-    if (Z_TYPE(tmp) != IS_UNDEF) {
-        add_assoc_zval(&array, "constants", &tmp);
-    }
-    ZVAL_COPY(&tmp, FUNC(get_properties, intern));
-    if (Z_TYPE(tmp) != IS_UNDEF) {
-        add_assoc_zval(&array, "properties", &tmp);
-    }
-    ZVAL_COPY(&tmp, FUNC(get_functions, intern));
-    if (Z_TYPE(tmp) != IS_UNDEF) {
-        add_assoc_zval(&array, "functions", &tmp);
-    }
+
 
     return Z_ARRVAL(array);
 }
@@ -113,19 +101,27 @@ PHP_API zval *FUNC(read_property, zval *object, zval *member, int type, void **c
     STRUCT *intern = Z_THIS_P(object);
     zend_string *property_name = Z_STR_P(member);
     if (zend_string_equals_literal(property_name, "name")) {
-        rv = FUNC(get_name, intern);
+        ZVAL_STR(rv, intern->type_name);
     }
-    else if (zend_string_equals_literal(property_name, "flags")) {
-        rv = FUNC(get_flags, intern);
+    else if (zend_string_equals_literal(property_name, "scalar")) {
+        ZVAL_BOOL(rv, intern->ce == NULL);
     }
-    else if (zend_string_equals_literal(property_name, "constants")) {
-        rv = FUNC(get_constants, intern);
-    }
-    else if (zend_string_equals_literal(property_name, "functions")) {
-        rv = FUNC(get_functions, intern);
-    }
-    else if (zend_string_equals_literal(property_name, "properties")) {
-        rv = FUNC(get_properties, intern);
+    else if (intern->ce) {
+        if (zend_string_equals_literal(property_name, "flags")) {
+            ZVAL_LONG(rv, intern->ce->ce_flags);
+        }
+        else if (zend_string_equals_literal(property_name, "docComment")) {
+            ZVAL_STR(rv, intern->ce->info.user.doc_comment);
+        }
+        else if (zend_string_equals_literal(property_name, "constants")) {
+            rv = FUNC(get_constants, intern);
+        }
+        else if (zend_string_equals_literal(property_name, "functions")) {
+            rv = FUNC(get_functions, intern);
+        }
+        else if (zend_string_equals_literal(property_name, "properties")) {
+            rv = FUNC(get_properties, intern);
+        }
     }
     if (Z_TYPE_P(rv) != IS_UNDEF) {
         return rv;

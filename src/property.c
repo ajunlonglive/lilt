@@ -28,7 +28,7 @@ INIT_FUNCTION {
     OHINIT;
 }
 
-PHP_API STRUCT *CTOR(zend_property_info *property_info) {
+PHP_API STRUCT *CTOR(zend_property_info *property_info, zend_string *name) {
     STRUCT *intern = ecalloc(1, sizeof(STRUCT));
     intern->property_info = property_info;
     if (intern->property_info) {
@@ -39,7 +39,7 @@ PHP_API STRUCT *CTOR(zend_property_info *property_info) {
             ZVAL_NULL(&intern->doc_comment);
         }
         ZVAL_LONG(&intern->flags, intern->property_info->flags);
-        ZVAL_STR(&intern->name, intern->property_info->name);
+        ZVAL_STR(&intern->name, name != NULL ? name : intern->property_info->name);
     }
     else {
         ZVAL_NULL(&intern->doc_comment);

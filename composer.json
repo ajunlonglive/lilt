@@ -15,19 +15,23 @@
   "require": {
     "php": ">=7.1"
   },
-  "require-dev": {
-    "phpunit/phpunit": "^5.5",
-    "friendsofphp/php-cs-fixer": "~1.9"
-  },
   "autoload-dev": {
     "psr-4": {
       "": "test/"
     }
   },
   "scripts": {
-    "test": "vendor/bin/phpunit -c phpunit.xml.dist",
+    "test": "REPORT_EXIT_STATUS=1 TEST_PHP_ARGS=\"-q --show-diff\" make test",
+    "memtest": "REPORT_EXIT_STATUS=1 USE_ZEND_ALLOC=0 ZEND_DONT_UNLOAD_MODULES=1 valgrind make test",
+    "clean": [
+      "make clean",
+      "phpize --clean"
+    ],
     "post-update-cmd": [
-      "phpize && ./configure --enable-lilt && make && sudo make install && make clean && phpize --clean"
+      "phpize",
+      "./configure --enable-lilt",
+      "make",
+      "make install"
     ]
   }
 }
