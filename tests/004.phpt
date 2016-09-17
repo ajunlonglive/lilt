@@ -34,7 +34,7 @@ string(3) "Foo"
 string(3) "Bar"
 bool(false)
 bool(false)
-bool(false)
+bool(true)
 int(1572868)
 array(0) {
 }

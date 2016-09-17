@@ -84,7 +84,7 @@ PHP_API zval *FUNC(read_property, zval *object, zval *member, int type, void **c
         } else if (zend_string_equals_literal(property_name, "properties")) {
             rv = FUNC(class_properties, intern);
         } else if (zend_string_equals_literal(property_name, "isInternal")) {
-            ZVAL_BOOL(rv, intern->ce->ce_flags & ZEND_INTERNAL_CLASS);
+            ZVAL_BOOL(rv, intern->ce->type == ZEND_INTERNAL_CLASS);
         } else if (zend_string_equals_literal(property_name, "isAbstract")) {
             ZVAL_BOOL(rv,
                 (intern->ce->ce_flags & ZEND_ACC_ABSTRACT) ||
