@@ -1,14 +1,14 @@
 --TEST--
-type array
+type integer
 --SKIPIF--
 <?php include("skipif.inc") ?>
 --FILE--
 <?php
-$type = \typeof([]);
+$type = \typeof(1);
 var_dump($type instanceof \Type);
-var_dump($type === \Type::of([]));
-var_dump($type === \Type::array);
-var_dump($type === TYPE_ARRAY);
+var_dump($type === \Type::of(1));
+var_dump($type === \Type::integer);
+var_dump($type === TYPE_INTEGER);
 var_dump($type->name);
 var_dump($type->scalar);
 ?>
@@ -17,5 +17,5 @@ bool(true)
 bool(true)
 bool(true)
 bool(true)
-string(5) "array"
+string(7) "integer"
 bool(true)

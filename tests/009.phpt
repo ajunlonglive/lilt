@@ -1,14 +1,14 @@
 --TEST--
-type array
+type null
 --SKIPIF--
 <?php include("skipif.inc") ?>
 --FILE--
 <?php
-$type = \typeof([]);
+$type = \typeof(null);
 var_dump($type instanceof \Type);
-var_dump($type === \Type::of([]));
-var_dump($type === \Type::array);
-var_dump($type === TYPE_ARRAY);
+var_dump($type === \Type::of(null));
+var_dump($type === \Type::null);
+var_dump($type === TYPE_NULL);
 var_dump($type->name);
 var_dump($type->scalar);
 ?>
@@ -17,5 +17,5 @@ bool(true)
 bool(true)
 bool(true)
 bool(true)
-string(5) "array"
+string(4) "null"
 bool(true)
