@@ -85,6 +85,20 @@ PHP_API zval *FUNC(read_property, zval *object, zval *member, int type, void **c
             rv = FUNC(class_properties, intern);
         } else if (zend_string_equals_literal(property_name, "isInternal")) {
             ZVAL_BOOL(rv, intern->ce->ce_flags & ZEND_INTERNAL_CLASS);
+        } else if (zend_string_equals_literal(property_name, "isAbstract")) {
+            ZVAL_BOOL(rv,
+                (intern->ce->ce_flags & ZEND_ACC_ABSTRACT) ||
+                (intern->ce->ce_flags & ZEND_ACC_EXPLICIT_ABSTRACT_CLASS) ||
+                (intern->ce->ce_flags & ZEND_ACC_IMPLICIT_ABSTRACT_CLASS)
+            );
+        } else if (zend_string_equals_literal(property_name, "isInterface")) {
+            ZVAL_BOOL(rv, intern->ce->ce_flags & ZEND_ACC_INTERFACE);
+        } else if (zend_string_equals_literal(property_name, "isDeprecated")) {
+            ZVAL_BOOL(rv, intern->ce->ce_flags & ZEND_ACC_DEPRECATED);
+        } else if (zend_string_equals_literal(property_name, "isFinal")) {
+            ZVAL_BOOL(rv, intern->ce->ce_flags & ZEND_ACC_FINAL);
+        } else if (zend_string_equals_literal(property_name, "isTrait")) {
+            ZVAL_BOOL(rv, intern->ce->ce_flags & ZEND_ACC_TRAIT);
         }
     } else if (zend_string_equals_literal(property_name, "isScalar")) {
         ZVAL_BOOL(rv, 1);

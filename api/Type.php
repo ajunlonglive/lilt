@@ -39,6 +39,34 @@ final class Type implements \Typed {
      */
     public $name;
     /**
+     * @var bool
+     */
+    public $isScalar;
+    /**
+     * @var bool
+     */
+    public $isInternal;
+    /**
+     * @var bool
+     */
+    public $isInterface;
+    /**
+     * @var bool
+     */
+    public $isTrait;
+    /**
+     * @var bool
+     */
+    public $isAbstract;
+    /**
+     * @var bool
+     */
+    public $isFinal;
+    /**
+     * @var bool
+     */
+    public $isDeprecated;
+    /**
      * @var int
      */
     public $flags;
