@@ -3,7 +3,6 @@
   "description": "lilt php code library",
   "homepage": "https://github.com/lilt-php/lilt",
   "license": "MIT",
-  "minimum-stability": "dev",
   "authors": [
     {
       "name": "lilty",
