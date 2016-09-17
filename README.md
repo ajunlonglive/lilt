@@ -64,7 +64,7 @@ class Bar implements Typed {
 }
 
 // or as reflection
-if ((Bar::type)->isInternal) {
+if (!(Bar::type)->isInternal) {
     foreach ((Bar::type)->properties as $k => $v) {
         if ($v->class === Bar::type) {
             if (preg_match('/@(\w+) (.+) ?(.+)/i', $v->docComment, $matches)) {
