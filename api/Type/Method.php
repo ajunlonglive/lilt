@@ -11,7 +11,11 @@ final class Method {
      */
     public $argInfos;
     /**
-     * @var \Type|null
+     * @var string
+     */
+    public $docComment;
+    /**
+     * @var \Type
      */
     public $class;
     /**
