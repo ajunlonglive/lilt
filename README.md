@@ -22,6 +22,60 @@ $ composer install
 $ echo "extension=lilt.so" >> /path/to/php.ini
 ```
 
+**Usage**
+
+```php
+// to type
+class Foo implements Typed { }
+class Bar implements Typed {
+    /**
+     * @var Foo
+     */
+    public $foo;
+    
+    public function __construct($var) {
+        switch (\typeof($var)) {
+            case \Type::
+                // do something
+                break;
+            case \Type::resource:
+                // do something
+                break;
+            case \Type::null: 
+                // do something
+                break;
+            case \Type::integer: 
+                // do something
+                break;
+            case \Type::double: 
+                // do something
+                break;
+            case \Type::boolean: 
+                // do something
+                break;
+            case \Type::array: 
+                // do something
+                break;
+            case Foo::type: 
+                $this->foo = $var;
+                break;
+        }
+    }
+}
+
+// or as reflection
+if ((Bar::type)->isInternal) {
+    foreach ((Bar::type)->properties as $k => $v) {
+        if ($v->class === Bar::type) {
+            if (preg_match('/@(\w+) (.+) ?(.+)/i', $v->docComment, $matches)) {
+                echo $matches[1]; // var
+                echo $matches[2]; // Foo
+            }
+        }
+    }
+}
+```
+
 **Benchmark**
 
 ```bash
