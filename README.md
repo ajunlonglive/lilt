@@ -1,4 +1,4 @@
-# lilt
+# lilt/lilt
 
 [![Build Status](https://img.shields.io/travis/lilt-php/lilt/master.svg?style=flat-square)](https://travis-ci.org/lilt-php/lilt)
 [![Minimum PHP Version](https://img.shields.io/badge/php-%3E%3D%207.1-8892BF.svg?style=flat-square)](https://php.net/)
@@ -15,9 +15,9 @@
 ```bash
 $ composer require lilt/lilt
 $ echo "extension=lilt.so" >> /path/to/php.ini
-```
-OR clone then
-```bash
+
+or clone then
+
 $ phpize
 $ ./configure --enable-lilt
 $ make
