@@ -18,11 +18,14 @@ $ echo "extension=lilt.so" >> /path/to/php.ini
 
 or clone then
 
-$ phpize
-$ ./configure --enable-lilt
-$ make
-$ sudo make install
+$ composer install
 $ echo "extension=lilt.so" >> /path/to/php.ini
+```
+
+**Benchmark**
+
+```bash
+$ composer bench
 ```
 
 **Tests**

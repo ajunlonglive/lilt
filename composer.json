@@ -15,9 +15,13 @@
   "require": {
     "php": ">=7.1"
   },
+  "require-dev": {
+    "lilt/bench": "dev-master"
+  },
   "scripts": {
     "test": "REPORT_EXIT_STATUS=1 TEST_PHP_ARGS=\"-q --show-diff\" make test",
     "memtest": "REPORT_EXIT_STATUS=1 USE_ZEND_ALLOC=0 ZEND_DONT_UNLOAD_MODULES=1 TEST_PHP_ARGS=\"-q --show-diff\" valgrind make test",
+    "bench": "php bench/bootstrap.php",
     "clean": [
       "make clean",
       "phpize --clean"
