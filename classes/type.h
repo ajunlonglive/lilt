@@ -34,11 +34,10 @@
 EXT_CLASS_STRUCT_BEGIN(Type)
     zend_class_entry *ce;
     zend_string *type_name;
-    zval name;
-    zval flags;
+    HashTable properties;
     zval constants;
     zval functions;
-    zval properties;
+    zval class_properties;
 EXT_CLASS_STRUCT_END(Type);
 EXT_CLASS_PHP_STRUCT_BEGIN(Type)
 EXT_CLASS_PHP_STRUCT_END(Type);
@@ -46,11 +45,10 @@ EXT_CLASS_INIT_FUNCTION(Type);
 PHP_API TypeStruct *TypeCtor(zend_string *type_name, zend_class_entry *ce);
 PHP_API zend_object *TypeFunc(enclose, TypeStruct *type);
 PHP_API void TypeFunc(free, TypeStruct *intern);
-PHP_API zval *TypeFunc(get_name, TypeStruct *intern);
-PHP_API zval *TypeFunc(get_flags, TypeStruct *intern);
-PHP_API zval *TypeFunc(get_constants, TypeStruct *intern);
-PHP_API zval *TypeFunc(get_functions, TypeStruct *intern);
-PHP_API zval *TypeFunc(get_properties, TypeStruct *intern);
+PHP_API HashTable *TypeFunc(properties, TypeStruct *intern);
+PHP_API zval *TypeFunc(constants, TypeStruct *intern);
+PHP_API zval *TypeFunc(functions, TypeStruct *intern);
+PHP_API zval *TypeFunc(class_properties, TypeStruct *intern);
 PHP_API int TypeFunc(zval_of, zval *value, zval *rv);
 PHP_API int TypeFunc(zval_of_ce, zend_class_entry *ce, zval *rv);
 PHP_API int TypeFunc(zval_of_classname, zval *value, zval *rv);

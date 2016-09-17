@@ -31,15 +31,7 @@ INIT_FUNCTION {
 PHP_API STRUCT *CTOR(zend_function *function) {
     STRUCT *intern = ecalloc(1, sizeof(STRUCT));
     intern->function = function;
-    if (function) {
-        ZVAL_LONG(&intern->flags, function->internal_function.fn_flags);
-        ZVAL_STR(&intern->name, intern->function->internal_function.function_name);
-    }
-    else {
-        ZVAL_NULL(&intern->flags);
-        ZVAL_NULL(&intern->name);
-    }
-
+    zend_hash_init(&intern->properties, 5, NULL, zval_p_dtor, 0);
     return intern;
 }
 
@@ -48,19 +40,33 @@ PHP_API zend_object *FUNC(enclose, STRUCT *intern) {
     zend_object_std_init(&object->std, CE);
     object->std.handlers = &OH;
     object->EXT_CLASS_INTERN_STRUCT = intern;
-
     return &object->std;
 }
 
 PHP_API void FUNC(free, STRUCT *intern) {
-    zval_ptr_dtor(&intern->arg_infos);
     zval_ptr_dtor(&intern->class);
-    zval_ptr_dtor(&intern->flags);
-    zval_ptr_dtor(&intern->name);
+    zval_ptr_dtor(&intern->arg_infos);
     efree(intern);
 }
 
-PHP_API zval *FUNC(get_arg_infos, STRUCT *intern) {
+PHP_API HashTable *FUNC(properties, STRUCT *intern) {
+    zval tmp;
+    if (zend_hash_num_elements(&intern->properties) <= 0) {
+        ZVAL_STR(&tmp, intern->function->internal_function.function_name);
+        _zend_hash_str_add_new(&intern->properties, STR_AND_LEN("name"), &tmp);
+        ZVAL_LONG(&tmp, intern->function->internal_function.fn_flags);
+        _zend_hash_str_add_new(&intern->properties, STR_AND_LEN("flags"), &tmp);
+        ZVAL_STR_OR_NULL(&tmp, intern->function->op_array.doc_comment);
+        _zend_hash_str_add_new(&intern->properties, STR_AND_LEN("docComment"), &tmp);
+        ZVAL_COPY(&tmp, FUNC(class, intern));
+        _zend_hash_str_add_new(&intern->properties, STR_AND_LEN("class"), &tmp);
+        ZVAL_COPY(&tmp, FUNC(arg_infos, intern));
+        _zend_hash_str_add_new(&intern->properties, STR_AND_LEN("argInfos"), &tmp);
+    }
+    return &intern->properties;
+}
+
+PHP_API zval *FUNC(arg_infos, STRUCT *intern) {
     if (Z_TYPE(intern->arg_infos) == IS_UNDEF) {
         if (intern->function) {
             zend_arg_info *ptr = intern->function->common.arg_info;
@@ -73,34 +79,22 @@ PHP_API zval *FUNC(get_arg_infos, STRUCT *intern) {
                     ptr++;
                 }
             }
-        }
-        else {
+        } else {
             ZVAL_NULL(&intern->arg_infos);
         }
     }
-
     return &intern->arg_infos;
 }
 
-PHP_API zval *FUNC(get_class, STRUCT *intern) {
+PHP_API zval *FUNC(class, STRUCT *intern) {
     if (Z_TYPE(intern->class) == IS_UNDEF) {
-        if (intern->function && intern->function->internal_function.scope) {
+        if (intern->function->internal_function.scope) {
             TypeFunc(zval_of_ce, intern->function->internal_function.scope, &intern->class);
-        }
-        else {
+        } else {
             ZVAL_NULL(&intern->class);
         }
     }
-
     return &intern->class;
-}
-
-PHP_API zval *FUNC(get_flags, STRUCT *intern) {
-    return &intern->flags;
-}
-
-PHP_API zval *FUNC(get_name, STRUCT *intern) {
-    return &intern->name;
 }
 
 #undef CUSTOM_STRUCT

@@ -19,12 +19,51 @@
 #ifndef LILT_UTILS_H
 #define LILT_UTILS_H
 
-#include "php.h"
+#include "lilt.h"
 
 static inline void zval_p_dtor(zval *zv) { /* {{{ */
-    zend_objects_destroy_object(Z_PTR_P(zv));
     zval_ptr_dtor(zv);
 } /* }}} */
+
+static inline int zend_hash_add_zval_ex(HashTable *ht, const char *str, size_t len, zval *data) { /* {{{ */
+    zval *ret;
+
+    ret = zend_symtable_str_update(ht, str, len, data);
+
+    return ret ? SUCCESS : FAILURE;
+} /* }}} */
+
+static inline int zend_hash_add_string_ex(HashTable *ht, const char *str, size_t len, zend_string *data) { /* {{{ */
+    zval *ret, tmp;
+
+    ZVAL_STR_OR_NULL(&tmp, data);
+    ret = zend_symtable_str_update(ht, str, len, &tmp);
+
+    return ret ? SUCCESS : FAILURE;
+} /* }}} */
+
+static inline int zend_hash_add_long_ex(HashTable *ht, const char *str, size_t len, int data) { /* {{{ */
+    zval *ret, tmp;
+
+    ZVAL_LONG(&tmp, data);
+    ret = zend_symtable_str_update(ht, str, len, &tmp);
+
+    return ret ? SUCCESS : FAILURE;
+} /* }}} */
+
+static inline int zend_hash_add_bool_ex(HashTable *ht, const char *str, size_t len, zend_bool data) { /* {{{ */
+    zval *ret, tmp;
+
+    ZVAL_BOOL(&tmp, data);
+    ret = zend_symtable_str_update(ht, str, len, &tmp);
+
+    return ret ? SUCCESS : FAILURE;
+} /* }}} */
+
+#define zend_hash_add_zval(_ht, _key, _data) zend_hash_add_zval_ex(_ht, STR_AND_LEN(_key), _data)
+#define zend_hash_add_string(_ht, _key, _data) zend_hash_add_string_ex(_ht, STR_AND_LEN(_key), _data)
+#define zend_hash_add_long(_ht, _key, _data) zend_hash_add_long_ex(_ht, STR_AND_LEN(_key), _data)
+#define zend_hash_add_bool(_ht, _key, _data) zend_hash_add_bool_ex(_ht, STR_AND_LEN(_key), _data)
 
 #endif /* LILT_UTILS_H */
 

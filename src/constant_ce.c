@@ -34,7 +34,8 @@ CEINIT_FUNCTION {
 }
 
 PHP_API zend_object *FUNC(create_object, zend_class_entry *ce) {
-    return FUNC(enclose, CTOR(NULL, NULL));
+    zend_error(E_ERROR,"Cannot instantiate %s::class in userland.", CLASS_STR);
+    return NULL;
 }
 
 #undef CUSTOM_STRUCT

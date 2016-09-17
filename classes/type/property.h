@@ -33,10 +33,9 @@
  * * * * * * * * * */
 EXT_CLASS_STRUCT_BEGIN(Type_Property)
     zend_property_info *property_info;
+    zend_string *name;
+    HashTable properties;
     zval class;
-    zval doc_comment;
-    zval flags;
-    zval name;
 EXT_CLASS_STRUCT_END(Type_Property);
 EXT_CLASS_PHP_STRUCT_BEGIN(Type_Property)
 EXT_CLASS_PHP_STRUCT_END(Type_Property);
@@ -44,10 +43,8 @@ EXT_CLASS_INIT_FUNCTION(Type_Property);
 PHP_API Type_PropertyStruct *Type_PropertyCtor(zend_property_info *property_info, zend_string *name);
 PHP_API zend_object *Type_PropertyFunc(enclose, Type_PropertyStruct *type);
 PHP_API void Type_PropertyFunc(free, Type_PropertyStruct *intern);
-PHP_API zval *Type_PropertyFunc(get_class, Type_PropertyStruct *intern);
-PHP_API zval *Type_PropertyFunc(get_doc_comment, Type_PropertyStruct *intern);
-PHP_API zval *Type_PropertyFunc(get_flags, Type_PropertyStruct *intern);
-PHP_API zval *Type_PropertyFunc(get_name, Type_PropertyStruct *intern);
+PHP_API HashTable *Type_PropertyFunc(properties, Type_PropertyStruct *intern);
+PHP_API zval *Type_PropertyFunc(class, Type_PropertyStruct *intern);
 
 /**
  * Class entry
@@ -61,7 +58,6 @@ PHP_API zend_object *Type_PropertyFunc(create_object, zend_class_entry *ce);
  * * * * * * * * * */
 EXT_CLASS_OBJECT_HANDLERS(Type_Property);
 EXT_CLASS_OHINIT_FUNCTION(Type_Property);
-PHP_API int Type_PropertyFunc(cast_object, zval *readobj, zval *retval, int type);
 PHP_API void Type_PropertyFunc(free_object, zend_object *object);
 PHP_API HashTable *Type_PropertyFunc(get_debug_info, zval *object, int *is_temp);
 PHP_API zval *Type_PropertyFunc(read_property, zval *object, zval *member, int type, void **cache_slot, zval *rv);

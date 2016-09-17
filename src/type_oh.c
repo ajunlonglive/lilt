@@ -33,7 +33,6 @@ OHINIT_FUNCTION {
 
 PHP_API int FUNC(do_operation, zend_uchar opcode, zval *result, zval *op1, zval *op2) {
     ZVAL_BOOL(result, 0);
-
     if (opcode == ZEND_IS_IDENTICAL || opcode == ZEND_IS_EQUAL ||
         opcode == ZEND_IS_NOT_IDENTICAL || opcode == ZEND_IS_NOT_EQUAL) {
         ZVAL_DEREF(op1);
@@ -47,14 +46,11 @@ PHP_API int FUNC(do_operation, zend_uchar opcode, zval *result, zval *op1, zval 
         }
         if (opcode == ZEND_IS_IDENTICAL || opcode == ZEND_IS_EQUAL) {
             ZVAL_BOOL(result, zend_string_equals(this->type_name, Z_STR_P(op2)));
-        }
-        else {
+        } else {
             ZVAL_BOOL(result, !zend_string_equals(this->type_name, Z_STR_P(op2)));
         }
-
         return SUCCESS;
     }
-
     return FAILURE;
 }
 
@@ -65,36 +61,8 @@ PHP_API void FUNC(free_object, zend_object *object) {
 }
 
 PHP_API HashTable *FUNC(get_debug_info, zval *object, int *is_temp) {
-    zval tmp;
-    zval array;
-    STRUCT *intern = Z_THIS_P(object);
-
-    is_temp = 0;
-    array_init_size(&array, 6);
-    add_assoc_str(&array, "name", intern->type_name);
-    add_assoc_bool(&array, "scalar", intern->ce == NULL);
-    if (intern->ce) {
-        add_assoc_str(&array, "docComment", intern->ce->info.user.doc_comment);
-        ZVAL_COPY(&tmp, FUNC(get_flags, intern));
-        if (Z_TYPE(tmp) != IS_UNDEF) {
-            add_assoc_zval(&array, "flags", &tmp);
-        }
-        ZVAL_COPY(&tmp, FUNC(get_constants, intern));
-        if (Z_TYPE(tmp) != IS_UNDEF) {
-            add_assoc_zval(&array, "constants", &tmp);
-        }
-        ZVAL_COPY(&tmp, FUNC(get_properties, intern));
-        if (Z_TYPE(tmp) != IS_UNDEF) {
-            add_assoc_zval(&array, "properties", &tmp);
-        }
-        ZVAL_COPY(&tmp, FUNC(get_functions, intern));
-        if (Z_TYPE(tmp) != IS_UNDEF) {
-            add_assoc_zval(&array, "functions", &tmp);
-        }
-    }
-
-
-    return Z_ARRVAL(array);
+    *is_temp = 0;
+    return FUNC(properties, Z_THIS_P(object));
 }
 
 PHP_API zval *FUNC(read_property, zval *object, zval *member, int type, void **cache_slot, zval *rv) {
@@ -102,32 +70,27 @@ PHP_API zval *FUNC(read_property, zval *object, zval *member, int type, void **c
     zend_string *property_name = Z_STR_P(member);
     if (zend_string_equals_literal(property_name, "name")) {
         ZVAL_STR(rv, intern->type_name);
-    }
-    else if (zend_string_equals_literal(property_name, "scalar")) {
-        ZVAL_BOOL(rv, intern->ce == NULL);
-    }
-    else if (intern->ce) {
-        if (zend_string_equals_literal(property_name, "flags")) {
+    } else if (intern->ce) {
+        if (zend_string_equals_literal(property_name, "scalar")) {
+            ZVAL_BOOL(rv, 0);
+        } else if (zend_string_equals_literal(property_name, "flags")) {
             ZVAL_LONG(rv, intern->ce->ce_flags);
-        }
-        else if (zend_string_equals_literal(property_name, "docComment")) {
+        } else if (zend_string_equals_literal(property_name, "docComment")) {
             ZVAL_STR(rv, intern->ce->info.user.doc_comment);
+        } else if (zend_string_equals_literal(property_name, "constants")) {
+            rv = FUNC(constants, intern);
+        } else if (zend_string_equals_literal(property_name, "functions")) {
+            rv = FUNC(functions, intern);
+        } else if (zend_string_equals_literal(property_name, "properties")) {
+            rv = FUNC(class_properties, intern);
         }
-        else if (zend_string_equals_literal(property_name, "constants")) {
-            rv = FUNC(get_constants, intern);
-        }
-        else if (zend_string_equals_literal(property_name, "functions")) {
-            rv = FUNC(get_functions, intern);
-        }
-        else if (zend_string_equals_literal(property_name, "properties")) {
-            rv = FUNC(get_properties, intern);
-        }
+    } else if (zend_string_equals_literal(property_name, "scalar")) {
+        ZVAL_BOOL(rv, 1);
     }
     if (Z_TYPE_P(rv) != IS_UNDEF) {
         return rv;
     }
     zend_error(E_ERROR,"Undefined property: %s::$%s", ZSTR_VAL(Z_OBJ_P(object)->ce->name), Z_STRVAL_P(member));
-
     return &EG(uninitialized_zval);
 }
 

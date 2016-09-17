@@ -22,11 +22,10 @@
 #include "gen/class.h"
 
 CLASS_ENTRY;
+const NO_METHODS;
 
 CEINIT_FUNCTION {
-    zend_class_entry ce;
-    INIT_CLASS_ENTRY(ce, CLASS_STR, NULL);
-    CE = zend_register_internal_interface(&ce);
+    INIT_INTERFACE;
 }
 
 #undef CLASS

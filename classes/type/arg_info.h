@@ -33,11 +33,7 @@
  * * * * * * * * * */
 EXT_CLASS_STRUCT_BEGIN(Type_ArgInfo)
     zend_arg_info *arg_info;
-    zval by_reference;
-    zval name;
-    zval nullable;
-    zval type_hint;
-    zval variadic;
+    HashTable properties;
 EXT_CLASS_STRUCT_END(Type_ArgInfo);
 EXT_CLASS_PHP_STRUCT_BEGIN(Type_ArgInfo)
 EXT_CLASS_PHP_STRUCT_END(Type_ArgInfo);
@@ -45,11 +41,7 @@ EXT_CLASS_INIT_FUNCTION(Type_ArgInfo);
 PHP_API Type_ArgInfoStruct *Type_ArgInfoCtor(zend_arg_info *arg_info);
 PHP_API zend_object *Type_ArgInfoFunc(enclose, Type_ArgInfoStruct *type);
 PHP_API void Type_ArgInfoFunc(free, Type_ArgInfoStruct *intern);
-PHP_API zval *Type_ArgInfoFunc(get_by_reference, Type_ArgInfoStruct *intern);
-PHP_API zval *Type_ArgInfoFunc(get_name, Type_ArgInfoStruct *intern);
-PHP_API zval *Type_ArgInfoFunc(get_nullable, Type_ArgInfoStruct *intern);
-PHP_API zval *Type_ArgInfoFunc(get_type_hint, Type_ArgInfoStruct *intern);
-PHP_API zval *Type_ArgInfoFunc(get_variadic, Type_ArgInfoStruct *intern);
+PHP_API HashTable *Type_ArgInfoFunc(properties, Type_ArgInfoStruct *intern);
 
 /**
  * Class entry
@@ -63,7 +55,6 @@ PHP_API zend_object *Type_ArgInfoFunc(create_object, zend_class_entry *ce);
  * * * * * * * * * */
 EXT_CLASS_OBJECT_HANDLERS(Type_ArgInfo);
 EXT_CLASS_OHINIT_FUNCTION(Type_ArgInfo);
-PHP_API int Type_ArgInfoFunc(cast_object, zval *readobj, zval *retval, int type);
 PHP_API void Type_ArgInfoFunc(free_object, zend_object *object);
 PHP_API HashTable *Type_ArgInfoFunc(get_debug_info, zval *object, int *is_temp);
 PHP_API zval *Type_ArgInfoFunc(read_property, zval *object, zval *member, int type, void **cache_slot, zval *rv);

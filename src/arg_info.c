@@ -29,10 +29,10 @@ INIT_FUNCTION {
 }
 
 PHP_API STRUCT *CTOR(zend_arg_info *arg_info) {
-    STRUCT *object = ecalloc(1, sizeof(STRUCT));
-    object->arg_info = arg_info;
-
-    return object;
+    STRUCT *intern = ecalloc(1, sizeof(STRUCT));
+    intern->arg_info = arg_info;
+    zend_hash_init(&intern->properties, 5, NULL, zval_p_dtor, 0);
+    return intern;
 }
 
 PHP_API zend_object *FUNC(enclose, STRUCT *intern) {
@@ -40,82 +40,22 @@ PHP_API zend_object *FUNC(enclose, STRUCT *intern) {
     zend_object_std_init(&object->std, CE);
     object->std.handlers = &OH;
     object->EXT_CLASS_INTERN_STRUCT = intern;
-
     return &object->std;
 }
 
 PHP_API void FUNC(free, STRUCT *intern) {
-    zval_ptr_dtor(&intern->by_reference);
-    zval_ptr_dtor(&intern->name);
-    zval_ptr_dtor(&intern->nullable);
-    zval_ptr_dtor(&intern->type_hint);
-    zval_ptr_dtor(&intern->variadic);
     efree(intern);
 }
 
-PHP_API zval *FUNC(get_by_reference, STRUCT *intern) {
-    if (Z_TYPE(intern->by_reference) == IS_UNDEF) {
-        if (intern->arg_info) {
-            ZVAL_BOOL(&intern->by_reference, intern->arg_info->pass_by_reference);
-        }
-        else {
-            ZVAL_NULL(&intern->by_reference);
-        }
+PHP_API HashTable *FUNC(properties, STRUCT *intern) {
+    if (zend_hash_num_elements(&intern->properties) <= 0) {
+        zend_hash_add_string(&intern->properties, "name", intern->arg_info->name);
+        zend_hash_add_bool(&intern->properties, "byReference", intern->arg_info->pass_by_reference);
+        zend_hash_add_bool(&intern->properties, "nullable", intern->arg_info->allow_null);
+        zend_hash_add_bool(&intern->properties, "typeHint", intern->arg_info->type_hint);
+        zend_hash_add_bool(&intern->properties, "variadic", intern->arg_info->is_variadic);
     }
-
-    return &intern->by_reference;
-}
-
-PHP_API zval *FUNC(get_name, STRUCT *intern) {
-    if (Z_TYPE(intern->name) == IS_UNDEF) {
-        if (intern->arg_info) {
-            ZVAL_STR(&intern->name, intern->arg_info->name);
-        }
-        else {
-            ZVAL_NULL(&intern->name);
-        }
-    }
-
-    return &intern->name;
-}
-
-PHP_API zval *FUNC(get_nullable, STRUCT *intern) {
-    if (Z_TYPE(intern->nullable) == IS_UNDEF) {
-        if (intern->arg_info) {
-            ZVAL_BOOL(&intern->nullable, intern->arg_info->allow_null);
-        }
-        else {
-            ZVAL_NULL(&intern->nullable);
-        }
-    }
-
-    return &intern->nullable;
-}
-
-PHP_API zval *FUNC(get_type_hint, STRUCT *intern) {
-    if (Z_TYPE(intern->type_hint) == IS_UNDEF) {
-        if (intern->arg_info) {
-            ZVAL_BOOL(&intern->type_hint, intern->arg_info->type_hint);
-        }
-        else {
-            ZVAL_NULL(&intern->type_hint);
-        }
-    }
-
-    return &intern->type_hint;
-}
-
-PHP_API zval *FUNC(get_variadic, STRUCT *intern) {
-    if (Z_TYPE(intern->variadic) == IS_UNDEF) {
-        if (intern->arg_info) {
-            ZVAL_BOOL(&intern->variadic, intern->arg_info->is_variadic);
-        }
-        else {
-            ZVAL_NULL(&intern->variadic);
-        }
-    }
-
-    return &intern->variadic;
+    return &intern->properties;
 }
 
 #undef CUSTOM_STRUCT

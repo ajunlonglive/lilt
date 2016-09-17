@@ -22,11 +22,8 @@ PHP_API PHP_FUNCTION(typeof) { /* {{{ */
     int num_args = ZEND_CALL_NUM_ARGS(execute_data);
     if (num_args == 1) {
         TypeMem(zval_of)(ZEND_CALL_ARG(execute_data, 1), return_value);
-    }
-    else {
-        zend_internal_type_error(
-            1, "typeof() expects 1 parameter, %d given", num_args
-        );
+    } else {
+        zend_internal_type_error(1, "typeof() expects 1 parameter, %d given", num_args);
     }
 } /* }}} */
 
@@ -38,17 +35,13 @@ PHP_API PHP_FUNCTION(classtype) { /* {{{ */
         ZVAL_DEREF(value);
         if (Z_TYPE_P(value) == IS_STRING) {
             TypeFunc(zval_of_classname, value, return_value);
-        }
-        else {
+        } else {
             zend_internal_type_error(
                 1, "classtype() expects parameter 1 to be string, %s given", zend_zval_type_name(value)
             );
         }
-    }
-    else {
-        zend_internal_type_error(
-            1, "classtype() expects 1 parameter, %d given", num_args
-        );
+    } else {
+        zend_internal_type_error(1, "classtype() expects 1 parameter, %d given", num_args);
     }
 } /* }}} */
 

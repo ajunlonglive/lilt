@@ -3,7 +3,6 @@
 /autom4te.cache/
 /config.guess
 /missing
-/.libs/
 /config.status
 /run-tests.php
 /.deps
@@ -18,14 +17,12 @@
 /acinclude.m4
 /Makefile.global
 /configure
-/lilt.la
 /Makefile
 /CMakeLists.txt
 /config.h.in
 /Makefile.fragments
 /Makefile.objects
 /composer.phar
-/lilt.lo
 /config.sub
 /mkinstalldirs
 /ltmain.sh
@@ -33,3 +30,6 @@
 /config.log
 /composer.lock
 /tmp-php.ini
+*.la
+.libs
+*.lo

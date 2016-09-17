@@ -31,7 +31,6 @@ EXT_HFREE_FUNCTION {
 EXT_HANDLER_FUNCTION(ZEND_DECLARE_INHERITED_CLASS) {
     zend_class_entry *ce, *parent;
     zval *lcname, *rtd_key;
-
     lcname = RT_CONSTANT(&EX(func)->op_array, EX(opline)->op1);
     rtd_key = lcname + 1;
     ce = zend_hash_find_ptr(EG(class_table), Z_STR_P(rtd_key));
@@ -45,14 +44,12 @@ EXT_HANDLER_FUNCTION(ZEND_DECLARE_INHERITED_CLASS) {
             Z_TRY_ADDREF(type);
         }
     }
-
     return ZEND_USER_OPCODE_DISPATCH;
 }
 
 EXT_HANDLER_FUNCTION(ZEND_ADD_INTERFACE) {
     zend_class_entry *parent;
     zend_class_entry *ce = Z_CE_P(EX_VAR(EX(opline)->op1.var));
-
     parent = CACHED_PTR(Z_CACHE_SLOT_P(EX_CONSTANT(EX(opline)->op2)));
     if (UNEXPECTED(parent == NULL)) {
         parent = zend_fetch_class_by_name(Z_STR_P(EX_CONSTANT(EX(opline)->op2)), EX_CONSTANT(EX(opline)->op2) + 1, ZEND_FETCH_CLASS_INTERFACE);
@@ -70,7 +67,6 @@ EXT_HANDLER_FUNCTION(ZEND_ADD_INTERFACE) {
             Z_TRY_ADDREF(type);
         }
     }
-
     return ZEND_USER_OPCODE_DISPATCH;
 }
 

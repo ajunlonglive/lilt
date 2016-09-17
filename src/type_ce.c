@@ -28,7 +28,8 @@
       LILTG(type_##scalar) = MEM(enclose(CTOR(z_string(STRINGIZE(scalar)), NULL))); \
       ZVAL_OBJ(&zv, LILTG(type_##scalar)); \
       zend_declare_class_constant(CE, STRINGIZE(scalar), sizeof(STRINGIZE(scalar))-1, &zv); \
-      ZVAL_COPY(&c.value, &zv); \
+      ZVAL_OBJ(&c.value, LILTG(type_##scalar)); \
+      Z_TRY_ADDREF(c.value); \
       c.flags = ZEND_ACC_PUBLIC; \
       c.name = zend_string_init(STR_AND_LEN(constname), ZEND_ACC_PUBLIC & CONST_PERSISTENT); \
       c.module_number = 0; \
@@ -44,7 +45,6 @@ CEINIT_FUNCTION {
     INIT_CLASS;
     CE->ce_flags |= ZEND_ACC_FINAL;
     CE->create_object = MEM(create_object);
-
     INIT_TYPE_SCALAR(array, "TYPE_ARRAY");
     INIT_TYPE_SCALAR(boolean, "TYPE_BOOLEAN");
     INIT_TYPE_SCALAR(double, "TYPE_DOUBLE");
@@ -56,18 +56,16 @@ CEINIT_FUNCTION {
 }
 
 PHP_API zend_object *FUNC(create_object, zend_class_entry *ce) {
-    return FUNC(enclose, CTOR(NULL, NULL));
+    zend_error(E_ERROR,"Cannot instantiate %s::class in userland.", CLASS_STR);
+    return NULL;
 }
 
 PHP_API METHOD(of) {
     int num_args = ZEND_CALL_NUM_ARGS(execute_data);
     if (num_args == 1) {
         FUNC(zval_of, ZEND_CALL_ARG(execute_data, 1), return_value);
-    }
-    else {
-        zend_internal_type_error(
-            1, "Type::of() expects 1 parameter, %d given", num_args
-        );
+    } else {
+        zend_internal_type_error(1, "Type::of() expects 1 parameter, %d given", num_args);
     }
 }
 

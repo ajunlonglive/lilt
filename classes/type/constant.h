@@ -34,10 +34,8 @@
 EXT_CLASS_STRUCT_BEGIN(Type_Constant)
     zend_string *const_name;
     zend_class_constant *constant;
+    HashTable properties;
     zval class;
-    zval doc_comment;
-    zval name;
-    zval value;
 EXT_CLASS_STRUCT_END(Type_Constant);
 EXT_CLASS_PHP_STRUCT_BEGIN(Type_Constant)
 EXT_CLASS_PHP_STRUCT_END(Type_Constant);
@@ -45,10 +43,8 @@ EXT_CLASS_INIT_FUNCTION(Type_Constant);
 PHP_API Type_ConstantStruct *Type_ConstantCtor(zend_string *const_name, zend_class_constant *constant);
 PHP_API zend_object *Type_ConstantFunc(enclose, Type_ConstantStruct *type);
 PHP_API void Type_ConstantFunc(free, Type_ConstantStruct *intern);
-PHP_API zval *Type_ConstantFunc(get_class, Type_ConstantStruct *intern);
-PHP_API zval *Type_ConstantFunc(get_doc_comment, Type_ConstantStruct *intern);
-PHP_API zval *Type_ConstantFunc(get_name, Type_ConstantStruct *intern);
-PHP_API zval *Type_ConstantFunc(get_value, Type_ConstantStruct *intern);
+PHP_API HashTable *Type_ConstantFunc(properties, Type_ConstantStruct *intern);
+PHP_API zval *Type_ConstantFunc(class, Type_ConstantStruct *intern);
 
 /**
  * Class entry
@@ -62,7 +58,6 @@ PHP_API zend_object *Type_ConstantFunc(create_object, zend_class_entry *ce);
  * * * * * * * * * */
 EXT_CLASS_OBJECT_HANDLERS(Type_Constant);
 EXT_CLASS_OHINIT_FUNCTION(Type_Constant);
-PHP_API int Type_ConstantFunc(cast_object, zval *readobj, zval *retval, int type);
 PHP_API void Type_ConstantFunc(free_object, zend_object *object);
 PHP_API HashTable *Type_ConstantFunc(get_debug_info, zval *object, int *is_temp);
 PHP_API zval *Type_ConstantFunc(read_property, zval *object, zval *member, int type, void **cache_slot, zval *rv);

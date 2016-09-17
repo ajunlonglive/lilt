@@ -21,7 +21,6 @@
 #endif
 
 #include "lilt.h"
-#include "utils.h"
 
 EXT_DECLARE_MODULE_GLOBALS;
 
@@ -31,7 +30,6 @@ EXT_MGINIT_FUNCTION { /* {{{ EXT_MGINIT_FUNCTION */
 
 EXT_MINIT_FUNCTION { /* {{{ EXT_MINIT_FUNCTION */
     ZEND_INIT_MODULE_GLOBALS(lilt, EXT_MGINIT, NULL);
-
     return SUCCESS;
 } /* }}} */
 
@@ -41,7 +39,6 @@ EXT_MSHUTDOWN_FUNCTION { /* {{{ EXT_MSHUTDOWN_FUNCTION */
 
 EXT_HANDLER_FUNCTION(0) {
     php_printf("opcode: %d\n", EX(opline)->opcode);
-
     return ZEND_USER_OPCODE_DISPATCH;
 }
 
@@ -51,27 +48,22 @@ EXT_RINIT_FUNCTION { /* {{{ EXT_RINIT_FUNCTION */
 #endif
     zend_hash_init(&LILTG(data.types), 8, NULL, zval_p_dtor, 0);
     LILTG(zstr.type) = z_string("type");
-
     EXT_CLASS_INIT(Type_ArgInfo);
     EXT_CLASS_INIT(Type_Constant);
     EXT_CLASS_INIT(Type_Function);
     EXT_CLASS_INIT(Type_Property);
     EXT_CLASS_INIT(Type);
     EXT_CLASS_INIT(Typed);
-
     EXT_HINIT();
-
     return SUCCESS;
 } /* }}} */
 
 EXT_RSHUTDOWN_FUNCTION { /* {{{ EXT_RSHUTDOWN_FUNCTION */
     zend_hash_destroy(&LILTG(data.types));
     zend_string_release(LILTG(zstr.type));
-
     if (zend_hash_num_elements(&TypeCe->constants_table)) {
         zend_class_constant *c;
         zend_string *k;
-
         ZEND_HASH_FOREACH_STR_KEY_PTR(&TypeCe->constants_table, k, c)
             zval_ptr_dtor(&c->value);
             if (c->doc_comment && c->ce == TypeCe) {
@@ -81,7 +73,6 @@ EXT_RSHUTDOWN_FUNCTION { /* {{{ EXT_RSHUTDOWN_FUNCTION */
         ZEND_HASH_FOREACH_END();
         zend_hash_destroy(&TypeCe->constants_table);
     }
-
     zend_hash_del(EG(zend_constants), z_string("TYPE_ARRAY"));
     zend_hash_del(EG(zend_constants), z_string("TYPE_BOOLEAN"));
     zend_hash_del(EG(zend_constants), z_string("TYPE_DOUBLE"));
@@ -90,9 +81,7 @@ EXT_RSHUTDOWN_FUNCTION { /* {{{ EXT_RSHUTDOWN_FUNCTION */
     zend_hash_del(EG(zend_constants), z_string("TYPE_RESOURCE"));
     zend_hash_del(EG(zend_constants), z_string("TYPE_STRING"));
     zend_hash_del(EG(zend_constants), z_string("TYPE_UNKNOWN"));
-
     EXT_HFREE();
-
     return SUCCESS;
 } /* }}} */
 

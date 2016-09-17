@@ -33,10 +33,9 @@
  * * * * * * * * * */
 EXT_CLASS_STRUCT_BEGIN(Type_Function)
     zend_function *function;
+    HashTable properties;
     zval arg_infos;
     zval class;
-    zval flags;
-    zval name;
 EXT_CLASS_STRUCT_END(Type_Function);
 EXT_CLASS_PHP_STRUCT_BEGIN(Type_Function)
 EXT_CLASS_PHP_STRUCT_END(Type_Function);
@@ -44,10 +43,9 @@ EXT_CLASS_INIT_FUNCTION(Type_Function);
 PHP_API Type_FunctionStruct *Type_FunctionCtor(zend_function *function);
 PHP_API zend_object *Type_FunctionFunc(enclose, Type_FunctionStruct *type);
 PHP_API void Type_FunctionFunc(free, Type_FunctionStruct *intern);
-PHP_API zval *Type_FunctionFunc(get_arg_infos, Type_FunctionStruct *intern);
-PHP_API zval *Type_FunctionFunc(get_class, Type_FunctionStruct *intern);
-PHP_API zval *Type_FunctionFunc(get_flags, Type_FunctionStruct *intern);
-PHP_API zval *Type_FunctionFunc(get_name, Type_FunctionStruct *intern);
+PHP_API HashTable *Type_FunctionFunc(properties, Type_FunctionStruct *intern);
+PHP_API zval *Type_FunctionFunc(arg_infos, Type_FunctionStruct *intern);
+PHP_API zval *Type_FunctionFunc(class, Type_FunctionStruct *intern);
 
 /**
  * Class entry
@@ -61,7 +59,6 @@ PHP_API zend_object *Type_FunctionFunc(create_object, zend_class_entry *ce);
  * * * * * * * * * */
 EXT_CLASS_OBJECT_HANDLERS(Type_Function);
 EXT_CLASS_OHINIT_FUNCTION(Type_Function);
-PHP_API int Type_FunctionFunc(cast_object, zval *readobj, zval *retval, int type);
 PHP_API void Type_FunctionFunc(free_object, zend_object *object);
 PHP_API HashTable *Type_FunctionFunc(get_debug_info, zval *object, int *is_temp);
 PHP_API zval *Type_FunctionFunc(read_property, zval *object, zval *member, int type, void **cache_slot, zval *rv);

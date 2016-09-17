@@ -72,6 +72,7 @@ EXT_EXTERN_MODULE_GLOBALS_NX(LILT_EXT_NAME);
 #include "classes.h"
 #include "functions.h"
 #include "handlers.h"
+#include "utils.h"
 
 #if defined(ZTS) && defined(COMPILE_DL_LILT)
 ZEND_TSRMLS_CACHE_EXTERN();

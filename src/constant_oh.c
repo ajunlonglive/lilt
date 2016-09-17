@@ -27,23 +27,8 @@ OHINIT_FUNCTION {
     INIT_HANDLERS;
     OH.dtor_obj = zend_objects_destroy_object;
     OH.free_obj = MEM(free_object);
-    OH.cast_object = MEM(cast_object);
     OH.get_debug_info = MEM(get_debug_info);
     OH.read_property = MEM(read_property);
-}
-
-PHP_API int FUNC(cast_object, zval *readobj, zval *retval, int type) {
-    if (type != IS_STRING) {
-        return zend_std_cast_object_tostring(readobj, retval, type);
-    }
-    STRUCT *this = Z_THIS_P(readobj);
-    if (this->const_name) {
-
-        ZVAL_STR(retval, this->const_name);
-        return SUCCESS;
-    }
-
-    return FAILURE;
 }
 
 PHP_API void FUNC(free_object, zend_object *object) {
@@ -54,41 +39,26 @@ PHP_API void FUNC(free_object, zend_object *object) {
 }
 
 PHP_API HashTable *FUNC(get_debug_info, zval *object, int *is_temp) {
-    zval tmp;
-    zval array;
-    STRUCT *intern = Z_THIS_P(object);
-
-    is_temp = 0;
-    array_init_size(&array, 4);
-    ZVAL_COPY(&tmp, FUNC(get_doc_comment, intern));
-    add_assoc_zval(&array, "docComment", &tmp);
-    ZVAL_COPY(&tmp, FUNC(get_class, intern));
-    add_assoc_zval(&array, "class", &tmp);
-    ZVAL_COPY(&tmp, FUNC(get_name, intern));
-    add_assoc_zval(&array, "name", &tmp);
-    ZVAL_COPY(&tmp, FUNC(get_value, intern));
-    add_assoc_zval(&array, "value", &tmp);
-
-    return Z_ARRVAL(array);
+    *is_temp = 0;
+    return FUNC(properties, Z_THIS_P(object));
 }
 
 PHP_API zval *FUNC(read_property, zval *object, zval *member, int type, void **cache_slot, zval *rv) {
     STRUCT *intern = Z_THIS_P(object);
     zend_string *property_name = Z_STR_P(member);
-    if (zend_string_equals_literal(property_name, "docComment")) {
-        return FUNC(get_doc_comment, intern);
-    }
-    if (zend_string_equals_literal(property_name, "class")) {
-        return FUNC(get_class, intern);
-    }
     if (zend_string_equals_literal(property_name, "name")) {
-        return FUNC(get_name, intern);
+        ZVAL_STR(rv, intern->const_name);
+    } else if (zend_string_equals_literal(property_name, "value")) {
+        rv = &intern->constant->value;
+    } else if (zend_string_equals_literal(property_name, "docComment")) {
+        ZVAL_STR_OR_NULL(rv, intern->constant->doc_comment);
+    } else if (zend_string_equals_literal(property_name, "class")) {
+        rv = FUNC(class, intern);
     }
-    if (zend_string_equals_literal(property_name, "value")) {
-        return FUNC(get_value, intern);
+    if (Z_TYPE_P(rv) != IS_UNDEF) {
+        return rv;
     }
     zend_error(E_ERROR,"Undefined property: %s::$%s", ZSTR_VAL(Z_OBJ_P(object)->ce->name), Z_STRVAL_P(member));
-
     return &EG(uninitialized_zval);
 }
 
