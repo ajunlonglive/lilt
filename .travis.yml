@@ -13,7 +13,7 @@ before_install:
 
 install:
   - composer self-update
-  - composer install --no-interaction
+  - composer install --no-interaction --no-dev
 
 before_script:
   - echo "extension=lilt.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
