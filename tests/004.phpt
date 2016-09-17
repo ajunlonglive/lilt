@@ -7,7 +7,7 @@
 class Foo implements \Typed { }
 $type = Foo::type;
 var_dump($type->name);
-var_dump($type->scalar);
+var_dump($type->isScalar);
 var_dump($type->flags);
 var_dump($type->constants);
 var_dump($type->properties);

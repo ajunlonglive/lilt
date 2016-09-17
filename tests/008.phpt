@@ -10,7 +10,7 @@ var_dump($type === \Type::of(1));
 var_dump($type === \Type::integer);
 var_dump($type === TYPE_INTEGER);
 var_dump($type->name);
-var_dump($type->scalar);
+var_dump($type->isScalar);
 ?>
 --EXPECT--
 bool(true)

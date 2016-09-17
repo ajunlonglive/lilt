@@ -71,7 +71,7 @@ PHP_API zval *FUNC(read_property, zval *object, zval *member, int type, void **c
     if (zend_string_equals_literal(property_name, "name")) {
         ZVAL_STR(rv, intern->type_name);
     } else if (intern->ce) {
-        if (zend_string_equals_literal(property_name, "scalar")) {
+        if (zend_string_equals_literal(property_name, "isScalar")) {
             ZVAL_BOOL(rv, 0);
         } else if (zend_string_equals_literal(property_name, "flags")) {
             ZVAL_LONG(rv, intern->ce->ce_flags);
@@ -83,8 +83,10 @@ PHP_API zval *FUNC(read_property, zval *object, zval *member, int type, void **c
             rv = FUNC(functions, intern);
         } else if (zend_string_equals_literal(property_name, "properties")) {
             rv = FUNC(class_properties, intern);
+        } else if (zend_string_equals_literal(property_name, "isInternal")) {
+            ZVAL_BOOL(rv, intern->ce->ce_flags & ZEND_INTERNAL_CLASS);
         }
-    } else if (zend_string_equals_literal(property_name, "scalar")) {
+    } else if (zend_string_equals_literal(property_name, "isScalar")) {
         ZVAL_BOOL(rv, 1);
     }
     if (Z_TYPE_P(rv) != IS_UNDEF) {

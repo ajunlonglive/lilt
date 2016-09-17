@@ -11,7 +11,7 @@ foreach([true, false] as $bool) {
     var_dump($type === \Type::boolean);
     var_dump($type === TYPE_BOOLEAN);
     var_dump($type->name);
-    var_dump($type->scalar);
+    var_dump($type->isScalar);
 }
 ?>
 --EXPECT--

@@ -11,7 +11,7 @@ var_dump($type === \Type::of($resource));
 var_dump($type === \Type::resource);
 var_dump($type === TYPE_RESOURCE);
 var_dump($type->name);
-var_dump($type->scalar);
+var_dump($type->isScalar);
 fclose($resource);
 ?>
 --EXPECT--

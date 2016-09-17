@@ -56,9 +56,9 @@ PHP_API HashTable *FUNC(properties, STRUCT *intern) {
     if (zend_hash_num_elements(&intern->properties) <= 0) {
         zend_hash_add_string(&intern->properties, "name", intern->type_name);
         if (!intern->ce) {
-            zend_hash_add_bool(&intern->properties, "scalar", 1);
+            zend_hash_add_bool(&intern->properties, "isScalar", 1);
         } else {
-            zend_hash_add_bool(&intern->properties, "scalar", 0);
+            zend_hash_add_bool(&intern->properties, "isScalar", 0);
             zend_hash_add_long(&intern->properties, "flags", intern->ce->ce_flags);
             zend_hash_add_string(&intern->properties, "docComment", intern->ce->info.user.doc_comment);
             zend_hash_add_zval(&intern->properties, "constants", FUNC(constants, intern));
