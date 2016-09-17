@@ -1,0 +1,25 @@
+var LILT_EXT_NAME="lilt";
+var LILT_EXT_DIR="ext/lilt/src";
+var LILT_EXT_API="ext.c";
+var LILT_EXT_FLAGS="/DZEND_ENABLE_STATIC_TSRMLS_CACHE=1 /I" + configure_module_dirname;
+
+function lilt_src(dir, files) {
+    return ADD_SOURCES(
+        LILT_EXT_DIR + dir,
+        files.join(" "),
+        LILT_EXT_NAME
+    );
+}
+
+////////////////////////////////////
+ARG_ENABLE("lilt", "enable lilt support", "no");
+
+if (PHP_LILT != "no") {
+	EXTENSION(LILT_EXT_NAME, LILT_EXT_API, PHP_LILT_SHARED, LILT_EXT_FLAGS);
+
+    lilt_src("/",
+    [
+    ]);
+
+    ADD_EXTENSION_DEP('lilt', 'spl');
+}
