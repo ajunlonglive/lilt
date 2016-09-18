@@ -47,7 +47,7 @@ EXT_RINIT_FUNCTION { /* {{{ EXT_RINIT_FUNCTION */
     ZEND_TSRMLS_CACHE_UPDATE();
 #endif
     zend_hash_init(&LILTG(data.types), 8, NULL, zval_p_dtor, 0);
-    zend_hash_init(&LILTG(data.mocks), 3, NULL, zval_p_dtor, 0);
+//    zend_hash_init(&LILTG(data.mocks), 3, NULL, zval_p_dtor, 0);
     LILTG(zstr.type) = z_string("type");
     EXT_CLASS_INIT(Type_ArgInfo);
     EXT_CLASS_INIT(Type_Constant);
@@ -61,7 +61,7 @@ EXT_RINIT_FUNCTION { /* {{{ EXT_RINIT_FUNCTION */
 
 EXT_RSHUTDOWN_FUNCTION { /* {{{ EXT_RSHUTDOWN_FUNCTION */
     zend_hash_destroy(&LILTG(data.types));
-    zend_hash_destroy(&LILTG(data.mocks));
+//    zend_hash_destroy(&LILTG(data.mocks));
     zend_string_release(LILTG(zstr.type));
     if (zend_hash_num_elements(&TypeCe->constants_table)) {
         zend_class_constant *c;
