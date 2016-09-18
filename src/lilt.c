@@ -83,6 +83,8 @@ EXT_RSHUTDOWN_FUNCTION { /* {{{ EXT_RSHUTDOWN_FUNCTION */
     zend_hash_del(EG(zend_constants), z_string("TYPE_RESOURCE"));
     zend_hash_del(EG(zend_constants), z_string("TYPE_STRING"));
     zend_hash_del(EG(zend_constants), z_string("TYPE_UNKNOWN"));
+    zend_string_release(TypeMem(fn_mock).common.function_name);
+    zend_string_release(TypeMem(fn_unmock).common.function_name);
     EXT_HSHUTDOWN();
     return SUCCESS;
 } /* }}} */
