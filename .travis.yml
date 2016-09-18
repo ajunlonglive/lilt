@@ -7,34 +7,19 @@ addons:
   apt:
     packages:
       - valgrind
-      - gdb
-      - apport
 
 before_install:
-  - ulimit -c
-  - ulimit -a -S
-  - ulimit -a -H
   - phpenv config-rm xdebug.ini || true
 
 install:
-  - ulimit -c unlimited -S
-  - ulimit -c
-  - ulimit -a -S
-  - ulimit -a -H
-  - cat /proc/sys/kernel/core_pattern
   - composer self-update
   - composer install --no-interaction --no-dev
 
 before_script:
-  - RESULT=0
   - echo "extension=lilt.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 script:
-  - composer memtest || RESULT=$?
-  - ls -l
-  - if [[ ${RESULT} == 0 ]]; then echo "\\o/ our test worked without problems"; else echo "ruhroh test returned an errorcode of $RESULT"; fi;
-  - for i in $(find ./ -maxdepth 1 -name 'core*' -print); do gdb $(pwd)/test core* -ex "thread apply all bt" -ex "set pagination 0" -batch; done;
-  - if [[ ${RESULT} != 0 ]]; then exit $RESULT ; fi;
+  - composer memtest
 
 cache:
   directories:
