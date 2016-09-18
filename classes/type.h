@@ -62,8 +62,8 @@ PHP_API int TypeFunc(zval_of_classname, zval *value, zval *rv);
  * * * * * * * * * */
 extern EXT_CLASS_CLASS_ENTRY(Type);
 EXT_CLASS_CEINIT_FUNCTION(Type);
-zend_function TypeMem(fn_mock);
-zend_function TypeMem(fn_unmock);
+//zend_function TypeMem(fn_mock);
+//zend_function TypeMem(fn_unmock);
 PHP_API EXT_CLASS_METHOD(Type, of);
 //PHP_API EXT_CLASS_METHOD(Type, mock);
 //PHP_API EXT_CLASS_METHOD(Type, unmock);

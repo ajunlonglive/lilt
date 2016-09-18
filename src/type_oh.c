@@ -24,6 +24,7 @@
 
 OHINIT_FUNCTION {
     INIT_HANDLERS;
+    OH.dtor_obj = zend_objects_destroy_object;
     //OH.get_method = MEM(get_method);
     //OH.call_method = MEM(call_method);
     OH.free_obj = MEM(free_object);
