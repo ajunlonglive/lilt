@@ -26,13 +26,9 @@ install:
   - php composer.phar self-update
   - sudo php composer.phar install --no-interaction
 
-before_script:
-  - sudo echo "extension=lilt.so" >> /etc/php.ini
-  - php -m
-
 script:
-  - php composer.phar bench
-  - php composer.phar test
+  - php -dextension=lilt.so composer.phar bench
+  - php -dextension=lilt.so composer.phar test
 
 cache:
   directories:
