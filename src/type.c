@@ -50,7 +50,7 @@ PHP_API void FUNC(free, STRUCT *intern) {
         intern->ce->parent->get_static_method = NULL;
     }
     if (intern->mock) {
-        free(intern->mock);
+        intern->mock = NULL;
         if (intern->ce) {
             intern->ce->create_object = NULL;
             intern->ce->get_static_method = NULL;
