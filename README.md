@@ -35,7 +35,7 @@ class Bar implements Typed {
     
     public function __construct($var) {
         switch (\typeof($var)) {
-            case \Type::
+            case \Type::string:
                 // do something
                 break;
             case \Type::resource:
