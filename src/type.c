@@ -45,10 +45,6 @@ PHP_API zend_object *FUNC(enclose, STRUCT *intern) {
 }
 
 PHP_API void FUNC(free, STRUCT *intern) {
-    if (intern->is_mocking && intern->ce) {
-        intern->ce->parent->create_object = NULL;
-        intern->ce->parent->get_static_method = NULL;
-    }
     if (intern->mock) {
         intern->mock = NULL;
         if (intern->ce) {
@@ -124,14 +120,19 @@ PHP_API zval *FUNC(functions, STRUCT *intern) {
 }
 
 PHP_API zend_object *FUNC(create_mock, zend_class_entry *ce) {
-    zval *mock = zend_hash_find(&LILTG(data.mocks), ce->name);
-    zend_object *object = zend_objects_new(Z_THIS_P(mock)->ce);
-    object_properties_init(object, Z_THIS_P(mock)->ce);
+    STRUCT *intern = Z_THIS_P(zend_hash_find(&LILTG(data.mocks), ce->name));
+    zend_object *object = intern->ce->create_object
+        ? intern->ce->create_object(intern->ce)
+        : zend_objects_new(intern->ce);
+    object_properties_init(object, intern->ce);
     return object;
 }
 
 PHP_API zend_function *FUNC(get_static_method_mock, zend_class_entry *ce, zend_string *name) {
-    return zend_std_get_static_method(Z_THIS_P(zend_hash_find(&LILTG(data.mocks), ce->name))->ce, name, NULL);
+    STRUCT *intern = Z_THIS_P(zend_hash_find(&LILTG(data.mocks), ce->name));
+    return intern->ce->get_static_method
+       ? intern->ce->get_static_method(intern->ce, name)
+       : zend_std_get_static_method(intern->ce, name, NULL);
 }
 
 PHP_API int FUNC(zval_of, zval *value, zval *rv) {

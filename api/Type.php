@@ -93,4 +93,16 @@ final class Type implements \Typed {
      * Type constructor.
      */
     private function __construct() { }
+
+    /**
+     * Mock parent class with actual class
+     * @return bool Mocking succeeded or not
+     */
+    public function mock() : bool { }
+
+    /**
+     * Disable mock applied by a children
+     * @return bool Unmocking succeeded or not
+     */
+    public function unmock() : bool { }
 }

@@ -49,7 +49,6 @@ PHP_API int FUNC(call_method, zend_string *method, zend_object *object, INTERNAL
                         }
                         this->ce->parent->create_object = MEM(create_mock);
                         this->ce->parent->get_static_method = MEM(get_static_method_mock);
-                        this->is_mocking = 1;
                         ZVAL_BOOL(return_value, 1);
                     } else {
                         ZVAL_BOOL(return_value, 0);
@@ -69,12 +68,6 @@ PHP_API int FUNC(call_method, zend_string *method, zend_object *object, INTERNAL
         if (num_args == 0) {
             if (this->ce) {
                 int unmock = 0;
-                if (this->is_mocking) {
-                    this->is_mocking = 0;
-                    this->ce->parent->create_object = NULL;
-                    this->ce->parent->get_static_method = NULL;
-                    unmock = 1;
-                }
                 if (this->mock) {
                     this->mock = NULL;
                     this->ce->create_object = NULL;

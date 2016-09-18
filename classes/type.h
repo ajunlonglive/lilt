@@ -35,7 +35,6 @@ EXT_CLASS_STRUCT_BEGIN(Type)
     zend_class_entry *ce;
     zend_string *type_name;
     zend_object *mock;
-    zend_bool is_mocking;
     HashTable properties;
     zval constants;
     zval functions;
