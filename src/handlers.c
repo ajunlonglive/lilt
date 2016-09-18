@@ -63,7 +63,6 @@ EXT_HANDLER_FUNCTION(ZEND_ADD_INTERFACE) {
             zend_hash_del(&ce->constants_table, LILTG(zstr.type));
             TypeFunc(zval_of_ce, ce, &type);
             zend_declare_class_constant(ce, ZSTR_VAL(LILTG(zstr.type)), ZSTR_LEN(LILTG(zstr.type)), &type);
-            Z_TRY_ADDREF(type);
         }
     }
     return ZEND_USER_OPCODE_DISPATCH;
