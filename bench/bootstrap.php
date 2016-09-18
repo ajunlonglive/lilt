@@ -15,3 +15,4 @@ class Foo implements Typed {
 include __DIR__.'/001.php';
 include __DIR__.'/002.php';
 include __DIR__.'/003.php';
+include __DIR__.'/004.php';

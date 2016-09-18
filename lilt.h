@@ -64,6 +64,7 @@ EXT_BEGIN_MODULE_GLOBALS_NX(LILT_EXT_NAME)
     } zstr;
     struct {
         HashTable types;
+        HashTable mocks;
     } data;
 EXT_END_MODULE_GLOBALS_NX(LILT_EXT_NAME)
 

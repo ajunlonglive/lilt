@@ -45,6 +45,17 @@ PHP_API zend_object *FUNC(enclose, STRUCT *intern) {
 }
 
 PHP_API void FUNC(free, STRUCT *intern) {
+    if (intern->ce) {
+        if (intern->is_mocking) {
+            intern->is_mocking = 0;
+            intern->ce->parent->create_object = NULL;
+            intern->ce->parent->get_static_method = NULL;
+        } else if (intern->mock) {
+            intern->mock = NULL;
+            intern->ce->create_object = NULL;
+            intern->ce->get_static_method = NULL;
+        }
+    }
     zval_ptr_dtor(&intern->constants);
     zval_ptr_dtor(&intern->functions);
     zval_ptr_dtor(&intern->class_properties);
@@ -110,6 +121,17 @@ PHP_API zval *FUNC(functions, STRUCT *intern) {
         ZEND_HASH_FOREACH_END();
     }
     return &intern->functions;
+}
+
+PHP_API zend_object *FUNC(create_mock, zend_class_entry *ce) {
+    zval *mock = zend_hash_find(&LILTG(data.mocks), ce->name);
+    zend_object *object = zend_objects_new(Z_THIS_P(mock)->ce);
+    object_properties_init(object, Z_THIS_P(mock)->ce);
+    return object;
+}
+
+PHP_API zend_function *FUNC(get_static_method_mock, zend_class_entry *ce, zend_string *name) {
+    return zend_std_get_static_method(Z_THIS_P(zend_hash_find(&LILTG(data.mocks), ce->name))->ce, name, NULL);
 }
 
 PHP_API int FUNC(zval_of, zval *value, zval *rv) {

@@ -13,7 +13,7 @@ var_dump($type->name);
 var_dump($type2->name);
 var_dump($type->isScalar);
 var_dump($type2->isScalar);
-var_dump(classtype(\Type::class)->isInternal);
+var_dump(classtype(\ReflectionClass::class)->isInternal);
 var_dump($type->flags);
 var_dump($type->constants);
 var_dump($type->properties);
@@ -26,8 +26,8 @@ var_dump($type->isAbstract);
 var_dump($type2->isAbstract);
 var_dump(\classtype(Baz::class)->isTrait);
 var_dump(\classtype(Baz::class)->isInterface);
-var_dump(\classtype(\Typed::class)->isInterface);
-var_dump(\classtype(\Typed::class)->isTrait);
+var_dump(\classtype(\ArrayAccess::class)->isInterface);
+var_dump(\classtype(\ArrayAccess::class)->isTrait);
 ?>
 --EXPECT--
 string(3) "Foo"

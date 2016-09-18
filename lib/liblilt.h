@@ -146,8 +146,8 @@
 typedef int (*lilt_opcode_handler_t)(LILT_OPCODE_HANDLER_ARGS);
 #define EXT_HINIT_NX(module) CONCAT(module, _opcode_handlers_init)
 #define EXT_HINIT_FUNCTION_NX(module) void EXT_HINIT_NX(module)()
-#define EXT_HFREE_NX(module) CONCAT(module, _opcode_handlers_free)
-#define EXT_HFREE_FUNCTION_NX(module) void EXT_HFREE_NX(module)()
+#define EXT_HSHUTDOWN_NX(module) CONCAT(module, _opcode_handlers_free)
+#define EXT_HFREE_FUNCTION_NX(module) void EXT_HSHUTDOWN_NX(module)()
 #define EXT_HANDLER_NX(module, opcode) CONCAT(module, _, opcode, _opcode_handler)
 #define EXT_DFT_HANDLER_NX(module, opcode) CONCAT(EXT_HANDLER_NX(module, opcode), _default)
 #define EXT_DFT_HANDLER_DECLARE_NX(module, opcode) lilt_opcode_handler_t EXT_DFT_HANDLER_NX(module, opcode)
