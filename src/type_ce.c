@@ -37,8 +37,6 @@
   }
 
 CLASS_ENTRY;
-zend_function TypeMem(fn_mock);
-zend_function TypeMem(fn_unmock);
 const METHODS_BEGIN
     ME(of, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 METHODS_END;
