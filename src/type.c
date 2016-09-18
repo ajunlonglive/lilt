@@ -175,7 +175,9 @@ PHP_API int FUNC(zval_of_ce, zend_class_entry *ce, zval *rv) {
     ptr = zend_hash_find(&LILTG(data.types), ce->name);
     if (!ptr) {
         ZVAL_OBJ(&zv, FUNC(enclose, CTOR(ce->name, ce)));
-        zend_hash_add(&LILTG(data.types), ce->name, &zv);
+        if (zend_hash_add(&LILTG(data.types), ce->name, &zv)) {
+            zval_copy_ctor(&zv);
+        }
         ptr = &zv;
     }
     ZVAL_OBJ(rv, Z_OBJ_P(ptr));
@@ -194,7 +196,9 @@ PHP_API int FUNC(zval_of_classname, zval *value, zval *rv) {
         ce = zend_lookup_class(Z_STR_P(value));
         if (ce) {
             ZVAL_OBJ(&zv, FUNC(enclose, CTOR(ce->name, ce)));
-            zend_hash_add(&LILTG(data.types), ce->name, &zv);
+            if (zend_hash_add(&LILTG(data.types), ce->name, &zv)){
+                zval_copy_ctor(&zv);
+            }
             ptr = &zv;
         } else {
             ZVAL_NULL(rv);

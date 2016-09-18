@@ -24,8 +24,8 @@
 
 OHINIT_FUNCTION {
     INIT_HANDLERS;
-    OH.get_method = MEM(get_method);
-    OH.call_method = MEM(call_method);
+    //OH.get_method = MEM(get_method);
+    //OH.call_method = MEM(call_method);
     OH.free_obj = MEM(free_object);
     OH.do_operation = MEM(do_operation);
     OH.get_debug_info = MEM(get_debug_info);
@@ -43,7 +43,9 @@ PHP_API int FUNC(call_method, zend_string *method, zend_object *object, INTERNAL
                     if (!this->ce->parent->create_object && !this->ce->parent->get_static_method) {
                         FUNC(zval_of_ce, this->ce->parent, &parent_type);
                         Z_THIS(parent_type)->mock = Z_OBJ(EX(This));
-                        zend_hash_update(&LILTG(data.mocks), this->ce->parent->name, &EX(This));
+                        if (zend_hash_update(&LILTG(data.mocks), this->ce->parent->name, &EX(This))) {
+                            zval_copy_ctor(&EX(This));
+                        }
                         this->ce->parent->create_object = MEM(create_mock);
                         this->ce->parent->get_static_method = MEM(get_static_method_mock);
                         this->is_mocking = 1;
