@@ -16,15 +16,17 @@
   +----------------------------------------------------------------------+
  */
 
-#include "classes/typed.h"
+#include "classes/i_static_init.h"
 
-#define CLASS Typed
+#define CLASS IStaticInit
 #include "gen/class.h"
 
 CLASS_ENTRY;
-const NO_METHODS;
+const METHODS_BEGIN
+    ABSTRACT_ME(__static, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+METHODS_END;
 
-CEINIT_FUNCTION {
+INIT_FUNCTION {
     INIT_INTERFACE;
 }
 

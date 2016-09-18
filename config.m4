@@ -39,7 +39,7 @@ if test "$PHP_LILT" != "no"; then
   src/type_ce.c \
   src/type_oh.c \
   src/typed.c \
-  src/typed_ce.c \
+  src/i_static_init.c \
   src/functions.c \
   src/handlers.c \
   \

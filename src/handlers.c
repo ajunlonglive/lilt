@@ -17,6 +17,7 @@
  */
 
 #include "handlers.h"
+#include "zend_interfaces.h"
 
 EXT_HINIT_FUNCTION {
     EXT_SET_HANDLER(ZEND_DECLARE_INHERITED_CLASS);
@@ -42,6 +43,17 @@ EXT_HANDLER_FUNCTION(ZEND_DECLARE_INHERITED_CLASS) {
             TypeFunc(zval_of_ce, ce, &type);
             zend_declare_class_constant(ce, ZSTR_VAL(LILTG(zstr.type)), ZSTR_LEN(LILTG(zstr.type)), &type);
         }
+        if (parent == IStaticInitCe || instanceof_function(parent, IStaticInitCe)) {
+            zval retval;
+            zend_string *name = z_string("__static");
+            zend_function *__static = ce->get_static_method
+                ? ce->get_static_method(ce, name)
+                : zend_std_get_static_method(ce, name, NULL);
+            if (UNEXPECTED(__static != NULL) && __static->common.scope == ce &&
+                zend_call_method_with_0_params(NULL, ce, &__static, "__static", &retval)) {
+                zval_ptr_dtor(&retval);
+            }
+        }
     }
     return ZEND_USER_OPCODE_DISPATCH;
 }
@@ -63,6 +75,17 @@ EXT_HANDLER_FUNCTION(ZEND_ADD_INTERFACE) {
             zend_hash_del(&ce->constants_table, LILTG(zstr.type));
             TypeFunc(zval_of_ce, ce, &type);
             zend_declare_class_constant(ce, ZSTR_VAL(LILTG(zstr.type)), ZSTR_LEN(LILTG(zstr.type)), &type);
+        }
+        if (parent == IStaticInitCe || instanceof_function(parent, IStaticInitCe)) {
+            zval retval;
+            zend_string *name = z_string("__static");
+            zend_function *__static = ce->get_static_method
+                ? ce->get_static_method(ce, name)
+                : zend_std_get_static_method(ce, name, NULL);
+            if (UNEXPECTED(__static != NULL) && __static->common.scope == ce &&
+                zend_call_method_with_0_params(NULL, ce, &__static, "__static", &retval)) {
+                zval_ptr_dtor(&retval);
+            }
         }
     }
     return ZEND_USER_OPCODE_DISPATCH;

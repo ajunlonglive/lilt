@@ -16,18 +16,26 @@
   +----------------------------------------------------------------------+
  */
 
-#ifndef LILT_CLASSES_H
-#define LILT_CLASSES_H
+#ifndef LILT_I_STATIC_INIT_H
+#define LILT_I_STATIC_INIT_H
 
-#include "classes/type/arg_info.h"
-#include "classes/type/constant.h"
-#include "classes/type/function.h"
-#include "classes/type/property.h"
-#include "classes/type.h"
-#include "classes/typed.h"
-#include "classes/i_static_init.h"
+#include "lilt.h"
 
-#endif /* LILT_CLASSES_H */
+#define IStaticInit IStaticInit
+#define IStaticInitCe EXT_CLASS_CE(IStaticInit)
+
+/**
+ * API
+ * * * * * * * * * */
+EXT_CLASS_INIT_FUNCTION(IStaticInit);
+
+/**
+ * Class entry
+ * * * * * * * * * */
+extern EXT_CLASS_CLASS_ENTRY(IStaticInit);
+EXT_CLASS_CEINIT_FUNCTION(IStaticInit);
+
+#endif /* LILT_I_STATIC_INIT_H */
 
 /*
  * Local variables:
