@@ -10,11 +10,11 @@ addons:
 before_install:
   - sudo apt-get -y install make build-essential autoconf automake bison re2c clang flex libicu-dev libgmp-dev libmpfr-dev libmpc-dev libc6-dev libxml2-dev
   - cd /usr/src
-  - git clone https://github.com/php/php-src.git
+  - sudo git clone https://github.com/php/php-src.git
   - cd php-src
-  - ./buildconf
+  - sudo ./buildconf
   - sudo ./configure --prefix=/usr --with-config-file-path=/etc/php.ini --with-config-file-scan-dir=/etc/php.d --with-openssl
-  - make
+  - sudo make
   - sudo make install
   - cd /home/travis/build/lilt-php/lilt
   - php -v
@@ -27,8 +27,7 @@ install:
   - sudo php composer.phar install --no-interaction
 
 before_script:
-  - sudo touch /etc/php.d/lilt.ini
-  - echo "extension=lilt.so" >> /etc/php.d/lilt.ini
+  - echo "extension=lilt.so" >> /etc/php.ini
   - php -m
 
 script:
