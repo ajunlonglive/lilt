@@ -34,8 +34,8 @@
 EXT_CLASS_STRUCT_BEGIN(Type)
     zend_class_entry *ce;
     zend_string *type_name;
-//    zend_object *mock;
-//    zend_bool is_mocking;
+    zend_object *mock;
+    zend_bool is_mocking;
     HashTable properties;
     zval constants;
     zval functions;
@@ -51,8 +51,8 @@ PHP_API HashTable *TypeFunc(properties, TypeStruct *intern);
 PHP_API zval *TypeFunc(constants, TypeStruct *intern);
 PHP_API zval *TypeFunc(functions, TypeStruct *intern);
 PHP_API zval *TypeFunc(class_properties, TypeStruct *intern);
-//PHP_API zend_object *TypeFunc(create_mock, zend_class_entry *ce);
-//PHP_API zend_function *TypeFunc(get_static_method_mock, zend_class_entry *ce, zend_string *name);
+PHP_API zend_object *TypeFunc(create_mock, zend_class_entry *ce);
+PHP_API zend_function *TypeFunc(get_static_method_mock, zend_class_entry *ce, zend_string *name);
 PHP_API int TypeFunc(zval_of, zval *value, zval *rv);
 PHP_API int TypeFunc(zval_of_ce, zend_class_entry *ce, zval *rv);
 PHP_API int TypeFunc(zval_of_classname, zval *value, zval *rv);
@@ -62,8 +62,8 @@ PHP_API int TypeFunc(zval_of_classname, zval *value, zval *rv);
  * * * * * * * * * */
 extern EXT_CLASS_CLASS_ENTRY(Type);
 EXT_CLASS_CEINIT_FUNCTION(Type);
-//zend_function TypeMem(fn_mock);
-//zend_function TypeMem(fn_unmock);
+zend_function TypeMem(fn_mock);
+zend_function TypeMem(fn_unmock);
 PHP_API EXT_CLASS_METHOD(Type, of);
 //PHP_API EXT_CLASS_METHOD(Type, mock);
 //PHP_API EXT_CLASS_METHOD(Type, unmock);
@@ -74,11 +74,11 @@ PHP_API zend_object *TypeFunc(create_object, zend_class_entry *ce);
  * * * * * * * * * */
 EXT_CLASS_OBJECT_HANDLERS(Type);
 EXT_CLASS_OHINIT_FUNCTION(Type);
-//PHP_API int TypeFunc(call_method, zend_string *method, zend_object *object, INTERNAL_FUNCTION_PARAMETERS);
+PHP_API int TypeFunc(call_method, zend_string *method, zend_object *object, INTERNAL_FUNCTION_PARAMETERS);
 PHP_API int TypeFunc(do_operation, zend_uchar opcode, zval *result, zval *op1, zval *op2);
 PHP_API void TypeFunc(free_object, zend_object *object);
 PHP_API HashTable *TypeFunc(get_debug_info, zval *object, int *is_temp);
-//PHP_API zend_function *TypeFunc(get_method, zend_object **object, zend_string *method, const zval *key);
+PHP_API zend_function *TypeFunc(get_method, zend_object **object, zend_string *method, const zval *key);
 PHP_API zval *TypeFunc(read_property, zval *object, zval *member, int type, void **cache_slot, zval *rv);
 
 #endif /* LILT_TYPE_H */

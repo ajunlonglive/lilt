@@ -25,73 +25,73 @@
 OHINIT_FUNCTION {
     INIT_HANDLERS;
     OH.dtor_obj = zend_objects_destroy_object;
-    //OH.get_method = MEM(get_method);
-    //OH.call_method = MEM(call_method);
+    OH.get_method = MEM(get_method);
+    OH.call_method = MEM(call_method);
     OH.free_obj = MEM(free_object);
     OH.do_operation = MEM(do_operation);
     OH.get_debug_info = MEM(get_debug_info);
     OH.read_property = MEM(read_property);
 }
 
-//PHP_API int FUNC(call_method, zend_string *method, zend_object *object, INTERNAL_FUNCTION_PARAMETERS) {
-//    STRUCT *this = ((PHP_STRUCT *)object)->intern;
-//    zval parent_type;
-//    if (zend_string_equals_literal(method, "mock")) {
-//        int num_args = ZEND_CALL_NUM_ARGS(execute_data);
-//        if (num_args == 0) {
-//            if (this->ce) {
-//                if (this->ce->parent) {
-//                    if (!this->ce->parent->create_object && !this->ce->parent->get_static_method) {
-//                        FUNC(zval_of_ce, this->ce->parent, &parent_type);
-//                        Z_THIS(parent_type)->mock = Z_OBJ(EX(This));
-//                        if (zend_hash_update(&LILTG(data.mocks), this->ce->parent->name, &EX(This))) {
-//                            zval_copy_ctor(&EX(This));
-//                        }
-//                        this->ce->parent->create_object = MEM(create_mock);
-//                        this->ce->parent->get_static_method = MEM(get_static_method_mock);
-//                        this->is_mocking = 1;
-//                        ZVAL_BOOL(return_value, 1);
-//                    } else {
-//                        ZVAL_BOOL(return_value, 0);
-//                    }
-//                } else {
-//                    zend_internal_type_error(1, "Their is not extend to mock for type %s.", ZSTR_VAL(this->type_name));
-//                }
-//            } else {
-//                zend_internal_type_error(1, "Cannot mock scalar type %s.", ZSTR_VAL(this->type_name));
-//            }
-//        } else {
-//            zend_internal_type_error(1, "Type::mock() expects 0 parameter, %d given.", num_args);
-//        }
-//        return SUCCESS;
-//    } else if (zend_string_equals_literal(method, "unmock")) {
-//        int num_args = ZEND_CALL_NUM_ARGS(execute_data);
-//        if (num_args == 0) {
-//            if (this->ce) {
-//                int unmock = 0;
-//                if (this->is_mocking) {
-//                    this->is_mocking = 0;
-//                    this->ce->parent->create_object = NULL;
-//                    this->ce->parent->get_static_method = NULL;
-//                    unmock = 1;
-//                }
-//                if (this->mock) {
-//                    this->mock = NULL;
-//                    this->ce->create_object = NULL;
-//                    this->ce->get_static_method = NULL;
-//                    unmock = 1;
-//                }
-//                ZVAL_BOOL(return_value, unmock);
-//            } else {
-//                zend_internal_type_error(1, "Cannot mock scalar type %s.", ZSTR_VAL(this->type_name));
-//            }
-//        } else {
-//            zend_internal_type_error(1, "Type::mock() expects 0 parameter, %d given.", num_args);
-//        }
-//        return SUCCESS;
-//    }
-//    return FAILURE;
-//}
+PHP_API int FUNC(call_method, zend_string *method, zend_object *object, INTERNAL_FUNCTION_PARAMETERS) {
+    STRUCT *this = ((PHP_STRUCT *)object)->intern;
+    zval parent_type;
+    if (zend_string_equals_literal(method, "mock")) {
+        int num_args = ZEND_CALL_NUM_ARGS(execute_data);
+        if (num_args == 0) {
+            if (this->ce) {
+                if (this->ce->parent) {
+                    if (!this->ce->parent->create_object && !this->ce->parent->get_static_method) {
+                        FUNC(zval_of_ce, this->ce->parent, &parent_type);
+                        Z_THIS(parent_type)->mock = Z_OBJ(EX(This));
+                        if (zend_hash_update(&LILTG(data.mocks), this->ce->parent->name, &EX(This))) {
+                            zval_copy_ctor(&EX(This));
+                        }
+                        this->ce->parent->create_object = MEM(create_mock);
+                        this->ce->parent->get_static_method = MEM(get_static_method_mock);
+                        this->is_mocking = 1;
+                        ZVAL_BOOL(return_value, 1);
+                    } else {
+                        ZVAL_BOOL(return_value, 0);
+                    }
+                } else {
+                    zend_internal_type_error(1, "Their is not extend to mock for type %s.", ZSTR_VAL(this->type_name));
+                }
+            } else {
+                zend_internal_type_error(1, "Cannot mock scalar type %s.", ZSTR_VAL(this->type_name));
+            }
+        } else {
+            zend_internal_type_error(1, "Type::mock() expects 0 parameter, %d given.", num_args);
+        }
+        return SUCCESS;
+    } else if (zend_string_equals_literal(method, "unmock")) {
+        int num_args = ZEND_CALL_NUM_ARGS(execute_data);
+        if (num_args == 0) {
+            if (this->ce) {
+                int unmock = 0;
+                if (this->is_mocking) {
+                    this->is_mocking = 0;
+                    this->ce->parent->create_object = NULL;
+                    this->ce->parent->get_static_method = NULL;
+                    unmock = 1;
+                }
+                if (this->mock) {
+                    this->mock = NULL;
+                    this->ce->create_object = NULL;
+                    this->ce->get_static_method = NULL;
+                    unmock = 1;
+                }
+                ZVAL_BOOL(return_value, unmock);
+            } else {
+                zend_internal_type_error(1, "Cannot mock scalar type %s.", ZSTR_VAL(this->type_name));
+            }
+        } else {
+            zend_internal_type_error(1, "Type::mock() expects 0 parameter, %d given.", num_args);
+        }
+        return SUCCESS;
+    }
+    return FAILURE;
+}
 
 PHP_API int FUNC(do_operation, zend_uchar opcode, zval *result, zval *op1, zval *op2) {
     ZVAL_BOOL(result, 0);
@@ -127,19 +127,19 @@ PHP_API HashTable *FUNC(get_debug_info, zval *object, int *is_temp) {
     return FUNC(properties, Z_THIS_P(object));
 }
 
-//PHP_API zend_function *FUNC(get_method, zend_object **object, zend_string *method, const zval *key) {
-//    if (zend_string_equals_literal(method, "mock")) {
-//        zend_function *fn = emalloc(sizeof(zend_function));
-//        memcpy(fn, &MEM(fn_mock), sizeof(zend_function));
-//        return fn;
-//    }
-//    else if (zend_string_equals_literal(method, "unmock")) {
-//        zend_function *fn = emalloc(sizeof(zend_function));
-//        memcpy(fn, &MEM(fn_unmock), sizeof(zend_function));
-//        return fn;
-//    }
-//    return NULL;
-//}
+PHP_API zend_function *FUNC(get_method, zend_object **object, zend_string *method, const zval *key) {
+    if (zend_string_equals_literal(method, "mock")) {
+        zend_function *fn = emalloc(sizeof(zend_function));
+        memcpy(fn, &MEM(fn_mock), sizeof(zend_function));
+        return fn;
+    }
+    else if (zend_string_equals_literal(method, "unmock")) {
+        zend_function *fn = emalloc(sizeof(zend_function));
+        memcpy(fn, &MEM(fn_unmock), sizeof(zend_function));
+        return fn;
+    }
+    return NULL;
+}
 
 PHP_API zval *FUNC(read_property, zval *object, zval *member, int type, void **cache_slot, zval *rv) {
     STRUCT *intern = Z_THIS_P(object);
