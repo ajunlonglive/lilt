@@ -45,6 +45,17 @@ PHP_API zend_object *FUNC(enclose, STRUCT *intern) {
 }
 
 PHP_API void FUNC(free, STRUCT *intern) {
+    if (intern->is_mocking && intern->ce) {
+        intern->ce->parent->create_object = NULL;
+        intern->ce->parent->get_static_method = NULL;
+    }
+    if (intern->mock) {
+        free(intern->mock);
+        if (intern->ce) {
+            intern->ce->create_object = NULL;
+            intern->ce->get_static_method = NULL;
+        }
+    }
     zval_ptr_dtor(&intern->constants);
     zval_ptr_dtor(&intern->functions);
     zval_ptr_dtor(&intern->class_properties);

@@ -35,15 +35,15 @@ OHINIT_FUNCTION {
 PHP_API int FUNC(call_method, zend_string *method, zend_object *object, INTERNAL_FUNCTION_PARAMETERS) {
     STRUCT *this = ((PHP_STRUCT *)object)->intern;
     zval parent_type;
-
     if (zend_string_equals_literal(method, "mock")) {
         int num_args = ZEND_CALL_NUM_ARGS(execute_data);
         if (num_args == 0) {
             if (this->ce) {
                 if (this->ce->parent) {
-                    if (!this->ce->parent->create_object && !this->ce->parent->get_static_method) {
-                        FUNC(zval_of_ce, this->ce->parent, &parent_type);
-                        Z_THIS(parent_type)->mock = Z_OBJ(EX(This));
+                    FUNC(zval_of_ce, this->ce->parent, &parent_type);
+                    if (!this->ce->parent->create_object && !this->ce->parent->get_static_method && !Z_THIS(parent_type)->mock) {
+                        Z_THIS(parent_type)->mock = emalloc(sizeof(*Z_OBJ(EX(This))));
+                        memcpy(Z_THIS(parent_type)->mock, Z_OBJ(EX(This)), sizeof(*Z_OBJ(EX(This))));
                         zend_hash_update(&LILTG(data.mocks), this->ce->parent->name, &EX(This));
                         this->ce->parent->create_object = MEM(create_mock);
                         this->ce->parent->get_static_method = MEM(get_static_method_mock);
@@ -71,12 +71,14 @@ PHP_API int FUNC(call_method, zend_string *method, zend_object *object, INTERNAL
                     this->ce->parent->create_object = NULL;
                     this->ce->parent->get_static_method = NULL;
                     ZVAL_BOOL(return_value, 1);
-                } else if (this->mock) {
+                }
+                if (this->mock) {
                     this->mock = NULL;
                     this->ce->create_object = NULL;
                     this->ce->get_static_method = NULL;
                     ZVAL_BOOL(return_value, 1);
-                } else {
+                }
+                if (Z_TYPE_P(return_value) != _IS_BOOL) {
                     ZVAL_BOOL(return_value, 0);
                 }
             } else {
@@ -87,7 +89,6 @@ PHP_API int FUNC(call_method, zend_string *method, zend_object *object, INTERNAL
         }
         return SUCCESS;
     }
-
     return FAILURE;
 }
 
@@ -136,7 +137,6 @@ PHP_API zend_function *FUNC(get_method, zend_object **object, zend_string *metho
         memcpy(fn, &MEM(fn_unmock), sizeof(zend_function));
         return fn;
     }
-
     return NULL;
 }
 
