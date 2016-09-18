@@ -27,7 +27,7 @@ install:
   - sudo php composer.phar install --no-interaction
 
 before_script:
-  - echo "extension=lilt.so" >> /etc/php.ini
+  - sudo echo "extension=lilt.so" >> /etc/php.ini
   - php -m
 
 script:
