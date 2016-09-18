@@ -9,20 +9,14 @@ addons:
 
 before_install:
   - sudo apt-get -y install make build-essential autoconf automake bison re2c clang flex libicu-dev libgmp-dev libmpfr-dev libmpc-dev libc6-dev libxml2-dev
-  - cd ../..
+  - cd /usr/src
   - git clone https://github.com/php/php-src.git
   - cd php-src
   - ./buildconf
-  - ./configure --prefix=/usr --with-config-file-path=/usr/php.ini --with-config-file-scan-dir=/usr/php.d --with-openssl
+  - sudo ./configure --prefix=/usr --with-config-file-path=/etc/php.ini --with-config-file-scan-dir=/etc/php.d --with-openssl
   - make
   - sudo make install
-  - cd ext/json
-  - phpize
-  - ./configure
-  - make && sudo make install
-  - sudo touch /usr/php.d/json.ini
-  - echo "extension=json.so" >> /usr/php.d/json.ini
-  - cd ../../../lilt-php/lilt
+  - cd /home/travis/build/lilt-php/lilt
   - php -v
   - php -m
   - ls -l
@@ -30,11 +24,12 @@ before_install:
 install:
   - php -r "readfile('https://getcomposer.org/installer');" | php
   - php composer.phar self-update
-  - php composer.phar install --no-interaction --no-dev
+  - sudo php composer.phar install --no-interaction
 
 before_script:
-  - sudo touch /usr/php.d/lilt.ini
-  - echo "extension=lilt.so" >> /usr/php.d/lilt.ini
+  - sudo touch /etc/php.d/lilt.ini
+  - echo "extension=lilt.so" >> /etc/php.d/lilt.ini
+  - php -m
 
 script:
   - php composer.phar bench
