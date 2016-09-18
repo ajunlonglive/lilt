@@ -7,19 +7,23 @@ addons:
   apt:
     packages:
       - valgrind
+      - gdb
 
 before_install:
   - phpenv config-rm xdebug.ini || true
 
 install:
-  - composer self-update
-  - composer install --no-interaction --no-dev
+  - php -r "readfile('https://getcomposer.org/installer');" | php
+  - php composer.phar self-update
+  - php composer.phar install --no-interaction --no-dev
 
 before_script:
   - echo "extension=lilt.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 script:
-  - composer memtest
+  - gdb php
+  - run composer.phar memtest
+  - quit
 
 cache:
   directories:

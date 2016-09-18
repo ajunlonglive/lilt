@@ -54,11 +54,9 @@ CEINIT_FUNCTION {
     INIT_TYPE_SCALAR(string, "TYPE_STRING");
     INIT_TYPE_SCALAR(unknown, "TYPE_UNKNOWN");
     TypeMem(fn_mock).common.scope = CE;
-    TypeMem(fn_mock).common.fn_flags = ZEND_ACC_PUBLIC;
     TypeMem(fn_mock).type = ZEND_OVERLOADED_FUNCTION;
     TypeMem(fn_mock).common.function_name = z_string("mock");
     TypeMem(fn_unmock).common.scope = CE;
-    TypeMem(fn_unmock).common.fn_flags = ZEND_ACC_PUBLIC;
     TypeMem(fn_unmock).type = ZEND_OVERLOADED_FUNCTION;
     TypeMem(fn_unmock).common.function_name = z_string("unmock");
 }
