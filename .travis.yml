@@ -27,12 +27,7 @@ install:
   - sudo php composer.phar install --no-interaction
 
 script:
-  - php -dextension=lilt.so composer.phar bench
-  - php -dextension=lilt.so composer.phar test
-
-cache:
-  directories:
-    - $HOME/.composer/cache
+  - sudo php -dextension=lilt.so composer.phar test
 
 notifications:
   on_success: never
