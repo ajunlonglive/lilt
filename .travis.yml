@@ -20,9 +20,9 @@ before_install:
   - phpize
   - ./configure
   - make && sudo make install
-  - cd ../..
+  - sudo touch /usr/php.d/json.ini
   - echo "extension=json.so" >> /usr/php.d/json.ini
-  - cd ../lilt-php/lilt
+  - cd ../../../lilt-php/lilt
   - php -v
   - php -m
   - ls -l
@@ -33,6 +33,7 @@ install:
   - php composer.phar install --no-interaction --no-dev
 
 before_script:
+  - sudo touch /usr/php.d/lilt.ini
   - echo "extension=lilt.so" >> /usr/php.d/lilt.ini
 
 script:
