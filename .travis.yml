@@ -1,7 +1,6 @@
-language: php
+sudo: required
 
-php:
-  - nightly
+language: cpp
 
 addons:
   apt:
@@ -9,17 +8,26 @@ addons:
       - valgrind
 
 before_install:
-  - phpenv config-rm xdebug.ini || true
+  - sudo apt-get -y install make build-essential autoconf automake bison re2c clang flex libicu-dev libgmp-dev libmpfr-dev libmpc-dev libc6-dev libxml2-dev
+  - cd ../..
+  - git clone https://github.com/php/php-src.git
+  - cd php-src
+  - ./buildconf
+  - ./configure --prefix=/usr --with-config-file-path=/etc/php.ini --with-config-file-scan-dir=/etc/php.d --with-openssl --enable-json=shared
+  - make
+  - sudo make install
+  - cd ../lilt-php/lilt
 
 install:
   - composer self-update
   - composer install --no-interaction --no-dev
 
 before_script:
-  - echo "extension=lilt.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "extension=lilt.so" >> /etc/php.ini
 
 script:
-  - composer memtest
+  - composer bench
+  - composer test
 
 cache:
   directories:
