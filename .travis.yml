@@ -13,10 +13,18 @@ before_install:
   - git clone https://github.com/php/php-src.git
   - cd php-src
   - ./buildconf
-  - ./configure --prefix=/usr --with-config-file-path=/etc/php.ini --with-config-file-scan-dir=/etc/php.d --with-openssl --enable-json=shared
+  - ./configure --prefix=/usr --with-config-file-path=../php.ini --with-config-file-scan-dir=../php.d --with-openssl --enable-json=shared
   - make
   - sudo make install
+  - cd ext/json
+  - phpize
+  - ./configure
+  - make && sudo make install
+  - cd ../..
+  - echo "extension=json.so" >> ../php.ini
   - cd ../lilt-php/lilt
+  - php -v
+  - php -m
   - ls -l
 
 install:
@@ -25,7 +33,7 @@ install:
   - php composer.phar install --no-interaction --no-dev
 
 before_script:
-  - echo "extension=lilt.so" >> /etc/php.ini
+  - echo "extension=lilt.so" >> ../../php.ini
 
 script:
   - php composer.phar bench
