@@ -8,7 +8,7 @@
 
 **Required PHP Version**
 
-- PHP 7.1+
+- PHP 7.1+ (NTS)
 
 **Installation**
 
