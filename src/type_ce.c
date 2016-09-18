@@ -36,20 +36,13 @@
       zend_register_constant(&c); \
   }
 
+/** todo arginfo macro */
 ZEND_BEGIN_ARG_INFO_EX(Type_of, 0, 0, 0)
 ZEND_END_ARG_INFO()
-
-//ZEND_BEGIN_ARG_INFO_EX(Type_mock, 0, 0, 0)
-//ZEND_END_ARG_INFO()
-//
-//ZEND_BEGIN_ARG_INFO_EX(Type_unmock, 0, 0, 0)
-//ZEND_END_ARG_INFO()
 
 CLASS_ENTRY;
 const METHODS_BEGIN
     ME(of, Type_of, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
-//    ME(mock, Type_mock, ZEND_ACC_PUBLIC)
-//    ME(unmock, Type_unmock, ZEND_ACC_PUBLIC)
 METHODS_END;
 
 CEINIT_FUNCTION {
@@ -85,64 +78,6 @@ PHP_API METHOD(of) {
         zend_internal_type_error(1, "Type::of() expects 1 parameter, %d given", num_args);
     }
 }
-
-//PHP_API METHOD(mock) {
-//    INIT_THIS;
-//    zval parent_type;
-//    int num_args = ZEND_CALL_NUM_ARGS(execute_data);
-//    if (num_args == 0) {
-//        if (this->ce) {
-//            if (this->ce->parent) {
-//                if (!this->ce->parent->create_object && !this->ce->parent->get_static_method) {
-//                    FUNC(zval_of_ce, this->ce->parent, &parent_type);
-//                    Z_THIS(parent_type)->mock = Z_OBJ(EX(This));
-//                    if (zend_hash_update(&LILTG(data.mocks), this->ce->parent->name, &EX(This))) {
-//                        zval_copy_ctor(&EX(This));
-//                    }
-//                    this->ce->parent->create_object = MEM(create_mock);
-//                    this->ce->parent->get_static_method = MEM(get_static_method_mock);
-//                    this->is_mocking = 1;
-//                    RETURN_TRUE;
-//                } else {
-//                    RETURN_FALSE;
-//                }
-//            } else {
-//                zend_internal_type_error(1, "Their is not extend to mock for type %s.", ZSTR_VAL(this->type_name));
-//            }
-//        } else {
-//            zend_internal_type_error(1, "Cannot mock scalar type %s.", ZSTR_VAL(this->type_name));
-//        }
-//    } else {
-//        zend_internal_type_error(1, "Type::mock() expects 0 parameter, %d given.", num_args);
-//    }
-//}
-//
-//PHP_API METHOD(unmock) {
-//    INIT_THIS;
-//    int num_args = ZEND_CALL_NUM_ARGS(execute_data);
-//    if (num_args == 0) {
-//        if (this->ce) {
-//            int unmock = 0;
-//            if (this->is_mocking) {
-//                this->is_mocking = 0;
-//                this->ce->parent->create_object = NULL;
-//                this->ce->parent->get_static_method = NULL;
-//                unmock = 1;
-//            }
-//            if (this->mock) {
-//                this->mock = NULL;
-//                this->ce->create_object = NULL;
-//                this->ce->get_static_method = NULL;
-//                unmock = 1;
-//            }
-//            ZVAL_BOOL(return_value, unmock);
-//        } else {
-//            zend_internal_type_error(1, "Cannot mock scalar type %s.", ZSTR_VAL(this->type_name));
-//        }
-//    } else {
-//        zend_internal_type_error(1, "Type::mock() expects 0 parameter, %d given.", num_args);
-//    }
-//}
 
 #undef CUSTOM_STRUCT
 #undef CLASS
