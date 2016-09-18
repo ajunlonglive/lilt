@@ -32,7 +32,6 @@ PHP_API PHP_FUNCTION(classtype) { /* {{{ */
     int num_args = ZEND_CALL_NUM_ARGS(execute_data);
     if (num_args == 1) {
         value = ZEND_CALL_ARG(execute_data, 1);
-        ZVAL_DEREF(value);
         if (Z_TYPE_P(value) == IS_STRING) {
             TypeFunc(zval_of_classname, value, return_value);
         } else {
