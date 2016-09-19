@@ -30,6 +30,11 @@ INIT_FUNCTION {
     OH.write_property = MEM(write_property);
 }
 
+zend_object *FUNC(create_object, zend_class_entry *ce) {
+    zend_error(E_ERROR, "Cannot instantiate enum %s::class.", ZSTR_VAL(ce->name));
+    return NULL;
+}
+
 void FUNC(write_property, zval *object, zval *member, zval *value, void **cache_slot) {
     if (zend_string_equals_literal(Z_STR_P(member), "name") ||
         zend_string_equals_literal(Z_STR_P(member), "value")) {

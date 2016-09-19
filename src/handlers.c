@@ -32,6 +32,7 @@ EXT_HFREE_FUNCTION {
 static void on_class_inheritance(zend_class_entry *ce, zend_class_entry *parent) {
     if (parent == TypedCe || instanceof_function(parent, TypedCe)) {
         zval type;
+
         zend_hash_del(&ce->constants_table, LILTG(zstr.type));
         TypeFunc(zval_of_ce, ce, &type);
         zend_declare_class_constant(ce, ZSTR_VAL(LILTG(zstr.type)), ZSTR_LEN(LILTG(zstr.type)), &type);
@@ -40,8 +41,9 @@ static void on_class_inheritance(zend_class_entry *ce, zend_class_entry *parent)
         zval retval;
         zend_string *name = z_string("__static");
         zend_function *__static = ce->get_static_method
-                                  ? ce->get_static_method(ce, name)
-                                  : zend_std_get_static_method(ce, name, NULL);
+            ? ce->get_static_method(ce, name)
+            : zend_std_get_static_method(ce, name, NULL);
+
         if (UNEXPECTED(__static != NULL) && __static->common.scope == ce &&
             zend_call_method_with_0_params(NULL, ce, &__static, "__static", &retval)) {
             zval_ptr_dtor(&retval);
@@ -52,12 +54,14 @@ static void on_class_inheritance(zend_class_entry *ce, zend_class_entry *parent)
         zend_class_constant *constant;
         zend_string *key;
         zend_class_entry *ce_enum = parent;
+
+        ce->create_object = EnumMem(create_object);
         ZEND_HASH_FOREACH_STR_KEY_PTR(&ce->constants_table, key, constant)
             if (Z_TYPE(constant->value) != IS_OBJECT) {
                 zval tmp;
 
                 ZVAL_COPY(&tmp, &constant->value);
-                object = ce->create_object ? ce->create_object(ce) : zend_objects_new(ce);
+                object = zend_objects_new(ce);
                 object_properties_init(object, ce);
 
                 ZVAL_OBJ(&constant->value, object);
@@ -68,7 +72,7 @@ static void on_class_inheritance(zend_class_entry *ce, zend_class_entry *parent)
                 zval *value, tmp;
 
                 value = zend_read_property(Z_OBJ(constant->value)->ce, &constant->value, STR_AND_LEN("value"), 0, &tmp);
-                object = ce->create_object ? ce->create_object(ce) : zend_objects_new(ce);
+                object = zend_objects_new(ce);
                 object_properties_init(object, ce);
 
                 ZVAL_OBJ(&constant->value, object);
@@ -83,7 +87,7 @@ static void on_class_inheritance(zend_class_entry *ce, zend_class_entry *parent)
                     zval value, cst;
 
                     ZVAL_COPY(&value, &constant->value);
-                    object = ce->create_object ? ce->create_object(ce) : zend_objects_new(ce);
+                    object = zend_objects_new(ce);
                     object_properties_init(object, ce);
 
                     ZVAL_OBJ(&cst, object);
@@ -97,7 +101,7 @@ static void on_class_inheritance(zend_class_entry *ce, zend_class_entry *parent)
                     zval *value, tmp, cst;
 
                     value = zend_read_property(Z_OBJ(constant->value)->ce, &constant->value, STR_AND_LEN("value"), 0, &tmp);
-                    object = ce->create_object ? ce->create_object(ce) : zend_objects_new(ce);
+                    object = zend_objects_new(ce);
                     object_properties_init(object, ce);
 
                     ZVAL_OBJ(&cst, object);
