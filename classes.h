@@ -25,6 +25,7 @@
 #include "classes/type/property.h"
 #include "classes/type.h"
 #include "classes/typed.h"
+#include "classes/i_static_init.h"
 
 #endif /* LILT_CLASSES_H */
 

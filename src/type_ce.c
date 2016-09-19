@@ -36,9 +36,13 @@
       zend_register_constant(&c); \
   }
 
+/** todo arginfo macro */
+ZEND_BEGIN_ARG_INFO_EX(Type_of, 0, 0, 0)
+ZEND_END_ARG_INFO()
+
 CLASS_ENTRY;
 const METHODS_BEGIN
-    ME(of, NULL, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+    ME(of, Type_of, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 METHODS_END;
 
 CEINIT_FUNCTION {
@@ -53,6 +57,12 @@ CEINIT_FUNCTION {
     INIT_TYPE_SCALAR(resource, "TYPE_RESOURCE");
     INIT_TYPE_SCALAR(string, "TYPE_STRING");
     INIT_TYPE_SCALAR(unknown, "TYPE_UNKNOWN");
+    TypeMem(fn_mock).common.scope = CE;
+    TypeMem(fn_mock).type = ZEND_OVERLOADED_FUNCTION;
+    TypeMem(fn_mock).common.function_name = z_string("mock");
+    TypeMem(fn_unmock).common.scope = CE;
+    TypeMem(fn_unmock).type = ZEND_OVERLOADED_FUNCTION;
+    TypeMem(fn_unmock).common.function_name = z_string("unmock");
 }
 
 PHP_API zend_object *FUNC(create_object, zend_class_entry *ce) {

@@ -16,33 +16,26 @@
   +----------------------------------------------------------------------+
  */
 
-#include "functions.h"
+#ifndef LILT_I_STATIC_INIT_H
+#define LILT_I_STATIC_INIT_H
 
-PHP_API PHP_FUNCTION(typeof) { /* {{{ */
-    int num_args = ZEND_CALL_NUM_ARGS(execute_data);
-    if (num_args == 1) {
-        TypeMem(zval_of)(ZEND_CALL_ARG(execute_data, 1), return_value);
-    } else {
-        zend_internal_type_error(1, "typeof() expects 1 parameter, %d given", num_args);
-    }
-} /* }}} */
+#include "lilt.h"
 
-PHP_API PHP_FUNCTION(classtype) { /* {{{ */
-    zval *value;
-    int num_args = ZEND_CALL_NUM_ARGS(execute_data);
-    if (num_args == 1) {
-        value = ZEND_CALL_ARG(execute_data, 1);
-        if (Z_TYPE_P(value) == IS_STRING) {
-            TypeFunc(zval_of_classname, value, return_value);
-        } else {
-            zend_internal_type_error(
-                1, "classtype() expects parameter 1 to be string, %s given", zend_zval_type_name(value)
-            );
-        }
-    } else {
-        zend_internal_type_error(1, "classtype() expects 1 parameter, %d given", num_args);
-    }
-} /* }}} */
+#define IStaticInit IStaticInit
+#define IStaticInitCe EXT_CLASS_CE(IStaticInit)
+
+/**
+ * API
+ * * * * * * * * * */
+EXT_CLASS_INIT_FUNCTION(IStaticInit);
+
+/**
+ * Class entry
+ * * * * * * * * * */
+extern EXT_CLASS_CLASS_ENTRY(IStaticInit);
+EXT_CLASS_CEINIT_FUNCTION(IStaticInit);
+
+#endif /* LILT_I_STATIC_INIT_H */
 
 /*
  * Local variables:

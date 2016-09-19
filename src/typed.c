@@ -21,8 +21,11 @@
 #define CLASS Typed
 #include "gen/class.h"
 
+CLASS_ENTRY;
+const NO_METHODS;
+
 INIT_FUNCTION {
-    CEINIT;
+    INIT_INTERFACE;
 }
 
 #undef CLASS
