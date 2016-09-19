@@ -40,6 +40,7 @@ if test "$PHP_LILT" != "no"; then
   src/type_oh.c \
   src/typed.c \
   src/i_static_init.c \
+  src/enum.c \
   src/functions.c \
   src/handlers.c \
   \

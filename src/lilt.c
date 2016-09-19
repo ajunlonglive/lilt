@@ -56,6 +56,7 @@ EXT_RINIT_FUNCTION { /* {{{ EXT_RINIT_FUNCTION */
     EXT_CLASS_INIT(Type);
     EXT_CLASS_INIT(Typed);
     EXT_CLASS_INIT(IStaticInit);
+    EXT_CLASS_INIT(Enum);
     EXT_HINIT();
     return SUCCESS;
 } /* }}} */

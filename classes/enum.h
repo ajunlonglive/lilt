@@ -16,19 +16,34 @@
   +----------------------------------------------------------------------+
  */
 
-#ifndef LILT_CLASSES_H
-#define LILT_CLASSES_H
+#ifndef LILT_ENUM_H
+#define LILT_ENUM_H
 
-#include "classes/type/arg_info.h"
-#include "classes/type/constant.h"
-#include "classes/type/function.h"
-#include "classes/type/property.h"
-#include "classes/type.h"
-#include "classes/typed.h"
-#include "classes/i_static_init.h"
-#include "classes/enum.h"
+#include "lilt.h"
 
-#endif /* LILT_CLASSES_H */
+#define Enum Enum
+#define EnumCe EXT_CLASS_CE(Enum)
+#define EnumOh EXT_CLASS_OH(Enum)
+#define EnumMem(name) EXT_CLASS_MEM(Enum, name)
+#define EnumFunc(name, ...) EXT_CLASS_FUNC(Enum, name, __VA_ARGS__)
+
+/**
+ * API
+ * * * * * * * * * */
+EXT_CLASS_INIT_FUNCTION(Enum);
+
+/**
+ * Class entry
+ * * * * * * * * * */
+extern EXT_CLASS_CLASS_ENTRY(Enum);
+
+/**
+ * Object handlers
+ * * * * * * * * * */
+EXT_CLASS_OBJECT_HANDLERS(Enum);
+void EnumFunc(write_property, zval *object, zval *member, zval *value, void **cache_slot);
+
+#endif /* LILT_ENUM_H */
 
 /*
  * Local variables:

@@ -33,7 +33,6 @@ EXT_CLASS_INIT_FUNCTION(IStaticInit);
  * Class entry
  * * * * * * * * * */
 extern EXT_CLASS_CLASS_ENTRY(IStaticInit);
-EXT_CLASS_CEINIT_FUNCTION(IStaticInit);
 
 #endif /* LILT_I_STATIC_INIT_H */
 
