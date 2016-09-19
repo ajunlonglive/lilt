@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 /**
  * Interface Enum
- * @property $name
+ * @property string $name
  * @property $value
  * @package \
  */

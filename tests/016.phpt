@@ -27,7 +27,7 @@ class BuildStatus extends Status {
 }
 class TravisBuildStatus extends BuildStatus {
     /**
-     * @var BuildStatus
+     * @var TravisBuildStatus
      */
     const Passing = 2;
 }
