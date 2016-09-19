@@ -31,8 +31,9 @@ INIT_FUNCTION {
 }
 
 void FUNC(write_property, zval *object, zval *member, zval *value, void **cache_slot) {
-    if (zend_string_equals_literal(Z_STR_P(member), "value")) {
-        zend_error(E_ERROR, "Cannot set immutable const %s::$value.", ZSTR_VAL(Z_OBJ_P(object)->ce->name));
+    if (zend_string_equals_literal(Z_STR_P(member), "name") ||
+        zend_string_equals_literal(Z_STR_P(member), "value")) {
+        zend_error(E_ERROR, "Cannot set immutable property %s::$%s.", ZSTR_VAL(Z_OBJ_P(object)->ce->name), Z_STRVAL_P(member));
     }
 
     return zend_std_write_property(object, member, value, cache_slot);
