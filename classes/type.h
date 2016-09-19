@@ -63,10 +63,8 @@ extern EXT_CLASS_CLASS_ENTRY(Type);
 EXT_CLASS_CEINIT_FUNCTION(Type);
 zend_function TypeMem(fn_mock);
 zend_function TypeMem(fn_unmock);
-PHP_API EXT_CLASS_METHOD(Type, of);
-//PHP_API EXT_CLASS_METHOD(Type, mock);
-//PHP_API EXT_CLASS_METHOD(Type, unmock);
-PHP_API zend_object *TypeFunc(create_object, zend_class_entry *ce);
+EXT_CLASS_DECLARE_METHOD(Type, of, AI_RETURN_OBJECT(STRINGIZE(Type), 1, 0, ARG(0, value)));
+zend_object *TypeFunc(create_object, zend_class_entry *ce);
 
 /**
  * Object handlers

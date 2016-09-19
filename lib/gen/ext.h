@@ -92,8 +92,13 @@
 #define EXT_CLASS_METHODS(class) EXT_CLASS_METHODS_NX(EXT_NAME, class)
 #define EXT_CLASS_NO_METHODS(class) EXT_CLASS_NO_METHODS_NX(EXT_NAME, class)
 #define EXT_CLASS_METHODS_BEGIN(class) EXT_CLASS_METHODS_BEGIN_NX(EXT_NAME, class)
+#define EXT_CLASS_DECLARE_METHOD(class, name, arg_infos) \
+  EXT_BEGIN_ARG_WITH_RETURN_TYPE_INFO_NX(EXT_ARGINFO_NX(EXT_NAME, class, name)) \
+      arg_infos \
+  ZEND_END_ARG_INFO() \
+  EXT_CLASS_METHOD_NX(EXT_NAME, class, name)
 #define EXT_CLASS_METHOD(class, name) EXT_CLASS_METHOD_NX(EXT_NAME, class, name)
-#define EXT_CLASS_ME(class, name, arginfo, flags) EXT_CLASS_ME_NX(EXT_NAME, class, name, arginfo, flags)
+#define EXT_CLASS_ME(class, name, flags) EXT_CLASS_ME_NX(EXT_NAME, class, name, flags)
 #define EXT_CLASS_ABSTRACT_ME(name, arginfo, flags) EXT_CLASS_ABSTRACT_ME_NX(name, arginfo, flags)
 #define EXT_CLASS_MAGIC_ME(name, arginfo, flags) EXT_CLASS_MAGIC_ME_NX(name, arginfo, flags)
 #define EXT_CLASS_CTOR(class) EXT_CLASS_CTOR_NX(EXT_NAME, class)

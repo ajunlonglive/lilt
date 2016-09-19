@@ -55,7 +55,7 @@
 #   define NO_METHODS EXT_CLASS_NO_METHODS(CLASS)
 #   define METHODS_BEGIN EXT_CLASS_METHODS_BEGIN(CLASS)
 #   define METHOD(name) EXT_CLASS_METHOD(CLASS, name)
-#   define ME(name, arginfo, flags) EXT_CLASS_ME(CLASS, name, arginfo, flags)
+#   define ME(name, flags) EXT_CLASS_ME(CLASS, name, flags)
 #   define ABSTRACT_ME(name, arginfo, flags) EXT_CLASS_ABSTRACT_ME(name, arginfo, flags)
 #   define MAGIC_ME(name, arginfo, flags) EXT_CLASS_MAGIC_ME(name, arginfo, flags)
 #   define CTOR EXT_CLASS_CTOR(CLASS)
