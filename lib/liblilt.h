@@ -235,9 +235,11 @@ typedef int (*lilt_opcode_handler_t)(LILT_OPCODE_HANDLER_ARGS);
       INIT_CLASS_ENTRY(ce, classname, EXT_CLASS_METHODS_NX(module, class)); \
       EXT_CLASS_CE_NX(module, class) = zend_register_internal_interface(&ce); \
   }
-#define EXT_CLASS_INIT_HANDLERS_NX(module, class) \
+#define EXT_CLASS_INIT_HANDLERS_CUSTOM_STRUCT_NX(module, class) \
   memcpy(&EXT_CLASS_OH_NX(module, class), zend_get_std_object_handlers(), sizeof(zend_object_handlers)); \
   EXT_CLASS_OH_NX(module, class).offset = XtOffsetOf(EXT_CLASS_PHP_STRUCT_NX(module, class), std)
+#define EXT_CLASS_INIT_HANDLERS_NX(module, class) \
+  memcpy(&EXT_CLASS_OH_NX(module, class), zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 
 #endif /* LILT_INCLUDES_H */
 

@@ -16,19 +16,29 @@
   +----------------------------------------------------------------------+
  */
 
-#ifndef LILT_CLASSES_H
-#define LILT_CLASSES_H
-
-#include "classes/type/arg_info.h"
-#include "classes/type/constant.h"
-#include "classes/type/function.h"
-#include "classes/type/property.h"
-#include "classes/type.h"
-#include "classes/typed.h"
-#include "classes/i_static_init.h"
 #include "classes/enum.h"
 
-#endif /* LILT_CLASSES_H */
+#define CLASS Enum
+#include "gen/class.h"
+
+CLASS_ENTRY;
+NO_METHODS;
+
+INIT_FUNCTION {
+    INIT_INTERFACE;
+    INIT_HANDLERS;
+    OH.write_property = MEM(write_property);
+}
+
+void FUNC(write_property, zval *object, zval *member, zval *value, void **cache_slot) {
+    if (zend_string_equals_literal(Z_STR_P(member), "value")) {
+        zend_error(E_ERROR, "Cannot set immutable const %s::$value.", ZSTR_VAL(Z_OBJ_P(object)->ce->name));
+    }
+
+    return zend_std_write_property(object, member, value, cache_slot);
+}
+
+#undef CLASS
 
 /*
  * Local variables:

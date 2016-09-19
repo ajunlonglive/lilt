@@ -54,6 +54,22 @@ EXT_HANDLER_FUNCTION(ZEND_DECLARE_INHERITED_CLASS) {
                 zval_ptr_dtor(&retval);
             }
         }
+        if (parent == EnumCe || instanceof_function(parent, EnumCe)) {
+            zend_object *object;
+            zend_class_constant *constant;
+            zend_declare_property_null(ce, STR_AND_LEN("value"), ZEND_ACC_PUBLIC);
+            ZEND_HASH_FOREACH_PTR(&ce->constants_table, constant)
+                if (Z_TYPE(constant->value) != IS_OBJECT || Z_OBJ(constant->value)->ce != TypeCe) {
+                    zval tmp;
+                    ZVAL_COPY(&tmp, &constant->value);
+                    object = ce->create_object ? ce->create_object(ce) : zend_objects_new(ce);
+                    object_properties_init(object, ce);
+                    ZVAL_OBJ(&constant->value, object);
+                    zend_update_property(ce, &constant->value, STR_AND_LEN("value"), &tmp);
+                    object->handlers = &(EnumOh);
+                }
+            ZEND_HASH_FOREACH_END();
+        }
     }
     return ZEND_USER_OPCODE_DISPATCH;
 }
@@ -86,6 +102,22 @@ EXT_HANDLER_FUNCTION(ZEND_ADD_INTERFACE) {
                 zend_call_method_with_0_params(NULL, ce, &__static, "__static", &retval)) {
                 zval_ptr_dtor(&retval);
             }
+        }
+        if (parent == EnumCe || instanceof_function(parent, EnumCe)) {
+            zend_object *object;
+            zend_class_constant *constant;
+            zend_declare_property_null(ce, STR_AND_LEN("value"), ZEND_ACC_PUBLIC);
+            ZEND_HASH_FOREACH_PTR(&ce->constants_table, constant)
+                if (Z_TYPE(constant->value) != IS_OBJECT || Z_OBJ(constant->value)->ce != TypeCe) {
+                    zval tmp;
+                    ZVAL_COPY(&tmp, &constant->value);
+                    object = ce->create_object ? ce->create_object(ce) : zend_objects_new(ce);
+                    object_properties_init(object, ce);
+                    ZVAL_OBJ(&constant->value, object);
+                    zend_update_property(ce, &constant->value, STR_AND_LEN("value"), &tmp);
+                    object->handlers = &(EnumOh);
+                }
+            ZEND_HASH_FOREACH_END();
         }
     }
     return ZEND_USER_OPCODE_DISPATCH;
