@@ -36,13 +36,9 @@
       zend_register_constant(&c); \
   }
 
-/** todo arginfo macro */
-ZEND_BEGIN_ARG_INFO_EX(Type_of, 0, 0, 0)
-ZEND_END_ARG_INFO()
-
 CLASS_ENTRY;
 const METHODS_BEGIN
-    ME(of, Type_of, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
+    ME(of, ZEND_ACC_PUBLIC|ZEND_ACC_STATIC)
 METHODS_END;
 
 CEINIT_FUNCTION {
@@ -65,12 +61,12 @@ CEINIT_FUNCTION {
     TypeMem(fn_unmock).common.function_name = z_string("unmock");
 }
 
-PHP_API zend_object *FUNC(create_object, zend_class_entry *ce) {
-    zend_error(E_ERROR,"Cannot instantiate %s::class in userland.", CLASS_STR);
+zend_object *FUNC(create_object, zend_class_entry *ce) {
+    zend_error(E_ERROR, "Cannot instantiate %s::class in userland.", CLASS_STR);
     return NULL;
 }
 
-PHP_API METHOD(of) {
+METHOD(of) {
     int num_args = ZEND_CALL_NUM_ARGS(execute_data);
     if (num_args == 1) {
         FUNC(zval_of, ZEND_CALL_ARG(execute_data, 1), return_value);
