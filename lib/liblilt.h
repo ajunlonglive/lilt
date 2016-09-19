@@ -74,8 +74,7 @@
 
 #define z_string_nx(str, persistent) zend_string_init(STR_AND_LEN(str), persistent)
 #define z_string(str) zend_string_init(STR_AND_LEN(str), 0)
-#define PHP_NSIZE_NX(nsname, class) nsname"\\"class
-#define PHP_NSIZE(nsname, class) PHP_NSIZE_NX(nsname, class)
+#define PHP_NSIZE(nsname, class) ZEND_NS_NAME(nsname, class)
 #define FUNCTIONS_END PHP_FE_END };
 #define METHODS_END PHP_FE_END };
 #define ZVAL_STR_OR_NULL(zv, str) if (str) { ZVAL_STR(zv, str); } else { ZVAL_NULL(zv); }
