@@ -68,36 +68,11 @@ static void on_class_inheritance(zend_class_entry *ce, zend_class_entry *parent)
                 zend_update_property_str(ce, &constant->value, STR_AND_LEN("name"), zend_string_copy(key));
                 zend_update_property(ce, &constant->value, STR_AND_LEN("value"), &tmp);
                 object->handlers = &(EnumOh);
-            } else if (instanceof_function(Z_OBJ(constant->value)->ce, EnumCe)) {
-                zval *value, tmp;
-
-                value = zend_read_property(Z_OBJ(constant->value)->ce, &constant->value, STR_AND_LEN("value"), 0, &tmp);
-                object = zend_objects_new(ce);
-                object_properties_init(object, ce);
-
-                ZVAL_OBJ(&constant->value, object);
-                zend_update_property_str(ce, &constant->value, STR_AND_LEN("name"), zend_string_copy(key));
-                zend_update_property(ce, &constant->value, STR_AND_LEN("value"), value);
-                object->handlers = &(EnumOh);
             }
         ZEND_HASH_FOREACH_END();
         while(ce_enum) {
             ZEND_HASH_FOREACH_STR_KEY_PTR(&ce_enum->constants_table, key, constant)
-                if (Z_TYPE(constant->value) != IS_OBJECT) {
-                    zval value, cst;
-
-                    ZVAL_COPY(&value, &constant->value);
-                    object = zend_objects_new(ce);
-                    object_properties_init(object, ce);
-
-                    ZVAL_OBJ(&cst, object);
-                    zend_update_property_str(ce, &cst, STR_AND_LEN("name"), zend_string_copy(key));
-                    zend_update_property(ce, &cst, STR_AND_LEN("value"), &value);
-                    object->handlers = &(EnumOh);
-
-                    zend_hash_del(&ce->constants_table, key);
-                    zend_declare_class_constant(ce, ZSTR_VAL(key), ZSTR_LEN(key), &cst);
-                } else if (instanceof_function(Z_OBJ(constant->value)->ce, EnumCe)) {
+                if (Z_TYPE(constant->value) == IS_OBJECT && instanceof_function(Z_OBJ(constant->value)->ce, EnumCe)) {
                     zval *value, tmp, cst;
 
                     value = zend_read_property(Z_OBJ(constant->value)->ce, &constant->value, STR_AND_LEN("value"), 0, &tmp);
