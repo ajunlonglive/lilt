@@ -7,11 +7,10 @@ addons:
     sources:
       - sourceline: 'deb http://ppa.launchpad.net/ondrej/php/ubuntu trusty main'
     packages:
-      - php7.1
+      - php7.1-dev
 
 install:
   - php -r "readfile('https://getcomposer.org/installer');" | php
-  - php composer.phar self-update
   - sudo php composer.phar install --no-interaction
 
 script:
