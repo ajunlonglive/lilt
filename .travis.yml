@@ -9,13 +9,16 @@ addons:
     packages:
       - php7.1-dev
 
+before_install:
+  - php -v
+
 install:
-  - php -r "readfile('https://getcomposer.org/installer');" | php
-  - sudo php composer.phar install --no-interaction
+  - sudo composer install --no-interaction
 
 script:
-  - sudo php -dextension=lilt.so composer.phar bench
-  - sudo php -dextension=lilt.so composer.phar test
+  - composer bench
+  - composer test
+  - composer memtest
 
 notifications:
   on_success: never
