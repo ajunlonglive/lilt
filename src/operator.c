@@ -16,21 +16,40 @@
   +----------------------------------------------------------------------+
  */
 
-#ifndef LILT_CLASSES_H
-#define LILT_CLASSES_H
-
-#include "classes/type/arg_info.h"
-#include "classes/type/constant.h"
-#include "classes/type/function.h"
-#include "classes/type/property.h"
-#include "classes/type.h"
-#include "classes/typed.h"
-#include "classes/i_static_init.h"
-#include "classes/enum.h"
-#include "classes/operable.h"
 #include "classes/operator.h"
 
-#endif /* LILT_CLASSES_H */
+#define CLASS Operator
+#include "gen/class.h"
+
+CLASS_ENTRY;
+NO_METHODS;
+
+INIT_FUNCTION {
+    int *opcode = OperableMem(opcodes);
+    const char* const* opconst = OperableMem(opconsts);
+    INIT_CLASS;
+    CE->ce_flags |= ZEND_ACC_FINAL;
+    CE->create_object = EnumMem(create_object);
+    while (*opcode) {
+        zval operator;
+        zend_object *object;
+
+        object = zend_objects_new(CE);
+        ZVAL_OBJ(&operator, object);
+        zend_update_property_string(CE, &operator, STR_AND_LEN("name"), *opconst);
+        zend_update_property_long(CE, &operator, STR_AND_LEN("value"), *opcode);
+        object->handlers = &EnumOh;
+
+        zend_declare_class_constant(CE, *opconst, strlen(*opconst), &operator);
+        MEM(operators)[*opcode] = object;
+
+        opconst++;
+        opcode++;
+    }
+    zend_class_implements(CE, 1, EnumCe);
+}
+
+#undef CLASS
 
 /*
  * Local variables:

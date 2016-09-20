@@ -44,42 +44,42 @@ var_dump(new Bar);
 var_dump(Bar::quz());
 ?>
 --EXPECTF--
-object(Bar)#12 (1) {
+object(Bar)#%d (1) {
   ["foo"]=>
   string(3) "bar"
 }
 string(8) "Bar::baz"
-object(Bar)#12 (1) {
+object(Bar)#%d (1) {
   ["foo"]=>
   string(3) "bar"
 }
 string(8) "Bar::baz"
-object(Baz)#12 (1) {
+object(Baz)#%d (1) {
   ["foo"]=>
   string(3) "bar"
 }
 string(8) "Baz::baz"
-object(Baz)#12 (1) {
+object(Baz)#%d (1) {
   ["foo"]=>
   string(3) "baz"
 }
 string(8) "Baz::baz"
-object(Bar)#12 (1) {
+object(Bar)#%d (1) {
   ["foo"]=>
   string(3) "bar"
 }
 string(8) "Bar::baz"
-object(Bar)#12 (1) {
+object(Bar)#%d (1) {
   ["foo"]=>
   string(3) "bar"
 }
 string(8) "Bar::baz"
-object(Foo)#12 (1) {
+object(Foo)#%d (1) {
   ["foo"]=>
   string(3) "foo"
 }
 string(8) "Foo::baz"
-object(Bar)#12 (1) {
+object(Bar)#%d (1) {
   ["foo"]=>
   string(3) "bar"
 }

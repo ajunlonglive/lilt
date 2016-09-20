@@ -92,6 +92,8 @@
 #define EXT_CLASS_METHODS(class) EXT_CLASS_METHODS_NX(EXT_NAME, class)
 #define EXT_CLASS_NO_METHODS(class) EXT_CLASS_NO_METHODS_NX(EXT_NAME, class)
 #define EXT_CLASS_METHODS_BEGIN(class) EXT_CLASS_METHODS_BEGIN_NX(EXT_NAME, class)
+#define EXT_ARGINFO(class, name) EXT_ARGINFO_NX(EXT_NAME, class, name)
+#define EXT_ARG_INFOS(class, name, arg_infos) EXT_ARG_INFOS_NX(EXT_NAME, class, name, #arg_infos)
 #define EXT_CLASS_DECLARE_METHOD(class, name, arg_infos) \
   EXT_BEGIN_ARG_WITH_RETURN_TYPE_INFO_NX(EXT_ARGINFO_NX(EXT_NAME, class, name)) \
       arg_infos \
