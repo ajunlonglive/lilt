@@ -3,7 +3,7 @@ PHP_ARG_ENABLE(lilt, whether to enable lilt support,
 
 AC_MSG_CHECKING([for C11 support with -std=c11])
 old_CFLAGS="$CFLAGS"
-CFLAGS="${CFLAGS} -std=c11"
+CFLAGS="${CFLAGS} -std=c11" -Wpragmas
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],[AC_MSG_RESULT([yes])],[
 	AC_MSG_RESULT([no])
 	CFLAGS="$old_CFLAGS"
