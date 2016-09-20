@@ -1,6 +1,5 @@
 sudo: required
 dist: trusty
-language: c
 
 addons:
   apt:
@@ -13,12 +12,13 @@ before_install:
   - php -v
 
 install:
-  - sudo composer install --no-interaction
+  - php -r "readfile('https://getcomposer.org/installer');" | php
+  - sudo php composer.phar install --no-interaction
 
 script:
-  - composer bench
-  - composer test
-  - composer memtest
+  - sudo php composer.phar bench
+  - sudo php composer.phar test
+  - sudo php composer.phar memtest
 
 notifications:
   on_success: never
