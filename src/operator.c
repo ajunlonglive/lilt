@@ -27,8 +27,8 @@ NO_METHODS;
 INIT_FUNCTION {
     int *opcode = OperableMem(opcodes);
     const char* const* opconst = OperableMem(opconsts);
-
     INIT_CLASS;
+    CE->ce_flags |= ZEND_ACC_FINAL;
     CE->create_object = EnumMem(create_object);
     while (*opcode) {
         zval operator;
@@ -46,6 +46,7 @@ INIT_FUNCTION {
         opconst++;
         opcode++;
     }
+    zend_class_implements(CE, 1, EnumCe);
 }
 
 #undef CLASS

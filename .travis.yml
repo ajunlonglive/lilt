@@ -14,8 +14,6 @@ install:
   - sudo php composer.phar install --no-interaction
 
 script:
-  - sudo php composer.phar bench
-  - sudo php composer.phar test
   - sudo php composer.phar memtest
 
 notifications:

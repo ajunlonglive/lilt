@@ -1,5 +1,5 @@
 --TEST--
-Enum ex
+Operators
 --SKIPIF--
 <?php include("skipif.inc") ?>
 --FILE--
