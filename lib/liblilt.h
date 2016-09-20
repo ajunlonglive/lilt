@@ -16,8 +16,8 @@
   +----------------------------------------------------------------------+
  */
 
-#ifndef LILT_INCLUDES_H
-#define LILT_INCLUDES_H
+#ifndef LILT_LIBLILT_H
+#define LILT_LIBLILT_H
 
 #include "php.h"
 #include "ext/standard/info.h"
@@ -248,7 +248,7 @@ typedef int (*lilt_opcode_handler_t)(LILT_OPCODE_HANDLER_ARGS);
 #define EXT_CLASS_INIT_HANDLERS_NX(module, class) \
   memcpy(&EXT_CLASS_OH_NX(module, class), zend_get_std_object_handlers(), sizeof(zend_object_handlers));
 
-#endif /* LILT_INCLUDES_H */
+#endif /* LILT_LIBLILT_H */
 
 /*
  * Local variables:
