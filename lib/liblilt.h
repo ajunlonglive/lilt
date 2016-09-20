@@ -21,7 +21,10 @@
 
 #include "php.h"
 #include "ext/standard/info.h"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wall"
 #include "p99/p99/p99.h"
+#pragma GCC diagnostic pop
 
 #define STRINGIZE_NX(A) #A
 #define STRINGIZE(A) STRINGIZE_NX(A)
