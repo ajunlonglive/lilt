@@ -51,6 +51,8 @@
 #       define $this EXT_CLASS_THIS(CLASS)
 #       define INIT_THIS EXT_CLASS_INIT_THIS(CLASS)
 #   endif
+#   define ARG_INFOS(name, arg_infos) EXT_ARG_INFOS(CLASS, name, arg_infos)
+#   define ARGINFO(name) EXT_ARGINFO(CLASS, name)
 #   define METHODS EXT_CLASS_METHODS(CLASS)
 #   define NO_METHODS EXT_CLASS_NO_METHODS(CLASS)
 #   define METHODS_BEGIN EXT_CLASS_METHODS_BEGIN(CLASS)

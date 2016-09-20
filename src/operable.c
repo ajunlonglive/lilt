@@ -16,21 +16,21 @@
   +----------------------------------------------------------------------+
  */
 
-#ifndef LILT_CLASSES_H
-#define LILT_CLASSES_H
-
-#include "classes/type/arg_info.h"
-#include "classes/type/constant.h"
-#include "classes/type/function.h"
-#include "classes/type/property.h"
-#include "classes/type.h"
-#include "classes/typed.h"
-#include "classes/i_static_init.h"
-#include "classes/enum.h"
 #include "classes/operable.h"
-#include "classes/operator.h"
 
-#endif /* LILT_CLASSES_H */
+#define CLASS Operable
+#include "gen/class.h"
+
+CLASS_ENTRY;
+const METHODS_BEGIN
+    ABSTRACT_ME(__operate, NULL, ZEND_ACC_PUBLIC)
+METHODS_END;
+
+INIT_FUNCTION {
+    INIT_INTERFACE;
+}
+
+#undef CLASS
 
 /*
  * Local variables:

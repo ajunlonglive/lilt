@@ -16,21 +16,26 @@
   +----------------------------------------------------------------------+
  */
 
-#ifndef LILT_CLASSES_H
-#define LILT_CLASSES_H
+#ifndef LILT_OPERATOR_H
+#define LILT_OPERATOR_H
 
-#include "classes/type/arg_info.h"
-#include "classes/type/constant.h"
-#include "classes/type/function.h"
-#include "classes/type/property.h"
-#include "classes/type.h"
-#include "classes/typed.h"
-#include "classes/i_static_init.h"
-#include "classes/enum.h"
-#include "classes/operable.h"
-#include "classes/operator.h"
+#include "lilt.h"
 
-#endif /* LILT_CLASSES_H */
+#define Operator Operator
+#define OperatorMem(name) EXT_CLASS_MEM(Operator, name)
+
+/**
+ * API
+ * * * * * * * * * */
+EXT_CLASS_INIT_FUNCTION(Operator);
+zend_object *OperatorMem(operators)[ZEND_CAST];
+
+/**
+ * Class entry
+ * * * * * * * * * */
+extern EXT_CLASS_CLASS_ENTRY(Operator);
+
+#endif /* LILT_OPERATOR_H */
 
 /*
  * Local variables:

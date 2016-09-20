@@ -202,6 +202,10 @@ typedef int (*lilt_opcode_handler_t)(LILT_OPCODE_HANDLER_ARGS);
 #define ARG_TYPE(pass_by_ref, name, type_hint, allow_null) { #name, NULL, type_hint, pass_by_ref, allow_null, 0 }
 #define ARG_VARIADIC(pass_by_ref, name) { #name, NULL, 0, pass_by_ref, 0, 1 }
 #define EXT_BEGIN_ARG_WITH_RETURN_TYPE_INFO_NX(name) static const zend_internal_arg_info name[] = {
+#define EXT_ARG_INFOS_NX(module, class, name, arg_infos) \
+  EXT_BEGIN_ARG_WITH_RETURN_TYPE_INFO_NX(EXT_ARGINFO_NX(module, class, name)) \
+      arg_infos \
+  ZEND_END_ARG_INFO()
 #define EXT_CLASS_DECLARE_METHOD_NX(module, class, name, arg_infos) \
   EXT_BEGIN_ARG_WITH_RETURN_TYPE_INFO_NX(EXT_ARGINFO_NX(module, class, name)) \
       arg_infos \
