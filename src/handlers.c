@@ -22,21 +22,35 @@
 #define OP2_ZPTR (op2 = znode_op_zval_ptr(execute_data, EX(opline)->op2, EX(opline)->op2_type))
 
 EXT_HINIT_FUNCTION {
-    EXT_SET_HANDLER(ZEND_CASE);
+    //EXT_SET_HANDLER(ZEND_CASE);
     EXT_SET_HANDLER(ZEND_CAST);
-    EXT_SET_HANDLER(ZEND_IS_EQUAL);
-    EXT_SET_HANDLER(ZEND_IS_NOT_EQUAL);
+    //EXT_SET_HANDLER(ZEND_IS_EQUAL);
+    //EXT_SET_HANDLER(ZEND_IS_NOT_EQUAL);
     EXT_SET_HANDLER(ZEND_IS_IDENTICAL);
     EXT_SET_HANDLER(ZEND_IS_NOT_IDENTICAL);
 }
 
 EXT_HFREE_FUNCTION {
-    EXT_UNSET_HANDLER(ZEND_CASE);
+    //EXT_UNSET_HANDLER(ZEND_CASE);
     EXT_UNSET_HANDLER(ZEND_CAST);
-    EXT_UNSET_HANDLER(ZEND_IS_EQUAL);
-    EXT_UNSET_HANDLER(ZEND_IS_NOT_EQUAL);
+    //EXT_UNSET_HANDLER(ZEND_IS_EQUAL);
+    //EXT_UNSET_HANDLER(ZEND_IS_NOT_EQUAL);
     EXT_UNSET_HANDLER(ZEND_IS_IDENTICAL);
     EXT_UNSET_HANDLER(ZEND_IS_NOT_IDENTICAL);
+}
+
+EXT_HANDLER_FUNCTION(ZEND_CASE) {
+    zval result, *op1, *op2;
+
+    if (OP1_ZPTR && Z_TYPE_P(op1) == IS_OBJECT && OP2_ZPTR && Z_TYPE_P(op2) == IS_OBJECT) {
+        ZVAL_BOOL(&result, zend_is_identical(op1, op2));
+        ZVAL_COPY(EX_VAR(EX(opline)->result.var), &result);
+        EX(opline)++;
+
+        return ZEND_USER_OPCODE_CONTINUE;
+    }
+
+    return ZEND_USER_OPCODE_DISPATCH;
 }
 
 EXT_HANDLER_FUNCTION(ZEND_CAST) {
@@ -60,20 +74,6 @@ EXT_HANDLER_FUNCTION(ZEND_CAST) {
 
             return ZEND_USER_OPCODE_CONTINUE;
         }
-    }
-
-    return ZEND_USER_OPCODE_DISPATCH;
-}
-
-EXT_HANDLER_FUNCTION(ZEND_CASE) {
-    zval result, *op1, *op2;
-
-    if (OP1_ZPTR && Z_TYPE_P(op1) == IS_OBJECT && OP2_ZPTR && Z_TYPE_P(op2) == IS_OBJECT) {
-        ZVAL_BOOL(&result, zend_is_identical(op1, op2));
-        ZVAL_COPY(EX_VAR(EX(opline)->result.var), &result);
-        EX(opline)++;
-
-        return ZEND_USER_OPCODE_CONTINUE;
     }
 
     return ZEND_USER_OPCODE_DISPATCH;
