@@ -54,7 +54,6 @@ int FUNC(interface_gets_implemented, zend_class_entry *iface, zend_class_entry *
 
             ZVAL_COPY(&tmp, &constant->value);
             object = zend_objects_new(ce);
-            object_properties_init(object, ce);
 
             ZVAL_OBJ(&constant->value, object);
             zend_update_property_str(ce, &constant->value, STR_AND_LEN("name"), zend_string_copy(key));
@@ -69,7 +68,6 @@ int FUNC(interface_gets_implemented, zend_class_entry *iface, zend_class_entry *
 
                 value = zend_read_property(Z_OBJ(constant->value)->ce, &constant->value, STR_AND_LEN("value"), 0, &tmp);
                 object = zend_objects_new(ce);
-                object_properties_init(object, ce);
 
                 ZVAL_OBJ(&cst, object);
                 zend_update_property_str(ce, &cst, STR_AND_LEN("name"), zend_string_copy(key));
@@ -87,12 +85,10 @@ int FUNC(interface_gets_implemented, zend_class_entry *iface, zend_class_entry *
 }
 
 void FUNC(write_property, zval *object, zval *member, zval *value, void **cache_slot) {
-    if (zend_string_equals_literal(Z_STR_P(member), "name") ||
-        zend_string_equals_literal(Z_STR_P(member), "value")) {
-        zend_error(E_ERROR, "Cannot set immutable property %s::$%s.", ZSTR_VAL(Z_OBJ_P(object)->ce->name), Z_STRVAL_P(member));
-    }
-
-    return zend_std_write_property(object, member, value, cache_slot);
+    zend_error(E_ERROR, "Cannot set property of enum object %s::$%s.",
+        ZSTR_VAL(Z_OBJ_P(object)->ce->name),
+        Z_STRVAL_P(member)
+    );
 }
 
 #undef CLASS

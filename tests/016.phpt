@@ -120,4 +120,4 @@ object(TravisBuildStatus)#%d (2) {
   int(2)
 }
 
-Fatal error: Cannot set immutable property Status::$value. in %s/tests/016.php on line %d
+Fatal error: Cannot set property of enum object Status::$value. in %s/tests/016.php on line %d
