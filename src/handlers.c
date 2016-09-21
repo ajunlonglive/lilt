@@ -22,21 +22,21 @@
 #define OP2_ZPTR (op2 = znode_op_zval_ptr(execute_data, EX(opline)->op2, EX(opline)->op2_type))
 
 EXT_HINIT_FUNCTION {
-    EXT_SET_HANDLER(ZEND_CASE);
-    EXT_SET_HANDLER(ZEND_CAST);
-    EXT_SET_HANDLER(ZEND_IS_EQUAL);
-    EXT_SET_HANDLER(ZEND_IS_NOT_EQUAL);
-    EXT_SET_HANDLER(ZEND_IS_IDENTICAL);
-    EXT_SET_HANDLER(ZEND_IS_NOT_IDENTICAL);
+//    EXT_SET_HANDLER(ZEND_CASE);
+//    EXT_SET_HANDLER(ZEND_CAST);
+//    EXT_SET_HANDLER(ZEND_IS_EQUAL);
+//    EXT_SET_HANDLER(ZEND_IS_NOT_EQUAL);
+//    EXT_SET_HANDLER(ZEND_IS_IDENTICAL);
+//    EXT_SET_HANDLER(ZEND_IS_NOT_IDENTICAL);
 }
 
 EXT_HFREE_FUNCTION {
-    EXT_UNSET_HANDLER(ZEND_CASE);
-    EXT_UNSET_HANDLER(ZEND_CAST);
-    EXT_UNSET_HANDLER(ZEND_IS_EQUAL);
-    EXT_UNSET_HANDLER(ZEND_IS_NOT_EQUAL);
-    EXT_UNSET_HANDLER(ZEND_IS_IDENTICAL);
-    EXT_UNSET_HANDLER(ZEND_IS_NOT_IDENTICAL);
+//    EXT_UNSET_HANDLER(ZEND_CASE);
+//    EXT_UNSET_HANDLER(ZEND_CAST);
+//    EXT_UNSET_HANDLER(ZEND_IS_EQUAL);
+//    EXT_UNSET_HANDLER(ZEND_IS_NOT_EQUAL);
+//    EXT_UNSET_HANDLER(ZEND_IS_IDENTICAL);
+//    EXT_UNSET_HANDLER(ZEND_IS_NOT_IDENTICAL);
 }
 
 EXT_HANDLER_FUNCTION(ZEND_CAST) {
@@ -54,7 +54,7 @@ EXT_HANDLER_FUNCTION(ZEND_CAST) {
         }
     }
     else if (EX(opline)->extended_value == IS_STRING) {
-        if (OP1_ZPTR && INSTANCE_OF_P(op1, TypeCe)) {
+        if (OP1_ZPTR && IS_A_P(op1, TypeCe)) {
             ZVAL_STR(EX_VAR(EX(opline)->result.var), ((TypePhpStruct *)Z_OBJ_P(op1))->intern->type_name);
             Z_TRY_ADDREF_P(EX_VAR(EX(opline)->result.var));
             EX(opline)++;
@@ -83,8 +83,8 @@ EXT_HANDLER_FUNCTION(ZEND_CASE) {
 EXT_HANDLER_FUNCTION(ZEND_IS_EQUAL) {
     zval result, *op1, *op2;
 
-    if (OP1_ZPTR && INSTANCE_OF_P(op1, TypeCe) &&
-        OP2_ZPTR && INSTANCE_OF_P(op2, TypeCe)) {
+    if (OP1_ZPTR && IS_A_P(op1, TypeCe) &&
+        OP2_ZPTR && IS_A_P(op2, TypeCe)) {
         ZVAL_BOOL(&result, Z_OBJ_P(op1) == Z_OBJ_P(op2));
         ZVAL_COPY(EX_VAR(EX(opline)->result.var), &result);
         EX(opline)++;
@@ -98,8 +98,8 @@ EXT_HANDLER_FUNCTION(ZEND_IS_EQUAL) {
 EXT_HANDLER_FUNCTION(ZEND_IS_NOT_EQUAL) {
     zval result, *op1, *op2;
 
-    if (OP1_ZPTR && INSTANCE_OF_P(op1, TypeCe) &&
-        OP2_ZPTR && INSTANCE_OF_P(op2, TypeCe)) {
+    if (OP1_ZPTR && IS_A_P(op1, TypeCe) &&
+        OP2_ZPTR && IS_A_P(op2, TypeCe)) {
         ZVAL_BOOL(&result, Z_OBJ_P(op1) != Z_OBJ_P(op2));
         ZVAL_COPY(EX_VAR(EX(opline)->result.var), &result);
         EX(opline)++;
