@@ -1,145 +1,48 @@
 --TEST--
-Operators
+Operable
 --SKIPIF--
 <?php include("skipif.inc") ?>
 --FILE--
 <?php
-class Long implements \Operable {
+class Foo implements \Operable {
     public function __operate(\Operator $operator, $value) {
-        var_dump($operator);
-        var_dump($value);
+        var_dump($operator->name);
 
-        return $this;
+        return $value;
     }
 }
-$long = new Long;
-$long + 1;
-$long - 2;
-$long * 3;
-$long / 4;
-$long % 5;
-$long << 6;
-$long >> 7;
-$long | 8;
-$long & 9;
-$long ^ 10;
-$long === 11;
-$long !== 12;
-$long == 14;
-$long != 15;
-$long < 16;
-$long <= 17;
+var_dump(new Foo + 1);
+var_dump(new Foo - 2);
+var_dump(new Foo * 3);
+var_dump(new Foo / 4);
+var_dump(new Foo % 5);
+var_dump(new Foo << 6);
+var_dump(new Foo >> 7);
+var_dump(new Foo . 8);
+var_dump(new Foo | 9);
+var_dump(new Foo & 10);
+var_dump(new Foo ^ 11);
 ?>
---EXPECTF--
-object(Operator)#%d (2) {
-  ["name"]=>
-  string(3) "Add"
-  ["value"]=>
-  int(1)
-}
+--EXPECT--
+string(3) "ADD"
 int(1)
-object(Operator)#%d (2) {
-  ["name"]=>
-  string(3) "Sub"
-  ["value"]=>
-  int(2)
-}
+string(3) "SUB"
 int(2)
-object(Operator)#%d (2) {
-  ["name"]=>
-  string(3) "Mul"
-  ["value"]=>
-  int(3)
-}
+string(3) "MUL"
 int(3)
-object(Operator)#%d (2) {
-  ["name"]=>
-  string(3) "Div"
-  ["value"]=>
-  int(4)
-}
+string(3) "DIV"
 int(4)
-object(Operator)#%d (2) {
-  ["name"]=>
-  string(3) "Mod"
-  ["value"]=>
-  int(5)
-}
+string(3) "MOD"
 int(5)
-object(Operator)#%d (2) {
-  ["name"]=>
-  string(2) "Sl"
-  ["value"]=>
-  int(6)
-}
+string(2) "SL"
 int(6)
-object(Operator)#%d (2) {
-  ["name"]=>
-  string(2) "Sr"
-  ["value"]=>
-  int(7)
-}
+string(2) "SR"
 int(7)
-object(Operator)#%d (2) {
-  ["name"]=>
-  string(4) "BwOr"
-  ["value"]=>
-  int(9)
-}
-int(8)
-object(Operator)#%d (2) {
-  ["name"]=>
-  string(5) "BwAnd"
-  ["value"]=>
-  int(10)
-}
+string(6) "CONCAT"
+string(1) "8"
+string(5) "BW_OR"
 int(9)
-object(Operator)#%d (2) {
-  ["name"]=>
-  string(5) "BwXor"
-  ["value"]=>
-  int(11)
-}
+string(6) "BW_AND"
 int(10)
-object(Operator)#%d (2) {
-  ["name"]=>
-  string(9) "Identical"
-  ["value"]=>
-  int(15)
-}
+string(6) "BW_XOR"
 int(11)
-object(Operator)#%d (2) {
-  ["name"]=>
-  string(12) "NotIdentical"
-  ["value"]=>
-  int(16)
-}
-int(12)
-object(Operator)#%d (2) {
-  ["name"]=>
-  string(5) "Equal"
-  ["value"]=>
-  int(17)
-}
-int(14)
-object(Operator)#%d (2) {
-  ["name"]=>
-  string(8) "NotEqual"
-  ["value"]=>
-  int(18)
-}
-int(15)
-object(Operator)#%d (2) {
-  ["name"]=>
-  string(7) "Smaller"
-  ["value"]=>
-  int(19)
-}
-int(16)
-object(Operator)#%d (2) {
-  ["name"]=>
-  string(14) "SmallerOrEqual"
-  ["value"]=>
-  int(20)
-}
-int(17)

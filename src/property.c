@@ -28,6 +28,8 @@ INIT_FUNCTION {
     OHINIT;
 }
 
+SHUTDOWN_FUNCTION { }
+
 PHP_API STRUCT *CTOR(zend_property_info *property_info, zend_string *name) {
     STRUCT *intern = ecalloc(1, sizeof(STRUCT));
 

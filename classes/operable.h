@@ -24,70 +24,30 @@
 #define Operable Operable
 #define OperableCe EXT_CLASS_CE(Operable)
 #define OperableMem(name) EXT_CLASS_MEM(Operable, name)
+#define OperableFunc(name, ...) EXT_CLASS_FUNC(Operable, name, __VA_ARGS__)
+
+#define IS_OPERABLE_P(zv) (Z_TYPE_P(zv) == IS_OBJECT && instanceof_function(Z_OBJ_P(zv)->ce, OperableCe))
+#define IS_OPERABLE(zv) IS_OPERABLE_P(&(zv))
+
 
 /**
  * API
- * todo add assignement:
- * ZEND_QM_ASSIGN,
- * ZEND_ASSIGN_ADD,
- * ZEND_ASSIGN_SUB,
- * ZEND_ASSIGN_MUL,
- * ZEND_ASSIGN_DIV,
- * ZEND_ASSIGN_MOD,
- * ZEND_ASSIGN_SL,
- * ZEND_ASSIGN_SR,
- * ZEND_ASSIGN_BW_OR,
- * ZEND_ASSIGN_BW_AND,
- * ZEND_ASSIGN_BW_XOR,
- * ZEND_ASSIGN,
- * ZEND_ASSIGN_REF,
  * * * * * * * * * */
 EXT_CLASS_INIT_FUNCTION(Operable);
-static int OperableMem(opcodes)[] = {
-    ZEND_ADD,
-    ZEND_SUB,
-    ZEND_MUL,
-    ZEND_DIV,
-    ZEND_MOD,
-    ZEND_SL,
-    ZEND_SR,
-    ZEND_BW_OR,
-    ZEND_BW_AND,
-    ZEND_BW_XOR,
-    ZEND_IS_IDENTICAL,
-    ZEND_IS_NOT_IDENTICAL,
-    ZEND_IS_EQUAL,
-    ZEND_IS_NOT_EQUAL,
-    ZEND_IS_SMALLER,
-    ZEND_IS_SMALLER_OR_EQUAL,
-    ZEND_CAST,
-    0
-};
-static const char* OperableMem(opconsts)[] = {
-    "Add",
-    "Sub",
-    "Mul",
-    "Div",
-    "Mod",
-    "Sl",
-    "Sr",
-    "BwOr",
-    "BwAnd",
-    "BwXor",
-    "Identical",
-    "NotIdentical",
-    "Equal",
-    "NotEqual",
-    "Smaller",
-    "SmallerOrEqual",
-    "Cast",
-    NULL
-};
+EXT_CLASS_SHUTDOWN_FUNCTION(Operable);
+zend_object *OperableFunc(create_object, zend_class_entry *ce);
 
 /**
  * Class entry
  * * * * * * * * * */
 extern EXT_CLASS_CLASS_ENTRY(Operable);
+int OperableFunc(interface_gets_implemented, zend_class_entry *iface, zend_class_entry *ce);
+
+/**
+ * Object handlers
+ * * * * * * * * * */
+EXT_CLASS_OBJECT_HANDLERS(Operable);
+int OperableFunc(do_operation, zend_uchar opcode, zval *result, zval *op1, zval *op2);
 
 #endif /* LILT_OPERABLE_H */
 

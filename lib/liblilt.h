@@ -83,6 +83,11 @@
 #define METHODS_END PHP_FE_END };
 #define ZVAL_STR_OR_NULL(zv, str) if (str) { ZVAL_STR(zv, str); } else { ZVAL_NULL(zv); }
 #define EX_ARG(n) ZEND_CALL_ARG(execute_data, n)
+#define IS_A_P(zv, _ce) (Z_TYPE_P(zv) == IS_OBJECT && Z_OBJ_P(zv)->ce == _ce)
+#define IS_A(zv, _ce) (Z_TYPE(zv) == IS_OBJECT && Z_OBJ(zv)->ce == _ce)
+#define INSTANCE_OF_P(zv, _ce) \
+  (Z_TYPE_P(zv) == IS_OBJECT && (Z_OBJ_P(zv)->ce == _ce || instanceof_function(Z_OBJ_P(zv)->ce, _ce)))
+#define INSTANCE_OF(zv, _ce) INSTANCE_OF_P(&zv, _ce)
 
 #define EXT_ME_NX(name) CONCAT(name, _module_entry)
 #define EXT_MODULE_ENTRY_NX(name) zend_module_entry EXT_ME_NX(name)
@@ -166,10 +171,14 @@ typedef int (*lilt_opcode_handler_t)(LILT_OPCODE_HANDLER_ARGS);
 
 #define EXT_CLASS_INIT_NX(module, class) CONCAT(module, _, class, _init)()
 #define EXT_CLASS_INIT_FUNCTION_NX(module, class) void EXT_CLASS_INIT_NX(module, class)
+#define EXT_CLASS_SHUTDOWN_NX(module, class) CONCAT(module, _, class, _shutdown)()
+#define EXT_CLASS_SHUTDOWN_FUNCTION_NX(module, class) void EXT_CLASS_SHUTDOWN_NX(module, class)
 #define EXT_CLASS_CE_NX(module, class) CONCAT(module, _ce_, class)
 #define EXT_CLASS_CLASS_ENTRY_NX(module, class) zend_class_entry *EXT_CLASS_CE_NX(module, class)
 #define EXT_CLASS_CEINIT_NX(module, class) CONCAT(EXT_CLASS_CE_NX(module, class), _init)()
 #define EXT_CLASS_CEINIT_FUNCTION_NX(module, class) void EXT_CLASS_CEINIT_NX(module, class)
+#define EXT_CLASS_CESHUTDOWN_NX(module, class) CONCAT(EXT_CLASS_CE_NX(module, class), _shutdown)()
+#define EXT_CLASS_CESHUTDOWN_FUNCTION_NX(module, class) void EXT_CLASS_CESHUTDOWN_NX(module, class)
 #define EXT_CLASS_OH_NX(module, class) CONCAT(module, _oh_, class)
 #define EXT_CLASS_OBJECT_HANDLERS_NX(module, class) zend_object_handlers EXT_CLASS_OH_NX(module, class)
 #define EXT_CLASS_OHINIT_NX(module, class) CONCAT(EXT_CLASS_OH_NX(module, class), _init)()

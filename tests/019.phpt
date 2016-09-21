@@ -1,53 +1,37 @@
 --TEST--
-Operators 2
+Castable
 --SKIPIF--
 <?php include("skipif.inc") ?>
 --FILE--
 <?php
-class Long implements \Operable {
-    private $value = 5;
-
-    public function __operate(\Operator $operator, $value) {
-        switch ($operator) {
-            case \Operator::Add:
-                return $this->value + $value;
-            case \Operator::Sub:
-                return $this->value - $value;
-            case \Operator::Mul:
-                return $this->value * $value;
-            case \Operator::Div:
-                return $this->value / $value;
-            case \Operator::Identical:
-                return $this->value === $value;
-            case \Operator::NotIdentical:
-                return $this->value !== $value;
-            case \Operator::Equal:
-                return $this->value == $value;
-            case \Operator::NotEqual:
-                return $this->value != $value;
-            case \Operator::Cast:
-                return $this->value;
+class Foo implements \Castable {
+    public function __cast(\Type $type) {
+        switch($type) {
+            case \Type::array:
+                return [9.9];
+            case \Type::boolean:
+                return true;
+            case \Type::double:
+                return 9.9;
+            case \Type::integer:
+                return 9;
+            case \Type::string:
+                return "9";
         }
     }
 }
-$long = new Long;
-var_dump($long + 1);
-var_dump($long - 2);
-var_dump($long * 3);
-var_dump($long / 4);
-var_dump($long === 5);
-var_dump($long !== 5);
-var_dump($long == 5);
-var_dump($long != 5);
-var_dump((int)$long);
+var_dump((array)new Foo);
+var_dump((bool)new Foo);
+var_dump((double)new Foo);
+var_dump((int)new Foo);
+var_dump((string)new Foo);
 ?>
 --EXPECT--
-int(6)
-int(3)
-int(15)
-float(1.25)
+array(1) {
+  [0]=>
+  float(9.9)
+}
 bool(true)
-bool(false)
-bool(true)
-bool(false)
-int(5)
+float(9.9)
+int(9)
+string(1) "9"

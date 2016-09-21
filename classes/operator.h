@@ -22,13 +22,27 @@
 #include "lilt.h"
 
 #define Operator Operator
+#define OperatorCe EXT_CLASS_CE(Operator)
 #define OperatorMem(name) EXT_CLASS_MEM(Operator, name)
+
+#define LILT_IS_GREATER ZEND_CAST+1
+#define LILT_IS_GREATER_OR_EQUAL ZEND_CAST+2
 
 /**
  * API
  * * * * * * * * * */
 EXT_CLASS_INIT_FUNCTION(Operator);
-zend_object *OperatorMem(operators)[ZEND_CAST];
+EXT_CLASS_SHUTDOWN_FUNCTION(Operator);
+zend_object *OperatorMem(operators)[LILT_IS_GREATER_OR_EQUAL+1];
+static int OperatorMem(opcodes)[] = {
+    ZEND_ADD, ZEND_SUB, ZEND_MUL, ZEND_DIV, ZEND_MOD, ZEND_SL, ZEND_SR, ZEND_CONCAT, ZEND_BW_OR, ZEND_BW_AND,
+    ZEND_BW_XOR, ZEND_IS_IDENTICAL, ZEND_IS_NOT_IDENTICAL, ZEND_IS_EQUAL, ZEND_IS_NOT_EQUAL, ZEND_IS_SMALLER,
+    ZEND_IS_SMALLER_OR_EQUAL, ZEND_CAST, LILT_IS_GREATER, LILT_IS_GREATER_OR_EQUAL, 0
+};
+static const char* OperatorMem(opnames)[] = {
+    "ADD", "SUB", "MUL", "DIV", "MOD", "SL", "SR", "CONCAT", "BW_OR", "BW_AND", "BW_XOR", "IDENTICAL", "NOT_IDENTICAL",
+    "EQUAL", "NOT_EQUAL", "SMALLER", "SMALLER_OR_EQUAL", "CAST", "GREATER", "GREATER_OR_EQUAL", NULL
+};
 
 /**
  * Class entry

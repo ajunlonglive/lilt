@@ -23,6 +23,7 @@
 
 #define Type Type
 #define TypeStruct EXT_CLASS_STRUCT(Type)
+#define TypePhpStruct EXT_CLASS_PHP_STRUCT(Type)
 #define TypeCe EXT_CLASS_CE(Type)
 #define TypeCtor EXT_CLASS_CTOR(Type)
 #define TypeMem(name) EXT_CLASS_MEM(Type, name)
@@ -53,6 +54,7 @@ EXT_CLASS_STRUCT_END(Type);
 EXT_CLASS_PHP_STRUCT_BEGIN(Type)
 EXT_CLASS_PHP_STRUCT_END(Type);
 EXT_CLASS_INIT_FUNCTION(Type);
+EXT_CLASS_SHUTDOWN_FUNCTION(Type);
 PHP_API TypeStruct *TypeCtor(zend_string *type_name, zend_class_entry *ce);
 PHP_API zend_object *TypeFunc(enclose, TypeStruct *type);
 PHP_API void TypeFunc(free, TypeStruct *intern);
@@ -72,6 +74,7 @@ PHP_API zend_object *TypeFunc(of_class_name, zend_string *class_name);
  * * * * * * * * * */
 extern EXT_CLASS_CLASS_ENTRY(Type);
 EXT_CLASS_CEINIT_FUNCTION(Type);
+EXT_CLASS_CESHUTDOWN_FUNCTION(Type);
 zend_function TypeMem(fn_mock);
 zend_function TypeMem(fn_unmock);
 EXT_CLASS_DECLARE_METHOD(Type, of, AI_RETURN_OBJECT(STRINGIZE(Type), 1, 0, ARG(0, value)));
@@ -83,7 +86,6 @@ zend_object *TypeFunc(create_object, zend_class_entry *ce);
 EXT_CLASS_OBJECT_HANDLERS(Type);
 EXT_CLASS_OHINIT_FUNCTION(Type);
 PHP_API int TypeFunc(call_method, zend_string *method, zend_object *object, INTERNAL_FUNCTION_PARAMETERS);
-PHP_API int TypeFunc(do_operation, zend_uchar opcode, zval *result, zval *op1, zval *op2);
 PHP_API void TypeFunc(free_object, zend_object *object);
 PHP_API HashTable *TypeFunc(get_debug_info, zval *object, int *is_temp);
 PHP_API zend_function *TypeFunc(get_method, zend_object **object, zend_string *method, const zval *key);

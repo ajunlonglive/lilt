@@ -43,6 +43,8 @@ if test "$PHP_LILT" != "no"; then
   src/enum.c \
   src/operable.c \
   src/operator.c \
+  src/castable.c \
+  src/comparable.c \
   src/functions.c \
   src/handlers.c \
   \

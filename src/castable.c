@@ -16,11 +16,10 @@
   +----------------------------------------------------------------------+
  */
 
-#include <Zend/zend.h>
-#include "classes/operable.h"
+#include "classes/castable.h"
 #include "zend_interfaces.h"
 
-#define CLASS Operable
+#define CLASS Castable
 #include "gen/class.h"
 
 CLASS_ENTRY;
@@ -30,7 +29,7 @@ INIT_FUNCTION {
     INIT_INTERFACE;
     INIT_HANDLERS;
     CE->interface_gets_implemented = MEM(interface_gets_implemented);
-    OH.do_operation = MEM(do_operation);
+    OH.cast_object = MEM(cast_object);
 }
 
 SHUTDOWN_FUNCTION { }
@@ -54,24 +53,15 @@ int FUNC(interface_gets_implemented, zend_class_entry *iface, zend_class_entry *
     return SUCCESS;
 }
 
-int FUNC(do_operation, zend_uchar opcode, zval *result, zval *op1, zval *op2) {
-    zval *value, *operable, operator;
-    zend_string *name = z_string("__operate");
-    zend_function *fn;
+int FUNC(cast_object, zval *readobj, zval *retval, int zend_type) {
+    zval type;
+    zend_string *name = z_string("__cast");
+    zend_function *fn = zend_hash_find_ptr(&Z_OBJ_P(readobj)->ce->function_table, name);
 
-    if (INSTANCE_OF_P(op1, CE)) {
-        operable = op1;
-        value = op2;
-    } else {
-        operable = op2;
-        value = op1;
-    }
-    fn = zend_hash_find_ptr(&Z_OBJ_P(operable)->ce->function_table, name);
     zend_string_release(name);
-    ZVAL_OBJ(&operator, OperatorMem(operators)[opcode]);
-    Z_TRY_ADDREF(operator);
-    if (fn && zend_call_method_with_2_params(operable, Z_OBJ_P(operable)->ce, &fn, "__operate", result, &operator, value)) {
-        return Z_TYPE_P(result) == IS_UNDEF || Z_TYPE_P(result) == IS_NULL
+    ZVAL_TYPEOF_TYPE(&type, zend_type);
+    if (fn && zend_call_method_with_1_params(readobj, Z_OBJ_P(readobj)->ce, &fn, "__cast", retval, &type)) {
+        return Z_TYPE_P(retval) == IS_UNDEF || Z_TYPE_P(retval) == IS_NULL
             ? FAILURE
             : SUCCESS;
     }

@@ -16,11 +16,10 @@
   +----------------------------------------------------------------------+
  */
 
-#include <Zend/zend.h>
-#include "classes/operable.h"
+#include "classes/comparable.h"
 #include "zend_interfaces.h"
 
-#define CLASS Operable
+#define CLASS Comparable
 #include "gen/class.h"
 
 CLASS_ENTRY;
@@ -30,7 +29,8 @@ INIT_FUNCTION {
     INIT_INTERFACE;
     INIT_HANDLERS;
     CE->interface_gets_implemented = MEM(interface_gets_implemented);
-    OH.do_operation = MEM(do_operation);
+    OH.compare = MEM(compare);
+    OH.compare_objects = MEM(compare_objects);
 }
 
 SHUTDOWN_FUNCTION { }
@@ -54,29 +54,42 @@ int FUNC(interface_gets_implemented, zend_class_entry *iface, zend_class_entry *
     return SUCCESS;
 }
 
-int FUNC(do_operation, zend_uchar opcode, zval *result, zval *op1, zval *op2) {
-    zval *value, *operable, operator;
-    zend_string *name = z_string("__operate");
+int FUNC(compare, zval *result, zval *op1, zval *op2) {
+    zval *value, *comparable, operator;
+    zend_string *name = z_string("__compare");
     zend_function *fn;
 
     if (INSTANCE_OF_P(op1, CE)) {
-        operable = op1;
+        comparable = op1;
         value = op2;
+        ZVAL_OBJ(&operator, OperatorMem(operators)[EG(current_execute_data)->opline->opcode]);
     } else {
-        operable = op2;
+        comparable = op2;
         value = op1;
+        if (EG(current_execute_data)->opline->opcode == ZEND_IS_SMALLER) {
+            ZVAL_OBJ(&operator, OperatorMem(operators)[LILT_IS_GREATER]);
+        } else if(EG(current_execute_data)->opline->opcode == ZEND_IS_SMALLER_OR_EQUAL) {
+            ZVAL_OBJ(&operator, OperatorMem(operators)[LILT_IS_GREATER_OR_EQUAL]);
+        } else {
+            ZVAL_OBJ(&operator, OperatorMem(operators)[EG(current_execute_data)->opline->opcode]);
+        }
     }
-    fn = zend_hash_find_ptr(&Z_OBJ_P(operable)->ce->function_table, name);
+    fn = zend_hash_find_ptr(&Z_OBJ_P(comparable)->ce->function_table, name);
     zend_string_release(name);
-    ZVAL_OBJ(&operator, OperatorMem(operators)[opcode]);
     Z_TRY_ADDREF(operator);
-    if (fn && zend_call_method_with_2_params(operable, Z_OBJ_P(operable)->ce, &fn, "__operate", result, &operator, value)) {
-        return Z_TYPE_P(result) == IS_UNDEF || Z_TYPE_P(result) == IS_NULL
+    if (fn && zend_call_method_with_2_params(comparable, Z_OBJ_P(comparable)->ce, &fn, "__compare", result, &operator, value)) {
+        return Z_TYPE_P(result) != IS_LONG
             ? FAILURE
             : SUCCESS;
     }
 
     return FAILURE;
+}
+
+int FUNC(compare_objects, zval *object1, zval *object2) {
+    zval result;
+
+    return FUNC(compare, &result, object1, object2) == SUCCESS ? (int) Z_LVAL(result) : 1;
 }
 
 #undef CLASS

@@ -28,7 +28,6 @@ OHINIT_FUNCTION {
     OH.get_method = MEM(get_method);
     OH.call_method = MEM(call_method);
     OH.free_obj = MEM(free_object);
-    OH.do_operation = MEM(do_operation);
     OH.get_debug_info = MEM(get_debug_info);
     OH.read_property = MEM(read_property);
 }
@@ -83,31 +82,6 @@ PHP_API int FUNC(call_method, zend_string *method, zend_object *object, INTERNAL
             }
         } else {
             zend_internal_type_error(1, "Type::mock() expects 0 parameter, %d given.", num_args);
-        }
-
-        return SUCCESS;
-    }
-
-    return FAILURE;
-}
-
-PHP_API int FUNC(do_operation, zend_uchar opcode, zval *result, zval *op1, zval *op2) {
-    ZVAL_BOOL(result, 0);
-    if (opcode == ZEND_IS_IDENTICAL || opcode == ZEND_IS_EQUAL ||
-        opcode == ZEND_IS_NOT_IDENTICAL || opcode == ZEND_IS_NOT_EQUAL) {
-        ZVAL_DEREF(op1);
-        ZVAL_DEREF(op2);
-        STRUCT *this = Z_THIS_P(op1);
-        if (!this) {
-            return FAILURE;
-        }
-        if (Z_TYPE_P(op2) != IS_STRING) {
-            return SUCCESS;
-        }
-        if (opcode == ZEND_IS_IDENTICAL || opcode == ZEND_IS_EQUAL) {
-            ZVAL_BOOL(result, zend_string_equals(this->type_name, Z_STR_P(op2)));
-        } else {
-            ZVAL_BOOL(result, !zend_string_equals(this->type_name, Z_STR_P(op2)));
         }
 
         return SUCCESS;

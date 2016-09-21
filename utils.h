@@ -65,6 +65,36 @@ static inline int zend_hash_add_bool_ex(HashTable *ht, const char *str, size_t l
 #define zend_hash_add_long(_ht, _key, _data) zend_hash_add_long_ex(_ht, STR_AND_LEN(_key), _data)
 #define zend_hash_add_bool(_ht, _key, _data) zend_hash_add_bool_ex(_ht, STR_AND_LEN(_key), _data)
 
+static inline zval *znode_op_zval_ptr(const zend_execute_data *execute_data, znode_op op, int type) { /* {{{ */
+    if (type == IS_CONST) {
+        return EX_CONSTANT(op);
+    }
+    zend_string *cv;
+    zval *ptr = EX_VAR(op.var);
+
+    if (UNEXPECTED(Z_TYPE_P(ptr) == IS_UNDEF)) {
+        switch (type) {
+            case BP_VAR_R:
+            case BP_VAR_UNSET:
+                cv = EX(func)->op_array.vars[op.var];
+                zend_error(E_NOTICE, "Undefined variable: %s", ZSTR_VAL(cv));
+            case BP_VAR_IS:
+                ptr = &EG(uninitialized_zval);
+                break;
+            case BP_VAR_RW:
+                cv = EX(func)->op_array.vars[op.var];
+                zend_error(E_NOTICE, "Undefined variable: %s", ZSTR_VAL(cv));
+            case BP_VAR_W:
+                ZVAL_NULL(ptr);
+                break;
+            default:
+                break;
+        }
+    }
+
+    return ptr;
+} /* }}} */
+
 #endif /* LILT_UTILS_H */
 
 /*
