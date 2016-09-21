@@ -28,7 +28,7 @@ NO_METHODS;
 INIT_FUNCTION {
     INIT_INTERFACE;
     INIT_HANDLERS;
-    CE->interface_gets_implemented = MEM(interface_gets_implemented);
+    //CE->interface_gets_implemented = MEM(interface_gets_implemented);
     OH.compare = MEM(compare);
     OH.compare_objects = MEM(compare_objects);
 }
