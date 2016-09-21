@@ -33,10 +33,10 @@ OHINIT_FUNCTION {
     OH.read_property = MEM(read_property);
 }
 
-PHP_API int FUNC(cast_object, zval *readobj, zval *retval, int zend_type) {
+PHP_API int FUNC(cast_object, zval *readobj, zval *retval, int type) {
     STRUCT *intern = Z_THIS_P(readobj);
 
-    if (zend_type == IS_STRING) {
+    if (type == IS_STRING) {
         ZVAL_STR(retval, intern->type_name);
         return SUCCESS;
     }

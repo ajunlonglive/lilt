@@ -28,7 +28,7 @@ NO_METHODS;
 INIT_FUNCTION {
     INIT_INTERFACE;
     INIT_HANDLERS;
-    //CE->interface_gets_implemented = MEM(interface_gets_implemented);
+    CE->interface_gets_implemented = MEM(interface_gets_implemented);
     OH.do_operation = MEM(do_operation);
 }
 
