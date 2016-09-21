@@ -41,7 +41,7 @@
 
 #define LILT_EXT_NAME lilt
 #define LILT_EXT_NAME_UC LILT
-#define LILT_EXT_VERSION "0.0.1"
+#define LILT_EXT_VERSION "0.8.0"
 
 #define EXT_NAME LILT_EXT_NAME
 #define EXT_NAME_UC LILT_EXT_NAME_UC

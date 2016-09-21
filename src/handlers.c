@@ -40,7 +40,6 @@ EXT_HFREE_FUNCTION {
     }
 }
 
-
 static zend_never_inline ZEND_COLD void zval_undefined_cv(uint32_t var, const zend_execute_data *execute_data) {
     zend_string *cv = EX(func)->op_array.vars[var];
     zend_error(E_NOTICE, "Undefined variable: %s", ZSTR_VAL(cv));
@@ -146,22 +145,23 @@ static void on_class_inheritance(zend_class_entry *ce, zend_class_entry *parent)
 EXT_HANDLER_FUNCTION(Operable) {
     zval *op1, *op2, operator, result;
 
-    if ((op1 = get_ptr(execute_data, EX(opline)->op1, EX(opline)->op1_type)) &&
-        Z_TYPE_P(op1) == IS_OBJECT && instanceof_function(Z_OBJ_P(op1)->ce, OperableCe) &&
+    if ((op1 = get_ptr(execute_data, EX(opline)->op1, EX(opline)->op1_type)) && Z_TYPE_P(op1) == IS_OBJECT &&
         (op2 = get_ptr(execute_data, EX(opline)->op2, EX(opline)->op2_type))) {
-        zend_string *name = z_string("__operate");
-        zend_function *__operate = zend_hash_find_ptr(&Z_OBJ_P(op1)->ce->function_table, name);
+        if (instanceof_function(Z_OBJ_P(op1)->ce, OperableCe)) {
+            zend_string *name = z_string("__operate");
+            zend_function *__operate = zend_hash_find_ptr(&Z_OBJ_P(op1)->ce->function_table, name);
 
-        zend_string_release(name);
-        ZVAL_OBJ(&operator, OperatorMem(operators)[EX(opline)->opcode]);
-        Z_TRY_ADDREF(operator);
-        if (UNEXPECTED(__operate != NULL) &&
-            zend_call_method_with_2_params(op1, Z_OBJ_P(op1)->ce, &__operate, "__operate", &result, &operator, op2)) {
-            if (Z_TYPE(result) != IS_UNDEF) {
-                ZVAL_COPY(EX_VAR(EX(opline)->result.var), &result);
-                EX(opline)++;
+            zend_string_release(name);
+            ZVAL_OBJ(&operator, OperatorMem(operators)[EX(opline)->opcode]);
+            Z_TRY_ADDREF(operator);
+            if (UNEXPECTED(__operate != NULL) &&
+                zend_call_method_with_2_params(op1, Z_OBJ_P(op1)->ce, &__operate, "__operate", &result, &operator, op2)) {
+                if (Z_TYPE(result) != IS_UNDEF) {
+                    ZVAL_COPY(EX_VAR(EX(opline)->result.var), &result);
+                    EX(opline)++;
 
-                return ZEND_USER_OPCODE_CONTINUE;
+                    return ZEND_USER_OPCODE_CONTINUE;
+                }
             }
         }
     }
