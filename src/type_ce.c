@@ -66,11 +66,11 @@ CESHUTDOWN_FUNCTION {
         zend_class_constant *c;
         zend_string *k;
         ZEND_HASH_FOREACH_STR_KEY_PTR(&TypeCe->constants_table, k, c)
-                zval_ptr_dtor(&c->value);
-                if (c->doc_comment && c->ce == TypeCe) {
-                    zend_string_release(c->doc_comment);
-                }
-                zend_hash_del(&TypeCe->constants_table, k);
+            zval_ptr_dtor(&c->value);
+            if (c->doc_comment && c->ce == TypeCe) {
+                zend_string_release(c->doc_comment);
+            }
+            zend_hash_del(&TypeCe->constants_table, k);
         ZEND_HASH_FOREACH_END();
         zend_hash_destroy(&TypeCe->constants_table);
     }

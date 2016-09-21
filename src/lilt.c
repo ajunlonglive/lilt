@@ -42,9 +42,9 @@ EXT_RINIT_FUNCTION { /* {{{ EXT_RINIT_FUNCTION */
 #if defined(COMPILE_DL_EXT) && defined(ZTS)
     ZEND_TSRMLS_CACHE_UPDATE();
 #endif
+    LILTG(zstr.type) = z_string("type");
     zend_hash_init(&LILTG(data.types), 8, NULL, zval_p_dtor, 0);
     zend_hash_init(&LILTG(data.mocks), 3, NULL, zval_p_dtor, 0);
-    LILTG(zstr.type) = z_string("type");
 
     EXT_CLASS_INIT(Type_ArgInfo);
     EXT_CLASS_INIT(Type_Constant);
@@ -65,10 +65,6 @@ EXT_RINIT_FUNCTION { /* {{{ EXT_RINIT_FUNCTION */
 } /* }}} */
 
 EXT_RSHUTDOWN_FUNCTION { /* {{{ EXT_RSHUTDOWN_FUNCTION */
-    zend_hash_destroy(&LILTG(data.types));
-    zend_hash_destroy(&LILTG(data.mocks));
-    zend_string_release(LILTG(zstr.type));
-
     EXT_CLASS_SHUTDOWN(Comparable);
     EXT_CLASS_SHUTDOWN(Castable);
     EXT_CLASS_SHUTDOWN(Operable);
@@ -81,6 +77,10 @@ EXT_RSHUTDOWN_FUNCTION { /* {{{ EXT_RSHUTDOWN_FUNCTION */
     EXT_CLASS_SHUTDOWN(Type_Function);
     EXT_CLASS_SHUTDOWN(Type_Constant);
     EXT_CLASS_SHUTDOWN(Type_ArgInfo);
+
+    zend_hash_destroy(&LILTG(data.types));
+    zend_hash_destroy(&LILTG(data.mocks));
+    zend_string_release(LILTG(zstr.type));
 
     EXT_HSHUTDOWN();
 
