@@ -36,13 +36,15 @@ OHINIT_FUNCTION {
 PHP_API int FUNC(call_method, zend_string *method, zend_object *object, INTERNAL_FUNCTION_PARAMETERS) {
     STRUCT *this = ((PHP_STRUCT *)object)->intern;
     zval parent_type;
+
     if (zend_string_equals_literal(method, "mock")) {
         int num_args = ZEND_CALL_NUM_ARGS(execute_data);
+
         if (num_args == 0) {
             if (this->ce) {
                 if (this->ce->parent) {
                     if (!this->ce->parent->create_object && !this->ce->parent->get_static_method) {
-                        FUNC(zval_of_ce, this->ce->parent, &parent_type);
+                        ZVAL_TYPEOF_CE(&parent_type, this->ce->parent);
                         Z_THIS(parent_type)->mock = Z_OBJ(EX(This));
                         if (zend_hash_update(&LILTG(data.mocks), this->ce->parent->name, &EX(This))) {
                             zval_copy_ctor(&EX(This));
@@ -62,6 +64,7 @@ PHP_API int FUNC(call_method, zend_string *method, zend_object *object, INTERNAL
         } else {
             zend_internal_type_error(1, "Type::mock() expects 0 parameter, %d given.", num_args);
         }
+
         return SUCCESS;
     } else if (zend_string_equals_literal(method, "unmock")) {
         int num_args = ZEND_CALL_NUM_ARGS(execute_data);
@@ -81,8 +84,10 @@ PHP_API int FUNC(call_method, zend_string *method, zend_object *object, INTERNAL
         } else {
             zend_internal_type_error(1, "Type::mock() expects 0 parameter, %d given.", num_args);
         }
+
         return SUCCESS;
     }
+
     return FAILURE;
 }
 
@@ -104,19 +109,23 @@ PHP_API int FUNC(do_operation, zend_uchar opcode, zval *result, zval *op1, zval 
         } else {
             ZVAL_BOOL(result, !zend_string_equals(this->type_name, Z_STR_P(op2)));
         }
+
         return SUCCESS;
     }
+
     return FAILURE;
 }
 
 PHP_API void FUNC(free_object, zend_object *object) {
     PHP_STRUCT *intern = (PHP_STRUCT *) object;
+
     FUNC(free, intern->intern);
     zend_object_std_dtor(&intern->std);
 }
 
 PHP_API HashTable *FUNC(get_debug_info, zval *object, int *is_temp) {
     *is_temp = 0;
+
     return FUNC(properties, Z_THIS_P(object));
 }
 
@@ -124,19 +133,23 @@ PHP_API zend_function *FUNC(get_method, zend_object **object, zend_string *metho
     if (zend_string_equals_literal(method, "mock")) {
         zend_function *fn = emalloc(sizeof(zend_function));
         memcpy(fn, &MEM(fn_mock), sizeof(zend_function));
+
         return fn;
     }
     else if (zend_string_equals_literal(method, "unmock")) {
         zend_function *fn = emalloc(sizeof(zend_function));
         memcpy(fn, &MEM(fn_unmock), sizeof(zend_function));
+
         return fn;
     }
+
     return NULL;
 }
 
 PHP_API zval *FUNC(read_property, zval *object, zval *member, int type, void **cache_slot, zval *rv) {
     STRUCT *intern = Z_THIS_P(object);
     zend_string *property_name = Z_STR_P(member);
+
     if (zend_string_equals_literal(property_name, "name")) {
         ZVAL_STR(rv, intern->type_name);
     } else if (intern->ce) {
@@ -176,6 +189,7 @@ PHP_API zval *FUNC(read_property, zval *object, zval *member, int type, void **c
         return rv;
     }
     zend_error(E_ERROR,"Undefined property: %s::$%s", ZSTR_VAL(Z_OBJ_P(object)->ce->name), Z_STRVAL_P(member));
+
     return &EG(uninitialized_zval);
 }
 

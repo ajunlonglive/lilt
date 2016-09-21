@@ -30,17 +30,21 @@ INIT_FUNCTION {
 
 PHP_API STRUCT *CTOR(zend_property_info *property_info, zend_string *name) {
     STRUCT *intern = ecalloc(1, sizeof(STRUCT));
+
     intern->property_info = property_info;
     intern->name = name ?: intern->property_info->name;
     zend_hash_init(&intern->properties, 4, NULL, zval_p_dtor, 0);
+
     return intern;
 }
 
 PHP_API zend_object *FUNC(enclose, STRUCT *intern) {
     PHP_STRUCT *object = ecalloc(1, sizeof(PHP_STRUCT));
+
     zend_object_std_init(&object->std, CE);
     object->std.handlers = &OH;
     object->EXT_CLASS_INTERN_STRUCT = intern;
+
     return &object->std;
 }
 
@@ -51,6 +55,7 @@ PHP_API void FUNC(free, STRUCT *intern) {
 
 PHP_API HashTable *FUNC(properties, STRUCT *intern) {
     zval tmp;
+
     if (zend_hash_num_elements(&intern->properties) <= 0) {
         ZVAL_STR(&tmp, intern->name);
         _zend_hash_str_add_new(&intern->properties, STR_AND_LEN("name"), &tmp);
@@ -61,13 +66,15 @@ PHP_API HashTable *FUNC(properties, STRUCT *intern) {
         ZVAL_COPY(&tmp, FUNC(class, intern));
         _zend_hash_str_add_new(&intern->properties, STR_AND_LEN("class"), &tmp);
     }
+
     return &intern->properties;
 }
 
 PHP_API zval *FUNC(class, STRUCT *intern) {
     if (Z_TYPE(intern->class) == IS_UNDEF) {
-        TypeFunc(zval_of_ce, intern->property_info->ce, &intern->class);
+        ZVAL_TYPEOF_CE(&intern->class, intern->property_info->ce);
     }
+
     return &intern->class;
 }
 

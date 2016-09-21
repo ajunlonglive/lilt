@@ -30,16 +30,20 @@ INIT_FUNCTION {
 
 PHP_API STRUCT *CTOR(zend_function *function) {
     STRUCT *intern = ecalloc(1, sizeof(STRUCT));
+
     intern->function = function;
     zend_hash_init(&intern->properties, 5, NULL, zval_p_dtor, 0);
+
     return intern;
 }
 
 PHP_API zend_object *FUNC(enclose, STRUCT *intern) {
     PHP_STRUCT *object = ecalloc(1, sizeof(PHP_STRUCT));
+
     zend_object_std_init(&object->std, CE);
     object->std.handlers = &OH;
     object->EXT_CLASS_INTERN_STRUCT = intern;
+
     return &object->std;
 }
 
@@ -51,6 +55,7 @@ PHP_API void FUNC(free, STRUCT *intern) {
 
 PHP_API HashTable *FUNC(properties, STRUCT *intern) {
     zval tmp;
+
     if (zend_hash_num_elements(&intern->properties) <= 0) {
         ZVAL_STR(&tmp, intern->function->internal_function.function_name);
         _zend_hash_str_add_new(&intern->properties, STR_AND_LEN("name"), &tmp);
@@ -63,6 +68,7 @@ PHP_API HashTable *FUNC(properties, STRUCT *intern) {
         ZVAL_COPY(&tmp, FUNC(arg_infos, intern));
         _zend_hash_str_add_new(&intern->properties, STR_AND_LEN("argInfos"), &tmp);
     }
+
     return &intern->properties;
 }
 
@@ -70,6 +76,7 @@ PHP_API zval *FUNC(arg_infos, STRUCT *intern) {
     if (Z_TYPE(intern->arg_infos) == IS_UNDEF) {
         if (intern->function) {
             zend_arg_info *ptr = intern->function->common.arg_info;
+
             array_init_size(&intern->arg_infos, 3);
             if (ptr) {
                 while (ptr->name && !zend_string_equals_literal(ptr->name ,"")) {
@@ -83,17 +90,19 @@ PHP_API zval *FUNC(arg_infos, STRUCT *intern) {
             ZVAL_NULL(&intern->arg_infos);
         }
     }
+
     return &intern->arg_infos;
 }
 
 PHP_API zval *FUNC(class, STRUCT *intern) {
     if (Z_TYPE(intern->class) == IS_UNDEF) {
         if (intern->function->internal_function.scope) {
-            TypeFunc(zval_of_ce, intern->function->internal_function.scope, &intern->class);
+            ZVAL_TYPEOF_CE(&intern->class, intern->function->internal_function.scope);
         } else {
             ZVAL_NULL(&intern->class);
         }
     }
+
     return &intern->class;
 }
 

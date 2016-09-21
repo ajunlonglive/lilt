@@ -30,16 +30,20 @@ INIT_FUNCTION {
 
 PHP_API STRUCT *CTOR(zend_arg_info *arg_info) {
     STRUCT *intern = ecalloc(1, sizeof(STRUCT));
+
     intern->arg_info = arg_info;
     zend_hash_init(&intern->properties, 5, NULL, zval_p_dtor, 0);
+
     return intern;
 }
 
 PHP_API zend_object *FUNC(enclose, STRUCT *intern) {
     PHP_STRUCT *object = ecalloc(1, sizeof(PHP_STRUCT));
+
     zend_object_std_init(&object->std, CE);
     object->std.handlers = &OH;
     object->EXT_CLASS_INTERN_STRUCT = intern;
+
     return &object->std;
 }
 
@@ -55,6 +59,7 @@ PHP_API HashTable *FUNC(properties, STRUCT *intern) {
         zend_hash_add_bool(&intern->properties, "typeHint", intern->arg_info->type_hint);
         zend_hash_add_bool(&intern->properties, "variadic", intern->arg_info->is_variadic);
     }
+
     return &intern->properties;
 }
 

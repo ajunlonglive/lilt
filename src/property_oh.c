@@ -33,6 +33,7 @@ OHINIT_FUNCTION {
 
 PHP_API void FUNC(free_object, zend_object *object) {
     PHP_STRUCT *intern = (PHP_STRUCT *) object;
+
     zend_object_std_dtor(&intern->std);
     FUNC(free, intern->intern);
     efree(intern);
@@ -40,12 +41,14 @@ PHP_API void FUNC(free_object, zend_object *object) {
 
 PHP_API HashTable *FUNC(get_debug_info, zval *object, int *is_temp) {
     *is_temp = 0;
+
     return FUNC(properties, Z_THIS_P(object));
 }
 
 PHP_API zval *FUNC(read_property, zval *object, zval *member, int type, void **cache_slot, zval *rv) {
     STRUCT *intern = Z_THIS_P(object);
     zend_string *property_name = Z_STR_P(member);
+
     if (zend_string_equals_literal(property_name, "name")) {
         ZVAL_STR(rv, intern->name);
     } else if (zend_string_equals_literal(property_name, "flags")) {
@@ -59,6 +62,7 @@ PHP_API zval *FUNC(read_property, zval *object, zval *member, int type, void **c
         return rv;
     }
     zend_error(E_ERROR,"Undefined property: %s::$%s", ZSTR_VAL(Z_OBJ_P(object)->ce->name), Z_STRVAL_P(member));
+
     return &EG(uninitialized_zval);
 }
 

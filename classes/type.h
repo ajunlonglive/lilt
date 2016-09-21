@@ -28,6 +28,16 @@
 #define TypeMem(name) EXT_CLASS_MEM(Type, name)
 #define TypeFunc(name, ...) EXT_CLASS_FUNC(Type, name, __VA_ARGS__)
 
+#define ZVAL_TYPEOF(zv, value) ZVAL_OBJ(zv, TypeFunc(of, value)); Z_TRY_ADDREF_P(zv)
+#define ZVAL_TYPEOF_TYPE_EX(zv, type, object) ZVAL_OBJ(zv, TypeFunc(of_type, type, object)); Z_TRY_ADDREF_P(zv)
+#define ZVAL_TYPEOF_TYPE(zv, type) ZVAL_TYPEOF_TYPE_EX(zv, type, NULL)
+#define ZVAL_TYPEOF_CE(zv, ce) ZVAL_OBJ(zv, TypeFunc(of_ce, ce)); Z_TRY_ADDREF_P(zv)
+#define ZVAL_TYPEOF_CLASS_NAME(zv, class_name) ZVAL_OBJ(zv, TypeFunc(of_class_name, class_name)); Z_TRY_ADDREF_P(zv)
+
+#define RETURN_TYPEOF(value) ZVAL_TYPEOF(return_value, value); return
+#define RETURN_TYPEOF_CE(ce) ZVAL_TYPEOF_CE(return_value, ce); return
+#define RETURN_TYPEOF_CLASS_NAME(class_name) ZVAL_TYPEOF_CLASS_NAME(return_value, class_name); return
+
 /**
  * API
  * * * * * * * * * */
@@ -52,9 +62,10 @@ PHP_API zval *TypeFunc(functions, TypeStruct *intern);
 PHP_API zval *TypeFunc(class_properties, TypeStruct *intern);
 PHP_API zend_object *TypeFunc(create_mock, zend_class_entry *ce);
 PHP_API zend_function *TypeFunc(get_static_method_mock, zend_class_entry *ce, zend_string *name);
-PHP_API int TypeFunc(zval_of, zval *value, zval *rv);
-PHP_API int TypeFunc(zval_of_ce, zend_class_entry *ce, zval *rv);
-PHP_API int TypeFunc(zval_of_classname, zval *value, zval *rv);
+PHP_API zend_object *TypeFunc(of, zval *value);
+PHP_API zend_object *TypeFunc(of_type, int type, zend_object *object);
+PHP_API zend_object *TypeFunc(of_ce, zend_class_entry *ce);
+PHP_API zend_object *TypeFunc(of_class_name, zend_string *class_name);
 
 /**
  * Class entry

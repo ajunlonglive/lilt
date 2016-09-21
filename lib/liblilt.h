@@ -82,6 +82,7 @@
 #define FUNCTIONS_END PHP_FE_END };
 #define METHODS_END PHP_FE_END };
 #define ZVAL_STR_OR_NULL(zv, str) if (str) { ZVAL_STR(zv, str); } else { ZVAL_NULL(zv); }
+#define EX_ARG(n) ZEND_CALL_ARG(execute_data, n)
 
 #define EXT_ME_NX(name) CONCAT(name, _module_entry)
 #define EXT_MODULE_ENTRY_NX(name) zend_module_entry EXT_ME_NX(name)

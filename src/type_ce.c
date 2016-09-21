@@ -63,16 +63,18 @@ CEINIT_FUNCTION {
 
 zend_object *FUNC(create_object, zend_class_entry *ce) {
     zend_error(E_ERROR, "Cannot instantiate %s::class in userland.", CLASS_STR);
+
     return NULL;
 }
 
 METHOD(of) {
-    int num_args = ZEND_CALL_NUM_ARGS(execute_data);
-    if (num_args == 1) {
-        FUNC(zval_of, ZEND_CALL_ARG(execute_data, 1), return_value);
-    } else {
+    int num_args = EX_NUM_ARGS();
+
+    if (num_args != 1) {
         zend_internal_type_error(1, "Type::of() expects 1 parameter, %d given", num_args);
     }
+
+    RETURN_TYPEOF(EX_ARG(1));
 }
 
 #undef CUSTOM_STRUCT
