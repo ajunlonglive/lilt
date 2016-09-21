@@ -56,7 +56,6 @@ EXT_HANDLER_FUNCTION(ZEND_CAST) {
     else if (EX(opline)->extended_value == IS_STRING) {
         if (OP1_ZPTR && IS_A_P(op1, TypeCe)) {
             ZVAL_STR(EX_VAR(EX(opline)->result.var), ((TypePhpStruct *)Z_OBJ_P(op1))->intern->type_name);
-            Z_TRY_ADDREF_P(EX_VAR(EX(opline)->result.var));
             EX(opline)++;
 
             return ZEND_USER_OPCODE_CONTINUE;
