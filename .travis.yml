@@ -7,7 +7,7 @@ addons:
       - sourceline: 'deb http://ppa.launchpad.net/ondrej/php/ubuntu trusty main'
     packages:
       - valgrind
-      - php7.2-dev
+      - php7.1-dev
 
 install:
   - php -r "readfile('https://getcomposer.org/installer');" | php
