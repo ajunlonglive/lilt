@@ -25,11 +25,23 @@
 OHINIT_FUNCTION {
     INIT_HANDLERS;
     OH.dtor_obj = zend_objects_destroy_object;
+    OH.cast_object = MEM(cast_object);
     OH.get_method = MEM(get_method);
     OH.call_method = MEM(call_method);
     OH.free_obj = MEM(free_object);
     OH.get_debug_info = MEM(get_debug_info);
     OH.read_property = MEM(read_property);
+}
+
+PHP_API int FUNC(cast_object, zval *readobj, zval *retval, int zend_type) {
+    STRUCT *intern = Z_THIS_P(readobj);
+
+    if (zend_type == IS_STRING) {
+        ZVAL_STR(retval, intern->type_name);
+        return SUCCESS;
+    }
+
+    return FAILURE;
 }
 
 PHP_API int FUNC(call_method, zend_string *method, zend_object *object, INTERNAL_FUNCTION_PARAMETERS) {
