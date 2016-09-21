@@ -26,6 +26,17 @@ const NO_METHODS;
 
 INIT_FUNCTION {
     INIT_INTERFACE;
+    CE->interface_gets_implemented = MEM(interface_gets_implemented);
+}
+
+int FUNC(interface_gets_implemented, zend_class_entry *iface, zend_class_entry *ce) {
+    zval type;
+
+    zend_hash_del(&ce->constants_table, LILTG(zstr.type));
+    ZVAL_TYPEOF_CE(&type, ce);
+    zend_declare_class_constant(ce, ZSTR_VAL(LILTG(zstr.type)), ZSTR_LEN(LILTG(zstr.type)), &type);
+
+    return SUCCESS;
 }
 
 #undef CLASS

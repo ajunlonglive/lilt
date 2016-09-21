@@ -22,7 +22,7 @@
 #include "lilt.h"
 
 #define IStaticInit IStaticInit
-#define IStaticInitCe EXT_CLASS_CE(IStaticInit)
+#define IStaticInitFunc(name, ...) EXT_CLASS_FUNC(IStaticInit, name, __VA_ARGS__)
 
 /**
  * API
@@ -33,6 +33,7 @@ EXT_CLASS_INIT_FUNCTION(IStaticInit);
  * Class entry
  * * * * * * * * * */
 extern EXT_CLASS_CLASS_ENTRY(IStaticInit);
+int IStaticInitFunc(interface_gets_implemented, zend_class_entry *iface, zend_class_entry *ce);
 
 #endif /* LILT_I_STATIC_INIT_H */
 

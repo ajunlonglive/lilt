@@ -17,6 +17,7 @@
  */
 
 #include "classes/i_static_init.h"
+#include "zend_interfaces.h"
 
 #define CLASS IStaticInit
 #include "gen/class.h"
@@ -28,6 +29,23 @@ METHODS_END;
 
 INIT_FUNCTION {
     INIT_INTERFACE;
+    CE->interface_gets_implemented = MEM(interface_gets_implemented);
+}
+
+int FUNC(interface_gets_implemented, zend_class_entry *iface, zend_class_entry *ce) {
+    zval retval;
+    zend_string *name = z_string("__static");
+    zend_function *__static = ce->get_static_method
+        ? ce->get_static_method(ce, name)
+        : zend_std_get_static_method(ce, name, NULL);
+
+    if (UNEXPECTED(__static != NULL) && __static->common.scope == ce &&
+        zend_call_method_with_0_params(NULL, ce, &__static, "__static", &retval)) {
+        zval_ptr_dtor(&retval);
+    }
+    zend_string_release(name);
+
+    return SUCCESS;
 }
 
 #undef CLASS

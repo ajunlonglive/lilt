@@ -24,7 +24,6 @@
 #define Enum Enum
 #define EnumCe EXT_CLASS_CE(Enum)
 #define EnumOh EXT_CLASS_OH(Enum)
-#define EnumMem(name) EXT_CLASS_MEM(Enum, name)
 #define EnumFunc(name, ...) EXT_CLASS_FUNC(Enum, name, __VA_ARGS__)
 
 /**
@@ -37,6 +36,7 @@ zend_object *EnumFunc(create_object, zend_class_entry *ce);
  * Class entry
  * * * * * * * * * */
 extern EXT_CLASS_CLASS_ENTRY(Enum);
+int EnumFunc(interface_gets_implemented, zend_class_entry *parent, zend_class_entry *ce);
 
 /**
  * Object handlers

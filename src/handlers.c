@@ -21,8 +21,6 @@
 
 
 EXT_HINIT_FUNCTION {
-    EXT_SET_HANDLER(ZEND_DECLARE_INHERITED_CLASS);
-    EXT_SET_HANDLER(ZEND_ADD_INTERFACE);
     int *ptr = OperableMem(opcodes);
     while (*ptr) {
         zend_set_user_opcode_handler((zend_uchar) *ptr, EXT_HANDLER(Operable));
@@ -31,8 +29,6 @@ EXT_HINIT_FUNCTION {
 }
 
 EXT_HFREE_FUNCTION {
-    EXT_UNSET_HANDLER(ZEND_DECLARE_INHERITED_CLASS);
-    EXT_UNSET_HANDLER(ZEND_ADD_INTERFACE);
     int *ptr = OperableMem(opcodes);
     while (*ptr) {
         zend_set_user_opcode_handler((zend_uchar) *ptr, NULL);
@@ -77,71 +73,6 @@ static zend_always_inline zval *get_ptr(const zend_execute_data *execute_data, z
     return ret;
 }
 
-static void on_class_inheritance(zend_class_entry *ce, zend_class_entry *parent) {
-    if (parent == TypedCe || instanceof_function(parent, TypedCe)) {
-        zval type;
-
-        zend_hash_del(&ce->constants_table, LILTG(zstr.type));
-        TypeFunc(zval_of_ce, ce, &type);
-        zend_declare_class_constant(ce, ZSTR_VAL(LILTG(zstr.type)), ZSTR_LEN(LILTG(zstr.type)), &type);
-    }
-    if (parent == IStaticInitCe || instanceof_function(parent, IStaticInitCe)) {
-        zval retval;
-        zend_string *name = z_string("__static");
-        zend_function *__static = ce->get_static_method
-            ? ce->get_static_method(ce, name)
-            : zend_std_get_static_method(ce, name, NULL);
-
-        if (UNEXPECTED(__static != NULL) && __static->common.scope == ce &&
-            zend_call_method_with_0_params(NULL, ce, &__static, "__static", &retval)) {
-            zval_ptr_dtor(&retval);
-        }
-        zend_string_release(name);
-    }
-    if (parent == EnumCe || instanceof_function(parent, EnumCe)) {
-        zend_object *object;
-        zend_class_constant *constant;
-        zend_string *key;
-        zend_class_entry *ce_enum = parent;
-
-        ce->create_object = EnumMem(create_object);
-        ZEND_HASH_FOREACH_STR_KEY_PTR(&ce->constants_table, key, constant)
-            if (Z_TYPE(constant->value) != IS_OBJECT) {
-                zval tmp;
-
-                ZVAL_COPY(&tmp, &constant->value);
-                object = zend_objects_new(ce);
-                object_properties_init(object, ce);
-
-                ZVAL_OBJ(&constant->value, object);
-                zend_update_property_str(ce, &constant->value, STR_AND_LEN("name"), zend_string_copy(key));
-                zend_update_property(ce, &constant->value, STR_AND_LEN("value"), &tmp);
-                object->handlers = &EnumOh;
-            }
-        ZEND_HASH_FOREACH_END();
-        while(ce_enum) {
-            ZEND_HASH_FOREACH_STR_KEY_PTR(&ce_enum->constants_table, key, constant)
-                if (Z_TYPE(constant->value) == IS_OBJECT && instanceof_function(Z_OBJ(constant->value)->ce, EnumCe)) {
-                    zval *value, tmp, cst;
-
-                    value = zend_read_property(Z_OBJ(constant->value)->ce, &constant->value, STR_AND_LEN("value"), 0, &tmp);
-                    object = zend_objects_new(ce);
-                    object_properties_init(object, ce);
-
-                    ZVAL_OBJ(&cst, object);
-                    zend_update_property_str(ce, &cst, STR_AND_LEN("name"), zend_string_copy(key));
-                    zend_update_property(ce, &cst, STR_AND_LEN("value"), value);
-                    object->handlers = &EnumOh;
-
-                    zend_hash_del(&ce->constants_table, key);
-                    zend_declare_class_constant(ce, ZSTR_VAL(key), ZSTR_LEN(key), &cst);
-                }
-            ZEND_HASH_FOREACH_END();
-            ce_enum = ce_enum->parent;
-        }
-    }
-}
-
 EXT_HANDLER_FUNCTION(Operable) {
     zval *op1, *op2, operator, result;
 
@@ -164,40 +95,6 @@ EXT_HANDLER_FUNCTION(Operable) {
                 }
             }
         }
-    }
-
-    return ZEND_USER_OPCODE_DISPATCH;
-}
-
-EXT_HANDLER_FUNCTION(ZEND_DECLARE_INHERITED_CLASS) {
-    zend_class_entry *ce, *parent;
-    zval *lcname, *rtd_key;
-
-    lcname = RT_CONSTANT(&EX(func)->op_array, EX(opline)->op1);
-    rtd_key = lcname + 1;
-    ce = zend_hash_find_ptr(EG(class_table), Z_STR_P(rtd_key));
-    parent = Z_CE_P(EX_VAR(EX(opline)->op2.var));
-    if (UNEXPECTED(ce != NULL && parent != NULL)) {
-        on_class_inheritance(ce, parent);
-    }
-
-    return ZEND_USER_OPCODE_DISPATCH;
-}
-
-EXT_HANDLER_FUNCTION(ZEND_ADD_INTERFACE) {
-    zend_class_entry *parent;
-    zend_class_entry *ce = Z_CE_P(EX_VAR(EX(opline)->op1.var));
-
-    parent = CACHED_PTR(Z_CACHE_SLOT_P(EX_CONSTANT(EX(opline)->op2)));
-    if (UNEXPECTED(parent == NULL)) {
-        parent = zend_fetch_class_by_name(Z_STR_P(EX_CONSTANT(EX(opline)->op2)), EX_CONSTANT(EX(opline)->op2) + 1, ZEND_FETCH_CLASS_INTERFACE);
-        if (UNEXPECTED(parent == NULL)) {
-            return ZEND_USER_OPCODE_DISPATCH;
-        }
-        CACHE_PTR(Z_CACHE_SLOT_P(EX_CONSTANT(EX(opline)->op2)), parent);
-    }
-    if (UNEXPECTED(ce != NULL && parent != NULL)) {
-        on_class_inheritance(ce, parent);
     }
 
     return ZEND_USER_OPCODE_DISPATCH;

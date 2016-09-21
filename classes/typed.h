@@ -22,7 +22,7 @@
 #include "lilt.h"
 
 #define Typed Typed
-#define TypedCe EXT_CLASS_CE(Typed)
+#define TypedFunc(name, ...) EXT_CLASS_FUNC(Typed, name, __VA_ARGS__)
 
 /**
  * API
@@ -33,7 +33,7 @@ EXT_CLASS_INIT_FUNCTION(Typed);
  * Class entry
  * * * * * * * * * */
 extern EXT_CLASS_CLASS_ENTRY(Typed);
-EXT_CLASS_CEINIT_FUNCTION(Typed);
+int TypedFunc(interface_gets_implemented, zend_class_entry *iface, zend_class_entry *ce);
 
 #endif /* LILT_TYPED_H */
 
