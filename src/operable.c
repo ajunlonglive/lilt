@@ -16,7 +16,6 @@
   +----------------------------------------------------------------------+
  */
 
-#include <Zend/zend.h>
 #include "classes/operable.h"
 #include "zend_interfaces.h"
 
