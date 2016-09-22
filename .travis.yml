@@ -1,29 +1,33 @@
 sudo: false
 
 language:
-  - php
   - c
+  - php
+
+php:
+  - nightly
+
+compiler:
+  - gcc
+  - clang
 
 addons:
   apt:
     packages:
       - gdb
-      - valgrind
 
 before_install:
-  - git clone git://github.com/php-build/php-build.git ~/.phpenv/plugins/php-build
-  - phpenv -i development 7.1.0 ~/.phpenv/versions/7.1.0
   - ulimit -c unlimited -S
 
 install:
   - composer install --no-interaction
 
 script:
-  - composer memtest
+  - composer test
 
 after_failure:
   - COREFILE=$(find . -maxdepth 1 -name "core*" | head -n 1)
-  - if [[ -f "$COREFILE" ]]; then gdb -c "$COREFILE" example -ex "thread apply all bt" -ex "set pagination 0" -batch; fi
+  - if [[ -f "$COREFILE" ]]; then gdb -c "$COREFILE" php -ex "thread apply all bt" -ex "set pagination 0" -batch; fi
 
 notifications:
   on_success: never
