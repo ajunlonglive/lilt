@@ -14,10 +14,10 @@ install:
   - sudo php composer.phar install --no-interaction
 
 script:
-  - .travis/run_tests.sh
+  - sudo .travis/run_tests.sh
 
 after_failure:
-  - .travis/after_failure.sh
+  - sudo .travis/after_failure.sh
 
 notifications:
   on_success: never
