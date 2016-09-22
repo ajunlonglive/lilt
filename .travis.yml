@@ -18,14 +18,14 @@ install:
 
 before_script:
   - ulimit -c unlimited -S
-  - echo 'core%e.%p' | sudo tee /proc/sys/kernel/core_pattern
+  - echo '/tmp/core%e.%p' | sudo tee /proc/sys/kernel/core_pattern
   - cat /proc/sys/kernel/core_pattern
 
 script:
-  - php run-tests.php
+  - composer test
 
 after_failure:
-  - for i in $(find ./ -maxdepth 1 -name 'core*' -print); do gdb /home/travis/.phpenv/versions/`php-config --version`/bin/php core* -ex "thread apply all bt" -ex "set pagination 0" -batch; done;
+  - for i in /tmp/core*.*; do gdb /home/travis/.phpenv/versions/`php-config --version`/bin/php core* -ex "thread apply all bt" -ex "set pagination 0" -batch; done;
 
 notifications:
   on_success: never
