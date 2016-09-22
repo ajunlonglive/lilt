@@ -62,9 +62,6 @@ EXT_RINIT_FUNCTION { /* {{{ EXT_RINIT_FUNCTION */
 } /* }}} */
 
 EXT_RSHUTDOWN_FUNCTION { /* {{{ EXT_RSHUTDOWN_FUNCTION */
-    zend_hash_destroy(&LILTG(data.types));
-    zend_hash_destroy(&LILTG(data.mocks));
-    zend_string_release(LILTG(zstr.type));
     if (zend_hash_num_elements(&TypeCe->constants_table)) {
         zend_class_constant *c;
         zend_string *k;
@@ -85,6 +82,9 @@ EXT_RSHUTDOWN_FUNCTION { /* {{{ EXT_RSHUTDOWN_FUNCTION */
     zend_hash_del(EG(zend_constants), z_string("TYPE_RESOURCE"));
     zend_hash_del(EG(zend_constants), z_string("TYPE_STRING"));
     zend_hash_del(EG(zend_constants), z_string("TYPE_UNKNOWN"));
+    zend_hash_destroy(&LILTG(data.types));
+    zend_hash_destroy(&LILTG(data.mocks));
+    zend_string_release(LILTG(zstr.type));
     zend_string_release(TypeMem(fn_mock).common.function_name);
     zend_string_release(TypeMem(fn_unmock).common.function_name);
     EXT_HSHUTDOWN();

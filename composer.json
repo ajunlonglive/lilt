@@ -29,7 +29,7 @@
     "post-update-cmd": [
       "phpize",
       "./configure --enable-lilt",
-      "make",
+      "make --silent",
       "make install"
     ]
   }

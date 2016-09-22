@@ -1,29 +1,31 @@
+sudo: false
+
 language:
   - php
   - c
 
-sudo: required
-dist: trusty
+php:
+  - nightly
 
 addons:
   apt:
-    sources:
-      - sourceline: 'deb http://ppa.launchpad.net/ondrej/php/ubuntu trusty main'
     packages:
       - gdb
       - valgrind
-      - php7.1-dev
+
+before_install:
+  - ulimit -c unlimited -S
 
 install:
-  - php -r "readfile('https://getcomposer.org/installer');" | php
-  - sudo php composer.phar install --no-interaction
+  - composer install --no-interaction
 
 script:
-  - sudo bash .travis/run_tests.sh
+  - composer memtest
 
 after_failure:
-  - sudo bash .travis/after_failure.sh
+  - COREFILE=$(find . -maxdepth 1 -name "core*" | head -n 1)
+  - if [[ -f "$COREFILE" ]]; then gdb -c "$COREFILE" example -ex "thread apply all bt" -ex "set pagination 0" -batch; fi
 
 notifications:
   on_success: never
-  on_failure: always
+  on_failure: never
