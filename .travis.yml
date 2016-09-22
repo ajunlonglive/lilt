@@ -25,6 +25,7 @@ script:
 
 after_failure:
   - sudo bash .travis/after_failure.sh
+  - ls -altrs /tmp
 
 notifications:
   on_success: never
