@@ -1,4 +1,4 @@
-sudo: false
+sudo: required
 
 language:
   - php
@@ -15,7 +15,7 @@ addons:
 
 before_install:
   - ulimit -c unlimited -S
-  - echo "core.%e.%p.%h.%t" > /proc/sys/kernel/core_pattern
+  - sudo echo "core.%e.%p.%h.%t" > /proc/sys/kernel/core_pattern
 
 install:
   - composer install --no-interaction
