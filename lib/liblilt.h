@@ -50,6 +50,12 @@
 #define MAP0(f, x, peek, ...) f(x) MAP_NEXT(peek, MAP1)(f, peek, __VA_ARGS__)
 #define MAP1(f, x, peek, ...) f(x) MAP_NEXT(peek, MAP0)(f, peek, __VA_ARGS__)
 #define MAP(f, ...) EVAL(MAP1(f, __VA_ARGS__, (), 0))
+#define MAP_ENDL_NEXT0(test, next, ...) next MAP_OUT
+#define MAP_ENDL_NEXT1(test, next) MAP_ENDL_NEXT0(test, next, 0)
+#define MAP_ENDL_NEXT(test, next) MAP_ENDL_NEXT1(MAP_GET_END test, next)
+#define MAP_ENDL0(f, x, peek, ...) f(x); MAP_ENDL_NEXT(peek, MAP_ENDL1)(f, peek, __VA_ARGS__)
+#define MAP_ENDL1(f, x, peek, ...) f(x); MAP_ENDL_NEXT(peek, MAP_ENDL0)(f, peek, __VA_ARGS__)
+#define MAP_ENDL(f, ...) EVAL(MAP_ENDL1(f, __VA_ARGS__, (), 0))
 
 #define CONCAT_FN_1(what, x, ...) what(x)
 #define CONCAT_FN_2(what, x, ...) \
@@ -166,10 +172,14 @@ typedef int (*lilt_opcode_handler_t)(LILT_OPCODE_HANDLER_ARGS);
 
 #define EXT_CLASS_INIT_NX(module, class) CONCAT(module, _, class, _init)()
 #define EXT_CLASS_INIT_FUNCTION_NX(module, class) void EXT_CLASS_INIT_NX(module, class)
+#define EXT_CLASS_SHUTDOWN_NX(module, class) CONCAT(module, _, class, _shutdown)()
+#define EXT_CLASS_SHUTDOWN_FUNCTION_NX(module, class) void EXT_CLASS_SHUTDOWN_NX(module, class)
 #define EXT_CLASS_CE_NX(module, class) CONCAT(module, _ce_, class)
 #define EXT_CLASS_CLASS_ENTRY_NX(module, class) zend_class_entry *EXT_CLASS_CE_NX(module, class)
 #define EXT_CLASS_CEINIT_NX(module, class) CONCAT(EXT_CLASS_CE_NX(module, class), _init)()
 #define EXT_CLASS_CEINIT_FUNCTION_NX(module, class) void EXT_CLASS_CEINIT_NX(module, class)
+#define EXT_CLASS_CESHUTDOWN_NX(module, class) CONCAT(EXT_CLASS_CE_NX(module, class), _shutdown)()
+#define EXT_CLASS_CESHUTDOWN_FUNCTION_NX(module, class) void EXT_CLASS_CESHUTDOWN_NX(module, class)
 #define EXT_CLASS_OH_NX(module, class) CONCAT(module, _oh_, class)
 #define EXT_CLASS_OBJECT_HANDLERS_NX(module, class) zend_object_handlers EXT_CLASS_OH_NX(module, class)
 #define EXT_CLASS_OHINIT_NX(module, class) CONCAT(EXT_CLASS_OH_NX(module, class), _init)()

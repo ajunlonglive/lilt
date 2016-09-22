@@ -28,6 +28,8 @@
 #include "classes/i_static_init.h"
 #include "classes/enum.h"
 
+#define CLASSES Type_ArgInfo, Type_Constant, Type_Function, Type_Property, Type, Typed, IStaticInit, Enum
+
 #endif /* LILT_CLASSES_H */
 
 /*

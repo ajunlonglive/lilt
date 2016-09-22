@@ -42,9 +42,13 @@ const METHODS_BEGIN
 METHODS_END;
 
 CEINIT_FUNCTION {
+    zend_hash_init(&LILTG(data.types), 8, NULL, zval_p_dtor, 0);
+    zend_hash_init(&LILTG(data.mocks), 3, NULL, zval_p_dtor, 0);
+
     INIT_CLASS;
     CE->ce_flags |= ZEND_ACC_FINAL;
     CE->create_object = MEM(create_object);
+
     INIT_TYPE_SCALAR(array, "TYPE_ARRAY");
     INIT_TYPE_SCALAR(boolean, "TYPE_BOOLEAN");
     INIT_TYPE_SCALAR(double, "TYPE_DOUBLE");
@@ -53,12 +57,43 @@ CEINIT_FUNCTION {
     INIT_TYPE_SCALAR(resource, "TYPE_RESOURCE");
     INIT_TYPE_SCALAR(string, "TYPE_STRING");
     INIT_TYPE_SCALAR(unknown, "TYPE_UNKNOWN");
+
     TypeMem(fn_mock).common.scope = CE;
     TypeMem(fn_mock).type = ZEND_OVERLOADED_FUNCTION;
     TypeMem(fn_mock).common.function_name = z_string("mock");
     TypeMem(fn_unmock).common.scope = CE;
     TypeMem(fn_unmock).type = ZEND_OVERLOADED_FUNCTION;
     TypeMem(fn_unmock).common.function_name = z_string("unmock");
+}
+
+CESHUTDOWN_FUNCTION {
+    if (zend_hash_num_elements(&TypeCe->constants_table)) {
+        zend_class_constant *c;
+        zend_string *k;
+        ZEND_HASH_FOREACH_STR_KEY_PTR(&TypeCe->constants_table, k, c)
+                zval_ptr_dtor(&c->value);
+                if (c->doc_comment && c->ce == TypeCe) {
+                    zend_string_release(c->doc_comment);
+                }
+                zend_hash_del(&TypeCe->constants_table, k);
+        ZEND_HASH_FOREACH_END();
+        zend_hash_destroy(&TypeCe->constants_table);
+    }
+
+    zend_hash_del(EG(zend_constants), z_string("TYPE_ARRAY"));
+    zend_hash_del(EG(zend_constants), z_string("TYPE_BOOLEAN"));
+    zend_hash_del(EG(zend_constants), z_string("TYPE_DOUBLE"));
+    zend_hash_del(EG(zend_constants), z_string("TYPE_INTEGER"));
+    zend_hash_del(EG(zend_constants), z_string("TYPE_NULL"));
+    zend_hash_del(EG(zend_constants), z_string("TYPE_RESOURCE"));
+    zend_hash_del(EG(zend_constants), z_string("TYPE_STRING"));
+    zend_hash_del(EG(zend_constants), z_string("TYPE_UNKNOWN"));
+
+    zend_string_release(TypeMem(fn_mock).common.function_name);
+    zend_string_release(TypeMem(fn_unmock).common.function_name);
+
+    zend_hash_destroy(&LILTG(data.types));
+    zend_hash_destroy(&LILTG(data.mocks));
 }
 
 zend_object *FUNC(create_object, zend_class_entry *ce) {

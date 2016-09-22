@@ -29,12 +29,18 @@ INIT_FUNCTION {
     CE->interface_gets_implemented = MEM(interface_gets_implemented);
 }
 
+SHUTDOWN_FUNCTION { }
+
 int FUNC(interface_gets_implemented, zend_class_entry *iface, zend_class_entry *ce) {
     zval type;
+    zend_string *name;
 
-    zend_hash_del(&ce->constants_table, LILTG(zstr.type));
-    ZVAL_TYPEOF_CE(&type, ce);
-    zend_declare_class_constant(ce, ZSTR_VAL(LILTG(zstr.type)), ZSTR_LEN(LILTG(zstr.type)), &type);
+    if ((name = z_string_nx("type", ce->type & ZEND_INTERNAL_CLASS))) {
+        zend_hash_del(&ce->constants_table, name);
+        ZVAL_TYPEOF_CE(&type, ce);
+        zend_declare_class_constant_ex(ce, name, &type, ZEND_ACC_PUBLIC, NULL);
+        zend_string_release(name);
+    }
 
     return SUCCESS;
 }

@@ -28,6 +28,7 @@
  * API
  * * * * * * * * * */
 EXT_CLASS_INIT_FUNCTION(IStaticInit);
+EXT_CLASS_SHUTDOWN_FUNCTION(IStaticInit);
 
 /**
  * Class entry

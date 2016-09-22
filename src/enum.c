@@ -31,6 +31,8 @@ INIT_FUNCTION {
     CE->interface_gets_implemented = MEM(interface_gets_implemented);
 }
 
+SHUTDOWN_FUNCTION { }
+
 zend_object *FUNC(create_object, zend_class_entry *ce) {
     zend_error(E_ERROR, "Cannot instantiate enum %s::class.", ZSTR_VAL(ce->name));
 

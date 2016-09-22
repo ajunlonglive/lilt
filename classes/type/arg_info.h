@@ -38,6 +38,7 @@ EXT_CLASS_STRUCT_END(Type_ArgInfo);
 EXT_CLASS_PHP_STRUCT_BEGIN(Type_ArgInfo)
 EXT_CLASS_PHP_STRUCT_END(Type_ArgInfo);
 EXT_CLASS_INIT_FUNCTION(Type_ArgInfo);
+EXT_CLASS_SHUTDOWN_FUNCTION(Type_ArgInfo);
 PHP_API Type_ArgInfoStruct *Type_ArgInfoCtor(zend_arg_info *arg_info);
 PHP_API zend_object *Type_ArgInfoFunc(enclose, Type_ArgInfoStruct *type);
 PHP_API void Type_ArgInfoFunc(free, Type_ArgInfoStruct *intern);

@@ -40,6 +40,7 @@ EXT_CLASS_STRUCT_END(Type_Function);
 EXT_CLASS_PHP_STRUCT_BEGIN(Type_Function)
 EXT_CLASS_PHP_STRUCT_END(Type_Function);
 EXT_CLASS_INIT_FUNCTION(Type_Function);
+EXT_CLASS_SHUTDOWN_FUNCTION(Type_Function);
 PHP_API Type_FunctionStruct *Type_FunctionCtor(zend_function *function);
 PHP_API zend_object *Type_FunctionFunc(enclose, Type_FunctionStruct *type);
 PHP_API void Type_FunctionFunc(free, Type_FunctionStruct *intern);
