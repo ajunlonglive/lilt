@@ -13,9 +13,6 @@ install:
   - php -r "readfile('https://getcomposer.org/installer');" | php
   - sudo php composer.phar install --no-interaction
 
-before_script:
-  - phpenv config-add tests.ini
-
 script:
   - .travis/run_tests.sh
 
