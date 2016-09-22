@@ -15,6 +15,7 @@ addons:
 
 before_install:
   - ulimit -c unlimited -S
+  - echo 'core%e.%p' | sudo tee /proc/sys/kernel/core_pattern
   - cat /proc/sys/kernel/core_pattern
 
 install:
@@ -24,7 +25,6 @@ script:
   - composer test
 
 after_failure:
-  - cat /proc/sys/kernel/core_pattern
   - COREFILE=$(find tests -maxdepth 1 -name "core*" | head -n 1)
   - if [[ -f "$COREFILE" ]]; then gdb -c "$COREFILE" php -ex "thread apply all bt" -ex "set pagination 0" -batch; fi
 
