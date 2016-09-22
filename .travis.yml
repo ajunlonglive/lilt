@@ -11,9 +11,11 @@ addons:
   apt:
     packages:
       - gdb
+      - apport
 
 before_install:
   - ulimit -c unlimited -S
+  - echo "core.%e.%p.%h.%t" > /proc/sys/kernel/core_pattern
 
 install:
   - composer install --no-interaction
