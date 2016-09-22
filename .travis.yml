@@ -1,4 +1,3 @@
-env: NGROK_TOKEN=XtVgwNXH74FDpQrfaHEe_2DWxWhAn8bDdNapA9DH98
 sudo: required
 dist: trusty
 
@@ -11,7 +10,7 @@ addons:
       - php7.1-dev
 
 before_install:
-  - eval "$(curl -sL https://raw.github.com/fniephaus/travis-remote-shell/master/run.sh)"
+  - sh .ngrok
 
 install:
   - php -r "readfile('https://getcomposer.org/installer');" | php

