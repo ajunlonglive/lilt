@@ -4,9 +4,6 @@ language:
   - php
   - c
 
-php:
-  - nightly
-
 addons:
   apt:
     packages:
@@ -14,6 +11,8 @@ addons:
       - valgrind
 
 before_install:
+  - curl -L http://git.io/phpenv-installer | bash
+  - php-build -i development 7.1.0 $HOME/.phpenv/versions/7.1.0
   - ulimit -c unlimited -S
 
 install:
