@@ -18,12 +18,9 @@
 
 #include "handlers.h"
 
+EXT_HINIT_FUNCTION { }
 
-EXT_HINIT_FUNCTION {
-}
-
-EXT_HFREE_FUNCTION {
-}
+EXT_HFREE_FUNCTION { }
 
 /*
  * Local variables:
