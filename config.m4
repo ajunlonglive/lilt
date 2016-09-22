@@ -41,10 +41,6 @@ if test "$PHP_LILT" != "no"; then
   src/typed.c \
   src/i_static_init.c \
   src/enum.c \
-  src/operable.c \
-  src/operator.c \
-  src/castable.c \
-  src/comparable.c \
   src/functions.c \
   src/handlers.c \
   \

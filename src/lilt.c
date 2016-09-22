@@ -30,7 +30,6 @@ EXT_MGINIT_FUNCTION { /* {{{ EXT_MGINIT_FUNCTION */
 
 EXT_MINIT_FUNCTION { /* {{{ EXT_MINIT_FUNCTION */
     ZEND_INIT_MODULE_GLOBALS(lilt, EXT_MGINIT, NULL);
-
     return SUCCESS;
 } /* }}} */
 
@@ -54,10 +53,6 @@ EXT_RINIT_FUNCTION { /* {{{ EXT_RINIT_FUNCTION */
     EXT_CLASS_INIT(Typed);
     EXT_CLASS_INIT(IStaticInit);
     EXT_CLASS_INIT(Enum);
-    EXT_CLASS_INIT(Operator);
-    EXT_CLASS_INIT(Operable);
-    EXT_CLASS_INIT(Castable);
-    EXT_CLASS_INIT(Comparable);
 
     EXT_HINIT();
 
@@ -65,22 +60,32 @@ EXT_RINIT_FUNCTION { /* {{{ EXT_RINIT_FUNCTION */
 } /* }}} */
 
 EXT_RSHUTDOWN_FUNCTION { /* {{{ EXT_RSHUTDOWN_FUNCTION */
-    EXT_CLASS_SHUTDOWN(Comparable);
-    EXT_CLASS_SHUTDOWN(Castable);
-    EXT_CLASS_SHUTDOWN(Operable);
-    EXT_CLASS_SHUTDOWN(Operator);
-    EXT_CLASS_SHUTDOWN(Enum);
-    EXT_CLASS_SHUTDOWN(Typed);
-    EXT_CLASS_SHUTDOWN(Type);
-    EXT_CLASS_SHUTDOWN(IStaticInit);
-    EXT_CLASS_SHUTDOWN(Type_Property);
-    EXT_CLASS_SHUTDOWN(Type_Function);
-    EXT_CLASS_SHUTDOWN(Type_Constant);
-    EXT_CLASS_SHUTDOWN(Type_ArgInfo);
-
     zend_hash_destroy(&LILTG(data.types));
     zend_hash_destroy(&LILTG(data.mocks));
     zend_string_release(LILTG(zstr.type));
+
+    if (zend_hash_num_elements(&TypeCe->constants_table)) {
+        zend_class_constant *c;
+        zend_string *k;
+        ZEND_HASH_FOREACH_STR_KEY_PTR(&TypeCe->constants_table, k, c)
+            zval_ptr_dtor(&c->value);
+            if (c->doc_comment && c->ce == TypeCe) {
+                zend_string_release(c->doc_comment);
+            }
+            zend_hash_del(&TypeCe->constants_table, k);
+        ZEND_HASH_FOREACH_END();
+        zend_hash_destroy(&TypeCe->constants_table);
+    }
+    zend_hash_del(EG(zend_constants), z_string("TYPE_ARRAY"));
+    zend_hash_del(EG(zend_constants), z_string("TYPE_BOOLEAN"));
+    zend_hash_del(EG(zend_constants), z_string("TYPE_DOUBLE"));
+    zend_hash_del(EG(zend_constants), z_string("TYPE_INTEGER"));
+    zend_hash_del(EG(zend_constants), z_string("TYPE_NULL"));
+    zend_hash_del(EG(zend_constants), z_string("TYPE_RESOURCE"));
+    zend_hash_del(EG(zend_constants), z_string("TYPE_STRING"));
+    zend_hash_del(EG(zend_constants), z_string("TYPE_UNKNOWN"));
+    zend_string_release(TypeMem(fn_mock).common.function_name);
+    zend_string_release(TypeMem(fn_unmock).common.function_name);
 
     EXT_HSHUTDOWN();
 

@@ -32,8 +32,6 @@ INIT_FUNCTION {
     CE->interface_gets_implemented = MEM(interface_gets_implemented);
 }
 
-SHUTDOWN_FUNCTION { }
-
 int FUNC(interface_gets_implemented, zend_class_entry *iface, zend_class_entry *ce) {
     zval retval;
     zend_string *name = z_string("__static");

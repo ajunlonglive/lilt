@@ -28,10 +28,6 @@ INIT_FUNCTION {
     OHINIT;
 }
 
-SHUTDOWN_FUNCTION {
-    CESHUTDOWN;
-}
-
 PHP_API STRUCT *CTOR(zend_string *type_name, zend_class_entry* ce) {
     STRUCT *intern = ecalloc(1, sizeof(STRUCT));
 

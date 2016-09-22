@@ -30,7 +30,6 @@
  * API
  * * * * * * * * * */
 EXT_CLASS_INIT_FUNCTION(Enum);
-EXT_CLASS_SHUTDOWN_FUNCTION(Enum);
 zend_object *EnumFunc(create_object, zend_class_entry *ce);
 
 /**

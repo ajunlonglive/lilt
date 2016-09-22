@@ -40,7 +40,6 @@ EXT_CLASS_STRUCT_END(Type_Property);
 EXT_CLASS_PHP_STRUCT_BEGIN(Type_Property)
 EXT_CLASS_PHP_STRUCT_END(Type_Property);
 EXT_CLASS_INIT_FUNCTION(Type_Property);
-EXT_CLASS_SHUTDOWN_FUNCTION(Type_Property);
 PHP_API Type_PropertyStruct *Type_PropertyCtor(zend_property_info *property_info, zend_string *name);
 PHP_API zend_object *Type_PropertyFunc(enclose, Type_PropertyStruct *type);
 PHP_API void Type_PropertyFunc(free, Type_PropertyStruct *intern);

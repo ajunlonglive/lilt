@@ -40,7 +40,6 @@ EXT_CLASS_STRUCT_END(Type_Constant);
 EXT_CLASS_PHP_STRUCT_BEGIN(Type_Constant)
 EXT_CLASS_PHP_STRUCT_END(Type_Constant);
 EXT_CLASS_INIT_FUNCTION(Type_Constant);
-EXT_CLASS_SHUTDOWN_FUNCTION(Type_Constant);
 PHP_API Type_ConstantStruct *Type_ConstantCtor(zend_string *const_name, zend_class_constant *constant);
 PHP_API zend_object *Type_ConstantFunc(enclose, Type_ConstantStruct *type);
 PHP_API void Type_ConstantFunc(free, Type_ConstantStruct *intern);
