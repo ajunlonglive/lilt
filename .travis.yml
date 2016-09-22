@@ -4,15 +4,14 @@ language:
   - php
   - c
 
-php:
-  - nightly
-
 compiler:
   - gcc
   - clang
 
 addons:
   apt:
+    sources:
+      - sourceline: 'deb http://ppa.launchpad.net/ondrej/php/ubuntu precise main'
     packages:
       - gdb
       - php7.1-dev
