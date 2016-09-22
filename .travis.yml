@@ -1,13 +1,9 @@
-sudo: false
-dist: trusty
-
 language:
   - php
   - c
 
-compiler:
-  - gcc
-  - clang
+sudo: required
+dist: trusty
 
 addons:
   apt:
