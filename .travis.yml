@@ -11,8 +11,9 @@ addons:
       - valgrind
 
 before_install:
-  - curl -L http://git.io/phpenv-installer | bash
-  - php-build -i development 7.1.0 $HOME/.phpenv/versions/7.1.0
+  - ls $HOME/.phpenv/plugins
+  - git clone git://github.com/php-build/php-build.git $HOME/.phpenv/plugins/php-build
+  - phpenv install development 7.1.0 $HOME/.phpenv/versions/7.1.0
   - ulimit -c unlimited -S
 
 install:
