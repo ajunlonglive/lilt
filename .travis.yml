@@ -1,8 +1,8 @@
 sudo: false
 
 language:
-  - c
   - php
+  - c
 
 php:
   - nightly
