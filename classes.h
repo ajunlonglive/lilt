@@ -27,8 +27,6 @@
 #include "classes/typed.h"
 #include "classes/i_static_init.h"
 #include "classes/enum.h"
-#include "classes/operable.h"
-#include "classes/operator.h"
 
 #endif /* LILT_CLASSES_H */
 
