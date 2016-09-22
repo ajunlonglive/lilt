@@ -1,17 +1,16 @@
+sudo: false
+
 language:
   - php
   - c
 
-sudo: required
-dist: trusty
+php:
+  - nightly
 
 addons:
   apt:
-    sources:
-      - sourceline: 'deb http://ppa.launchpad.net/ondrej/php/ubuntu trusty main'
     packages:
       - gdb
-      - php7.1-dev
 
 before_install:
   - ulimit -c unlimited -S
@@ -23,7 +22,8 @@ script:
   - composer test
 
 after_failure:
-  - COREFILE=$(find . -maxdepth 1 -name "core*" | head -n 1)
+  - cat /proc/sys/kernel/core_pattern
+  - COREFILE=$(find tests -maxdepth 1 -name "core*" | head -n 1)
   - if [[ -f "$COREFILE" ]]; then gdb -c "$COREFILE" php -ex "thread apply all bt" -ex "set pagination 0" -batch; fi
 
 notifications:
