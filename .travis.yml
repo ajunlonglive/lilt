@@ -14,18 +14,17 @@ addons:
       - apport
 
 install:
-  - composer install --no-interaction
+  - composer install
 
 before_script:
   - ulimit -c unlimited -S
   - echo '/tmp/core%e.%p' | sudo tee /proc/sys/kernel/core_pattern
-  - cat /proc/sys/kernel/core_pattern
 
 script:
   - composer test
 
 after_failure:
-  - for i in /tmp/core*.*; do gdb /home/travis/.phpenv/versions/`php-config --version`/bin/php core* -ex "thread apply all bt" -ex "set pagination 0" -batch; done;
+  - sudo bash .travis/after_failure.sh
 
 notifications:
   on_success: never
