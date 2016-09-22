@@ -6,7 +6,6 @@ addons:
     sources:
       - sourceline: 'deb http://ppa.launchpad.net/ondrej/php/ubuntu trusty main'
     packages:
-      - gdb
       - valgrind
       - php7.1-dev
 
@@ -14,25 +13,14 @@ install:
   - php -r "readfile('https://getcomposer.org/installer');" | php
   - sudo php composer.phar install --no-interaction
 
+before_script:
+  - phpenv config-add tests.ini
+
 script:
-  - gdb -batch -ex "run" -ex "bt" -ex "quit" --args php tests/001.phpt 2>&1 | grep -v ^"No stack."$
-  - gdb -batch -ex "run" -ex "bt" -ex "quit" --args php tests/002.phpt 2>&1 | grep -v ^"No stack."$
-  - gdb -batch -ex "run" -ex "bt" -ex "quit" --args php tests/003.phpt 2>&1 | grep -v ^"No stack."$
-  - gdb -batch -ex "run" -ex "bt" -ex "quit" --args php tests/004.phpt 2>&1 | grep -v ^"No stack."$
-  - gdb -batch -ex "run" -ex "bt" -ex "quit" --args php tests/005.phpt 2>&1 | grep -v ^"No stack."$
-  - gdb -batch -ex "run" -ex "bt" -ex "quit" --args php tests/006.phpt 2>&1 | grep -v ^"No stack."$
-  - gdb -batch -ex "run" -ex "bt" -ex "quit" --args php tests/007.phpt 2>&1 | grep -v ^"No stack."$
-  - gdb -batch -ex "run" -ex "bt" -ex "quit" --args php tests/008.phpt 2>&1 | grep -v ^"No stack."$
-  - gdb -batch -ex "run" -ex "bt" -ex "quit" --args php tests/009.phpt 2>&1 | grep -v ^"No stack."$
-  - gdb -batch -ex "run" -ex "bt" -ex "quit" --args php tests/010.phpt 2>&1 | grep -v ^"No stack."$
-  - gdb -batch -ex "run" -ex "bt" -ex "quit" --args php tests/011.phpt 2>&1 | grep -v ^"No stack."$
-  - gdb -batch -ex "run" -ex "bt" -ex "quit" --args php tests/012.phpt 2>&1 | grep -v ^"No stack."$
-  - gdb -batch -ex "run" -ex "bt" -ex "quit" --args php tests/013.phpt 2>&1 | grep -v ^"No stack."$
-  - gdb -batch -ex "run" -ex "bt" -ex "quit" --args php tests/014.phpt 2>&1 | grep -v ^"No stack."$
-  - gdb -batch -ex "run" -ex "bt" -ex "quit" --args php tests/015.phpt 2>&1 | grep -v ^"No stack."$
-  - gdb -batch -ex "run" -ex "bt" -ex "quit" --args php tests/016.phpt 2>&1 | grep -v ^"No stack."$
-  - gdb -batch -ex "run" -ex "bt" -ex "quit" --args php tests/017.phpt 2>&1 | grep -v ^"No stack."$
-  - sudo php composer.phar memtest
+  - .travis/run_tests.sh
+
+after_failure:
+  - .travis/after_failure.sh
 
 notifications:
   on_success: never
