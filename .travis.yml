@@ -22,13 +22,10 @@ before_script:
   - cat /proc/sys/kernel/core_pattern
 
 script:
-  - composer test
+  - php run-tests.php
 
 after_failure:
-  - ls
-  - ls tests
-  - COREFILE=$(find . -maxdepth 1 -name "core*" | head -n 1)
-  - if [[ -f "$COREFILE" ]]; then gdb -c "$COREFILE" php -ex "thread apply all bt" -ex "set pagination 0" -batch; fi
+  - for i in $(find ./ -maxdepth 1 -name 'core*' -print); do gdb /home/travis/.phpenv/versions/`php-config --version`/bin/php core* -ex "thread apply all bt" -ex "set pagination 0" -batch; done;
 
 notifications:
   on_success: never
