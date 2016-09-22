@@ -1,3 +1,7 @@
+language:
+  - php
+  - c
+
 sudo: required
 dist: trusty
 
@@ -6,6 +10,7 @@ addons:
     sources:
       - sourceline: 'deb http://ppa.launchpad.net/ondrej/php/ubuntu trusty main'
     packages:
+      - gdb
       - valgrind
       - php7.1-dev
 
