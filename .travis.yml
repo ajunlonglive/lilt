@@ -15,6 +15,7 @@ addons:
   apt:
     packages:
       - gdb
+      - php7.1-dev
 
 before_install:
   - ulimit -c unlimited -S
